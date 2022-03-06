@@ -59,7 +59,7 @@ namespace Blabbers.Game00
 			}
 			catch (Exception e)
 			{
-				Debug.Log("[Could not SAVE state data] " + e);
+				Debug.Log("[Could NOT SAVE state data] " + e);
 			}
 		}
 
