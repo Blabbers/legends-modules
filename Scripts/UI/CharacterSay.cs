@@ -1,0 +1,56 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using BeauRoutine;
+using Blabbers.Game00;
+using NaughtyAttributes;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
+
+[CreateAssetMenu]
+public class CharacterSay : ScriptableObject
+{
+	public Sprite character;
+	public string key;
+	[ReadOnly] public string text;
+	public bool allowContinue = true;
+    public bool playTTS = true;
+	public UnityEvent OnIsOver;
+
+    public void Execute(float delay = 0f)
+	{
+		if (string.IsNullOrEmpty(key))
+			return;
+
+		text = LocalizationExtensions.LocalizeText(key);
+
+		Routine.Start(MyRoutine());
+
+		IEnumerator MyRoutine()
+		{
+			if (delay > 0f)
+			{
+				yield return Routine.WaitSeconds(delay);
+			}
+
+			if (playTTS)
+			{
+				LocalizationExtensions.PlayTTS(key);
+			}
+
+			Singleton.Get<UI_PopupDialogue>().Execute(this, allowContinue);
+		}
+	}
+
+	public void Stop()
+	{
+		Singleton.Get<UI_PopupDialogue>().HidePopup();
+	}
+    
+    // Inspector button for testing during runtime
+    [Button()]
+    public void TestExecution()
+    {
+        Execute(0f);
+    }
+}
