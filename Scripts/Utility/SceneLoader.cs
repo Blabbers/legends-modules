@@ -60,5 +60,10 @@ namespace Blabbers.Game00
         {
             SceneManager.LoadScene($"{gameData.gameLevelTag}main-menu");
         }
+        
+        public void LoadSceneByName(string fullSceneName)
+        {
+            SceneManager.LoadScene(fullSceneName);
+        }
     }
 }

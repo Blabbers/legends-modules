@@ -1,11 +1,17 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEngine;
 using Blabbers.Game00;
-using UnityEngine;
 
-public class UI_ConfigWindow : MonoBehaviour //can be based on UI PopupWindow later
+public class UI_ConfigWindow : MonoBehaviour, ISingleton //can be based on UI PopupWindow later
 {
+    public bool showOnInitialize = true;
+    
+    public void OnCreated()
+    {
+        if (showOnInitialize)
+        {
+            this.gameObject.SetActive(true);
+        }
+    }
     public void OnYesButton()
     {
         ProgressController.GameProgress.enableAutomaticTTS = true;
