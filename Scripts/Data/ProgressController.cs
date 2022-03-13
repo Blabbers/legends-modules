@@ -50,7 +50,7 @@ namespace Blabbers.Game00
 		}
 
 		#region SaveLoadFunctions
-		void Save()
+		public void Save()
 		{
 			Debug.Log(" Saving current progress... " + gameData.progress.currentProgress);
 			try
