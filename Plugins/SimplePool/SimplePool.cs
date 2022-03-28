@@ -195,6 +195,13 @@ public static class SimplePool
         return _pools[prefab.GetInstanceID()].Spawn(pos, rot, parent);
     }
     
+    static public GameObject Spawn(GameObject prefab, Transform parent = null)
+    {
+        Init(prefab);
+
+        return Spawn(prefab, prefab.transform.position, prefab.transform.rotation, parent);
+    }
+    
     /// <summary>
     /// Despawn the specified gameobject back into its pool.
     /// </summary>
