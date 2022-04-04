@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using System.Collections.Generic;
+using DG.Tweening;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -70,8 +71,19 @@ namespace Blabbers.Game00
 			Instance.gameplaySource.pitch = 1f;
 		}
 
-		public void PlayGameplayClip(AudioClip clip, float volumeScale = 1f)
+		public Dictionary<AudioSFX, float> EndTimeBySFX = new Dictionary<AudioSFX, float>();
+		public void PlayGameplayClip(AudioSFX sfx, AudioClip clip, float volumeScale = 1f)
 		{
+			if (!EndTimeBySFX.ContainsKey(sfx) || Time.time > EndTimeBySFX[sfx])
+			{
+				EndTimeBySFX[sfx] = Time.time + clip.length;
+			}
+			else if(sfx.onlyPlayOnceEachTime)
+			{
+				// We shouldnt play this SFX if one from the same type was recently played 
+				Debug.Log("We should not play yet");
+				return;
+			}
 			Instance.gameplaySource.PlayOneShot(clip, volumeScale);
 		}
 

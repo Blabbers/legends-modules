@@ -11,6 +11,7 @@ namespace Blabbers.Game00
 		private List<AudioClip> audioClips = new List<AudioClip>();
 		[SerializeField, Range(0f, 1f)]
 		private float volumeScale = 1f;
+		public bool onlyPlayOnceEachTime;
 		/// <summary>
 		/// Randomizes audioclip play between variations
 		/// </summary>
@@ -19,7 +20,7 @@ namespace Blabbers.Game00
 			if (audioClips.Count > 0)
 			{
 				var clip = audioClips[Random.Range(0, audioClips.Count)];
-				Singleton.Get<AudioController>().PlayGameplayClip(clip, volumeScale);
+				Singleton.Get<AudioController>().PlayGameplayClip(this, clip, volumeScale);
 			}
 		}
 
@@ -31,7 +32,7 @@ namespace Blabbers.Game00
 			if (audioClips.Count > index)
 			{
 				var clip = audioClips[index];
-				Singleton.Get<AudioController>().PlayGameplayClip(clip, volumeScale);
+				Singleton.Get<AudioController>().PlayGameplayClip(this, clip, volumeScale);
 			}
 		}
 	}
