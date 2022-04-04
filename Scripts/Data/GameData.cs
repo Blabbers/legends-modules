@@ -58,6 +58,8 @@ public class GameProgress
 	public Level[] levels;
 
 	public bool enableAutomaticTTS = true;
+
+    public Customization[] customizations;
 }
 
 [System.Serializable]
@@ -66,4 +68,12 @@ public class Level
 	// Info for each specific level instance
 	public int score;
 	public int starAmount;
+}
+
+[System.Serializable]
+public class Customization
+{
+    // Info for each specific level instance
+    public string name;
+    public int id;
 }

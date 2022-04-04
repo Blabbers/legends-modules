@@ -15,6 +15,7 @@ public class CharacterSay : ScriptableObject
 	[ReadOnly] public string text;
 	public bool allowContinue = true;
     public bool playTTS = true;
+    public UnityEvent OnStart;
 	public UnityEvent OnIsOver;
 
     public void Execute(float delay = 0f)
@@ -37,7 +38,7 @@ public class CharacterSay : ScriptableObject
 			{
 				LocalizationExtensions.PlayTTS(key);
 			}
-
+            OnStart?.Invoke();
 			Singleton.Get<UI_PopupDialogue>().Execute(this, allowContinue);
 		}
 	}

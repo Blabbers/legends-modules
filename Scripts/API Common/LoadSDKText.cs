@@ -112,6 +112,11 @@ namespace Blabbers.Game00
 		}
 		public static string LocalizeText(string localizationKey, string appendLeft = null, string appendRight = null)
 		{
+            if (!Application.isPlaying)
+            {
+                // TODO: Read fro json file and get the text from here
+            }
+            
 			if(SharedState.languageDefs == null)
 				Debug.Log($"<TextNotFound> SharedState.languageDefs is not loaded yet. Localization Key: {localizationKey}");
 			
