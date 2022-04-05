@@ -20,7 +20,8 @@ namespace Blabbers.Game00
 		public List<GameObject> showWhenOpen;
 		public List<GameObject> hideWhenLocked;
 
-		public TextMeshProUGUI textLevelNumber;
+		public TextMeshProUGUI textLevelNumberActive;
+        public TextMeshProUGUI textLevelNumberLocked;
         
 #if UNITY_EDITOR
 		private void OnValidate()
@@ -79,10 +80,14 @@ namespace Blabbers.Game00
 
 		private void SetNumberText()
 		{
-			if (!textLevelNumber.text.Equals(myLevel.ToString()))
+			if (!textLevelNumberActive.text.Equals(myLevel.ToString()))
 			{
-				textLevelNumber.text = myLevel.ToString();
+                textLevelNumberActive.text = myLevel.ToString();
 			}
+            if (!textLevelNumberLocked.text.Equals(myLevel.ToString()))
+            {
+                textLevelNumberLocked.text = myLevel.ToString();
+            }
 		}
 	}
 }
