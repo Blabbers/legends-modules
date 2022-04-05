@@ -53,17 +53,41 @@ namespace Blabbers.Game00
 
         public void LoadLevelSelectScene()
         {
-            SceneManager.LoadScene($"{gameData.gameLevelTag}level-select");
+            if (gameData.FirstTimeLevelSelect)
+            {
+                gameData.FirstTimeLevelSelect = false;
+                LoadSceneByName("customization");
+            }
+            else
+            {
+                SceneManager.LoadScene($"{gameData.gameLevelTag}level-select");
+            }
+
         }
 
         public void LoadMainMenuScene()
         {
             SceneManager.LoadScene($"{gameData.gameLevelTag}main-menu");
         }
-        
+
         public void LoadSceneByName(string fullSceneName)
         {
             SceneManager.LoadScene(fullSceneName);
         }
+
+        //Added
+        public void LoadNewGame()
+        {
+            if (gameData.StartCustomizationFirst)
+            {
+                LoadSceneByName("customization");
+            }
+            else
+            {
+                LoadSceneByName("cutscene");
+            }
+
+        }
+
     }
 }
