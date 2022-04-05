@@ -11,7 +11,8 @@ namespace Blabbers.Game00
 	public class UI_LevelButton : MonoBehaviour
 	{
 		public int myLevel = 0;
-
+        public bool autoLoadLevel = true;
+        
 		public Image targetImage;
 		//public Sprite levelLocked, levelOpen;
 		public List<GameObject> stars;
@@ -20,7 +21,7 @@ namespace Blabbers.Game00
 		public List<GameObject> hideWhenLocked;
 
 		public TextMeshProUGUI textLevelNumber;
-
+        
 #if UNITY_EDITOR
 		private void OnValidate()
 		{
@@ -32,24 +33,18 @@ namespace Blabbers.Game00
 		{
 			var button = this.gameObject.GetComponent<Button>();
 
-			// adding click event to the button, it will load the scene "Level1" <- using "myLevel" as the number
-			button.onClick.AddListener(() => { Singleton.Get<SceneLoader>().LoadGameLevel(myLevel); });
+            if (autoLoadLevel)
+            {
+                // adding click event to the button, it will load the scene "Level1" <- using "myLevel" as the number
+                button.onClick.AddListener(() => { Singleton.Get<SceneLoader>().LoadGameLevel(myLevel); });    
+            }
 
-			button.interactable = true;
-
-			//foreach (var item in showWhenOpen)
-			//{
-			//	if (item)			
-			//		item.SetActive(false);
-			//}
+            button.interactable = true;
 
 			if (ProgressController.GameProgress.reachedLevel < myLevel - 1)
 			{
 				button.interactable = false;
-				//this.transform.GetComponentInChildren<TextMeshProUGUI>().gameObject.SetActive(false);
-				//targetImage.sprite = levelLocked;
-
-				foreach (var item in hideWhenLocked)
+                foreach (var item in hideWhenLocked)
 				{
 					if (item)
 						item.SetActive(false);
@@ -58,9 +53,6 @@ namespace Blabbers.Game00
 			// level open
 			if (ProgressController.GameProgress.reachedLevel == myLevel - 1)
 			{
-				//targetImage.sprite = levelOpen;
-				//this.transform.DOScale(this.transform.localScale * 1.14f, 0.8f).SetLoops(-1, LoopType.Yoyo);
-
 				foreach (var item in showWhenOpen)
 				{
 					if (item)
@@ -83,8 +75,6 @@ namespace Blabbers.Game00
 					stars[i].SetActive(i < length);
 				}
 			}
-
-			//SetNumberText();
 		}
 
 		private void SetNumberText()

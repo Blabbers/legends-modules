@@ -1,6 +1,10 @@
-﻿using NaughtyAttributes;
+﻿using System;
+using NaughtyAttributes;
 using System.Collections.Generic;
+using System.Reflection;
+using UnityEditor;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Blabbers.Game00
 {
@@ -35,5 +39,53 @@ namespace Blabbers.Game00
 				Singleton.Get<AudioController>().PlayGameplayClip(this, clip, volumeScale);
 			}
 		}
+
+        [Button()]
+        public void Preview()
+        {
+            var clip = audioClips[Random.Range(0, audioClips.Count)];
+            EditorPlayClip(clip);
+        }
+        [Button()]
+        public void Stop()
+        {
+            EditorStopAllClips();
+        }
+
+        
+        public static void EditorPlayClip(AudioClip clip, int startSample = 0, bool loop = false)
+        {
+            System.Reflection.Assembly unityEditorAssembly = typeof(AudioImporter).Assembly;
+            System.Type audioUtilClass = unityEditorAssembly.GetType("UnityEditor.AudioUtil");
+            System.Reflection.MethodInfo method = audioUtilClass.GetMethod(
+                "PlayClip",
+                System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public,
+                null,
+                new System.Type[] { typeof(AudioClip), typeof(int), typeof(bool) },
+                null
+            );
+            method.Invoke(
+                null,
+                new object[] { clip, startSample, loop }
+            );
+        }
+        
+        public static void EditorStopAllClips()
+        {
+            Assembly unityEditorAssembly = typeof(AudioImporter).Assembly;
+            Type audioUtilClass =
+                unityEditorAssembly.GetType("UnityEditor.AudioUtil");
+            MethodInfo method = audioUtilClass.GetMethod(
+                "StopAllClips",
+                BindingFlags.Static | BindingFlags.Public,
+                null,
+                new System.Type[]{},
+                null
+            );
+            method.Invoke(
+                null,
+                new object[] {}
+            );
+        }
 	}
 }

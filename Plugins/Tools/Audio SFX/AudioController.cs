@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DG.Tweening;
 using NaughtyAttributes;
 using UnityEngine;
@@ -12,11 +13,18 @@ namespace Blabbers.Game00
 		public AudioSource musicSource;
 		public AudioSource gameplaySource;
 
+        private float baseMusicVolume;
+        
 		[BoxGroup("Game Audio")]
 		//Music
 		public AudioClip gameplayMusic, lobbyMusic;
 
-		void ISingleton.OnCreated()
+        private void Awake()
+        {
+            baseMusicVolume = musicSource.volume;
+        }
+
+        void ISingleton.OnCreated()
 		{
 		}
 
@@ -44,7 +52,7 @@ namespace Blabbers.Game00
 			void Execute()
 			{
 				Instance.musicSource.Stop();
-				Instance.musicSource.volume = 0.2f;
+				Instance.musicSource.volume = baseMusicVolume;
 				Instance.musicSource.clip = musicClip;
 				Instance.musicSource.loop = true;
 				Instance.musicSource.Play();
@@ -64,6 +72,11 @@ namespace Blabbers.Game00
 		{
 			Instance.musicSource.DOFade(targetVolume, duration);
 		}
+        
+        public void FadeResetMusicVolume(float duration = 0.5f)
+        {
+            Instance.musicSource.DOFade(baseMusicVolume, duration);
+        }
 
 		//Gameplay
 		public void ResetGameplayPitch()
