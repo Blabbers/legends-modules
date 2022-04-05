@@ -13,9 +13,11 @@ namespace Blabbers.Game00
 		public readonly float TapAnywhereDelay = 3f;
 		[ReadOnly] public bool CanTapToDisableScreen;
 		public float duration;
+		public UnityEvent OnWindowOpened;
 		public UnityEvent OnWindowClosed;
 		private void OnEnable()
 		{
+			OnWindowOpened?.Invoke();
 			ShowTapTextAfterDelay();
 		}
 
@@ -46,7 +48,6 @@ namespace Blabbers.Game00
 					duration += Time.unscaledDeltaTime;
 					if (HoldSlider.value >= 1)
 					{
-						Debug.Log("I WILL CALL ENABLE FALSE: " + false);
 						HideScreen();
 						OnWindowClosed?.Invoke();
 						CanTapToDisableScreen = false;
