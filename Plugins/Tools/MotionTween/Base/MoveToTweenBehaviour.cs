@@ -15,7 +15,7 @@ namespace Blabbers.Game00
 			}
 
 			tweenPlayer.RectTransform.DOAnchorPos(targetPosition, duration)
-				.SetEase(curve);
+				.SetEase(curve).SetUpdate(true);
 		}
 	}
 }

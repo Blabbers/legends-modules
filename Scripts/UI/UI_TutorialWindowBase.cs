@@ -19,7 +19,8 @@ namespace Blabbers.Game00
 			ShowTapTextAfterDelay();
 		}
 
-		public abstract void ShowScreen(bool enable);
+		public abstract void ShowScreen();
+		public abstract void HideScreen();
 
 		public void ShowTapTextAfterDelay()
 		{
@@ -30,7 +31,7 @@ namespace Blabbers.Game00
 			StartCoroutine(Routine());
 			IEnumerator Routine()
 			{
-				yield return new WaitForSeconds(TapAnywhereDelay);
+				yield return new WaitForSecondsRealtime(TapAnywhereDelay);
 				CanTapToDisableScreen = true;
 				HoldSlider.gameObject.SetActive(true);
 			}
@@ -42,17 +43,18 @@ namespace Blabbers.Game00
 			{
 				if (Input.anyKey)
 				{
-					duration += Time.deltaTime;
+					duration += Time.unscaledDeltaTime;
 					if (HoldSlider.value >= 1)
 					{
-						ShowScreen(false);
+						Debug.Log("I WILL CALL ENABLE FALSE: " + false);
+						HideScreen();
 						OnWindowClosed?.Invoke();
 						CanTapToDisableScreen = false;
 					}
 				}
 				else
 				{
-					duration -= Time.deltaTime;
+					duration -= Time.unscaledDeltaTime;
 				}
 				duration = Mathf.Clamp01(duration);
 				HoldSlider.value = SliderCurve.Evaluate(duration);

@@ -9,7 +9,7 @@ namespace Blabbers.Game00
 
 		public override void Play(MotionTweenPlayer tweenPlayer)
 		{
-			tweenPlayer.RectTransform.DOAnchorPos(tweenPlayer.RectTransform.anchoredPosition + addPosition, duration).SetEase(curve);
+			tweenPlayer.RectTransform.DOAnchorPos(tweenPlayer.RectTransform.anchoredPosition + addPosition, duration).SetEase(curve).SetUpdate(true);
 		}
 	}
 }

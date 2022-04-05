@@ -9,7 +9,7 @@ namespace Blabbers.Game00
 
 		public override void Play(MotionTweenPlayer tweenPlayer)
 		{
-			tweenPlayer.transform.DOScale(scaleTo, duration).SetEase(curve);
+			tweenPlayer.transform.DOScale(scaleTo, duration).SetEase(curve).SetUpdate(true);
 		}
 	}
 }

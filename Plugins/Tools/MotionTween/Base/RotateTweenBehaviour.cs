@@ -10,7 +10,7 @@ namespace Blabbers.Game00
 
 		public override void Play(MotionTweenPlayer tweenPlayer)
 		{
-			tweenPlayer.transform.DORotate(tweenPlayer.transform.eulerAngles + eulerAngles, duration).SetEase(curve);
+			tweenPlayer.transform.DORotate(tweenPlayer.transform.eulerAngles + eulerAngles, duration).SetEase(curve).SetUpdate(true);
 		}
 	}
 }

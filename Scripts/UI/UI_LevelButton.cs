@@ -12,9 +12,9 @@ namespace Blabbers.Game00
 	{
 		public int myLevel = 0;
         public bool autoLoadLevel = true;
-        
-		public Image targetImage;
-		//public Sprite levelLocked, levelOpen;
+
+        public Sprite currentBtnSprite;
+        public Image targetImage;
 		public List<GameObject> stars;
 
 		public List<GameObject> showWhenOpen;
@@ -59,6 +59,8 @@ namespace Blabbers.Game00
 					if (item)
 						item.SetActive(true);
 				}
+
+				targetImage.sprite = currentBtnSprite;
 			}
 
 			// hide all stars
