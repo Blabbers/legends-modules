@@ -34,7 +34,7 @@ public class CharacterSay : ScriptableObject
 				yield return Routine.WaitSeconds(delay);
 			}
 
-			if (playTTS)
+			if (playTTS && ProgressController.GameProgress.enableAutomaticTTS)
 			{
 				LocalizationExtensions.PlayTTS(key);
 			}

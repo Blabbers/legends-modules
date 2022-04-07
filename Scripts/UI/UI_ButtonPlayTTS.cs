@@ -32,7 +32,7 @@ public class UI_ButtonPlayTTS : MonoBehaviour
         if (sdkText)
         {
             loaded = true;
-            button.onClick.AddListener(sdkText.PlaySpeechText);    
+            button.onClick.AddListener(sdkText.PlayThisSpeechText);    
         }
     }
 

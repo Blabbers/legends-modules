@@ -49,12 +49,12 @@ namespace Blabbers.Game00
 				}
 
 				UpdateText();
-				if (playTTSOnEnable && ProgressController.GameProgress.enableAutomaticTTS)
+				if (playTTSOnEnable)
 				{
 					// Only plays each TTS info ONCE per session.
 					//if (!LocalizationExtensions.HasPlayedTTS(key))
 					{
-						PlaySpeechText();	
+						LocalizationExtensions.PlayTTS(key);	
 					}
 				}
 			}
@@ -84,16 +84,10 @@ namespace Blabbers.Game00
 				myText.text = LocalizationExtensions.LocalizeText(key);
 			}
 		}
-
-		//Plays the TTS tool
-		public void PlaySpeechText()
+		
+		public void PlayThisSpeechText()
 		{
-			try
-			{
-                LOLSDK.Instance?.SpeakText(key);
-				LocalizationExtensions.AlreadyPlayedTTS.Add(key);
-			}
-			catch { }
+			LocalizationExtensions.PlayTTS(key);
 		}
 	}
 
@@ -133,8 +127,12 @@ namespace Blabbers.Game00
 		{
 			try
 			{
-				LOLSDK.Instance?.SpeakText(key);
-				LocalizationExtensions.AlreadyPlayedTTS.Add(key);
+				Debug.Log("PlayTTS → EnableAutomaticTTS: " + ProgressController.GameProgress.enableAutomaticTTS);
+				if (ProgressController.GameProgress.enableAutomaticTTS)
+				{
+					LOLSDK.Instance?.SpeakText(key);
+					LocalizationExtensions.AlreadyPlayedTTS.Add(key);
+				}
 			}
 			catch { }
 		}
