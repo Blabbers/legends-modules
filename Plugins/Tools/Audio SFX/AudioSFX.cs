@@ -40,6 +40,7 @@ namespace Blabbers.Game00
 			}
 		}
 
+        #if UNITY_EDITOR
         [Button()]
         public void Preview()
         {
@@ -87,5 +88,6 @@ namespace Blabbers.Game00
                 new object[] {}
             );
         }
+        #endif
 	}
 }
