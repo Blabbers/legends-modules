@@ -7,51 +7,73 @@ using UnityEngine.UI;
 
 namespace Blabbers.Game00
 {
-	public class UI_PopupVictoryScreen : UI_PopupWindow, ISingleton
-	{
-		// Objects
-		[SerializeField]
-		private List<GameObject> stars;
+    public class UI_PopupVictoryScreen : UI_PopupWindow, ISingleton
+    {
+        // Objects
+        [SerializeField]
+        private List<GameObject> stars;
 
-		/// <summary>
-		/// Invokes the victory screen with given star amount (from 1 to 3)
-		/// </summary>
-		public void ShowLevelVictoryScreen(int starAmount, int score)
-		{
-			base.ShowPopup();
+        [SerializeField]
+        private Button continueButton;
 
-			//OpenedPopupList.Add(this.gameObject);
-			//this.gameObject.SetActive(true);
 
-			// Functionality
-			if (ProgressController.GameProgress.levels != null)
-			{
-				ProgressController.GameProgress.levels[ProgressController.GameProgress.currentLevelId].starAmount = Mathf.Max(starAmount, ProgressController.GameProgress.levels[ProgressController.GameProgress.currentLevelId].starAmount);
-				ProgressController.GameProgress.levels[ProgressController.GameProgress.currentLevelId].score = Mathf.Max(score, ProgressController.GameProgress.levels[ProgressController.GameProgress.currentLevelId].score);
-			}
+        public float continueDelay = 2.5f;
 
-			foreach (var item in stars)
-			{
-				item.SetActive(false);
-			}
+        /// <summary>
+        /// Invokes the victory screen with given star amount (from 1 to 3)
+        /// </summary>
+        public void ShowLevelVictoryScreen(int starAmount, int score)
+        {
 
-			int i = 1;
-			foreach (var item in stars)
-			{
-				if (i > starAmount)
-					break;
+            continueButton.interactable = false;
+            base.ShowPopup();
 
-				item.SetActive(true);
-				i++;
-			}
-		}
+            //OpenedPopupList.Add(this.gameObject);
+            //this.gameObject.SetActive(true);
 
-		public override void HidePopup()
-		{
-			base.HidePopup();
+            // Functionality
+            if (ProgressController.GameProgress.levels != null)
+            {
+                ProgressController.GameProgress.levels[ProgressController.GameProgress.currentLevelId].starAmount = Mathf.Max(starAmount, ProgressController.GameProgress.levels[ProgressController.GameProgress.currentLevelId].starAmount);
+                ProgressController.GameProgress.levels[ProgressController.GameProgress.currentLevelId].score = Mathf.Max(score, ProgressController.GameProgress.levels[ProgressController.GameProgress.currentLevelId].score);
+            }
 
-			//this.gameObject.SetActive(false);
-			//OpenedPopupList.Remove(this.gameObject);
-		}
-	}
+            foreach (var item in stars)
+            {
+                item.SetActive(false);
+            }
+
+            int i = 1;
+            foreach (var item in stars)
+            {
+                if (i > starAmount)
+                    break;
+
+                item.SetActive(true);
+                i++;
+            }
+
+            EnableContinueButton();
+        }
+
+
+        void EnableContinueButton()
+        {
+            StartCoroutine(_Delay());
+            IEnumerator _Delay()
+            {
+                yield return new WaitForSeconds(continueDelay);
+                continueButton.interactable = true;
+            }
+        }
+
+
+        public override void HidePopup()
+        {
+            base.HidePopup();
+
+            //this.gameObject.SetActive(false);
+            //OpenedPopupList.Remove(this.gameObject);
+        }
+    }
 }
