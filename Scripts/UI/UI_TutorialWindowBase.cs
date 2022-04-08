@@ -48,9 +48,7 @@ namespace Blabbers.Game00
 					duration += Time.unscaledDeltaTime;
 					if (HoldSlider.value >= 1)
 					{
-						HideScreen();
-						OnWindowClosed?.Invoke();
-						CanTapToDisableScreen = false;
+						Finish();
 					}
 				}
 				else
@@ -60,6 +58,20 @@ namespace Blabbers.Game00
 				duration = Mathf.Clamp01(duration);
 				HoldSlider.value = SliderCurve.Evaluate(duration);
 			}
+
+#if UNITY_EDITOR
+			if (Input.GetKeyDown(KeyCode.PageDown))
+			{
+				Finish();
+			}
+#endif
+		}
+
+		private void Finish()
+		{
+			HideScreen();
+			OnWindowClosed?.Invoke();
+			CanTapToDisableScreen = false;
 		}
 	}
 }
