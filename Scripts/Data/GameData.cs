@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Blabbers.Game00;
 using UnityEngine;
 using SimpleJSON;
 using NaughtyAttributes;
@@ -29,6 +30,18 @@ public class GameData : ScriptableObject
 
     [Header("Saved Progress")]
     public GameProgress progress;
+    
+    [Button("Test → Finish Current Level")]
+    public void TestFinishCurrentLevel()
+    {
+        Singleton.Get<ProgressController>().FinishLevel();
+    }
+
+    [Button("Test → Submit Save")]
+    public void TestSubmitSave()
+    {
+        Singleton.Get<ProgressController>().Save();
+    }
 }
 
 [System.Serializable]
