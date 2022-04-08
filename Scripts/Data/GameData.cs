@@ -22,7 +22,6 @@ public class GameData : ScriptableObject
 
     //Added variables to control customization
     public bool StartCustomizationFirst = false;
-    public bool FirstTimeLevelSelect = true;
 
     // I will be hiding this for now. This is only usefull if the LL staff asks us to actually use the namespaces and merge all the projects
     [HideInInspector]//[Header("Custom strings")]
@@ -30,7 +29,7 @@ public class GameData : ScriptableObject
 
     [Header("Saved Progress")]
     public GameProgress progress;
-    
+
     [Button("Test → Finish Current Level")]
     public void TestFinishCurrentLevel()
     {
@@ -51,6 +50,7 @@ public class GameProgress
     public void Initialize(int totalLevels)
     {
         isNewGame = true;
+        FirstTimeLevelSelect = true;
         levels = new Level[totalLevels];
         for (int i = 0; i < levels.Length; i++)
         {
@@ -59,6 +59,9 @@ public class GameProgress
     }
 
     public bool isNewGame;
+
+    //Moved variable from GameData to Progress // Used to control if Customization will be open
+    public bool FirstTimeLevelSelect = true;
 
     // Level being played at the moment
     public int currentLevelId = 0;
