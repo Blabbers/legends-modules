@@ -84,7 +84,7 @@ namespace Blabbers.Game00
             }
             else
             {
-                LoadSceneByName("cutscene");
+                LoadSceneByName("cutscene-start");
             }
 
         }

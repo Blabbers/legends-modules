@@ -13,6 +13,19 @@ public class Fade : MonoBehaviour {
     private int drawDepth = -1000;
     private static float alpha = 1;
 
+    public void FadeOut(float speed)
+    {
+	    alpha = 1;		
+	    fadeDir = -1;
+	    Fade.fadeSpeed = speed;
+    }
+    public void FadeIn(float speed)
+    {
+	    alpha = 0;
+	    fadeDir = 1;
+	    Fade.fadeSpeed = speed;
+    }
+    
 	public static void Out(float speed)
 	{
 		alpha = 1;		

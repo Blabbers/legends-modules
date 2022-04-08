@@ -37,7 +37,7 @@ namespace Blabbers.Game00
             if (autoLoadLevel)
             {
                 // adding click event to the button, it will load the scene "Level1" <- using "myLevel" as the number
-                button.onClick.AddListener(() => { Singleton.Get<SceneLoader>().LoadGameLevel(myLevel); });    
+                button.GetComponent<MotionTweenPlayer>().OnAnimationFinished.AddListener(() => { Singleton.Get<SceneLoader>().LoadGameLevel(myLevel); });    
             }
 
             button.interactable = true;

@@ -21,9 +21,17 @@ namespace Blabbers.Game00
 	public class MotionTween : ScriptableObject
 	{
 		[SerializeField] private List<TweenBehaviour> behaviours = new List<TweenBehaviour>();
+
 		public void PlaySequence(MotionTweenPlayer tweenPlayer)
 		{
-			tweenPlayer.OnAnimationStart?.Invoke();
+			PlaySequence(tweenPlayer, true);
+		}
+		public void PlaySequence(MotionTweenPlayer tweenPlayer, bool playEvents)
+		{
+			if(playEvents)
+			{
+				tweenPlayer.OnAnimationStart?.Invoke();
+			}
 
 			tweenPlayer.StartCoroutine(Routine());
 			IEnumerator Routine()
@@ -41,7 +49,10 @@ namespace Blabbers.Game00
 				}
 
 				yield return null;
-				tweenPlayer.OnAnimationFinished?.Invoke();
+				if(playEvents)
+				{
+					tweenPlayer.OnAnimationFinished?.Invoke();
+				}
 
 				if (tweenPlayer.isLoop)
 				{
