@@ -107,7 +107,7 @@ namespace Blabbers.Game00
             else if (sfx.onlyPlayOnceEachTime)
             {
                 // We shouldnt play this SFX if one from the same type was recently played 
-                Debug.Log("We should not play yet");
+                //Debug.Log("We should not play yet");
                 return;
             }
             Instance.gameplaySource.PlayOneShot(clip, volumeScale);
