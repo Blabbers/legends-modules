@@ -9,8 +9,16 @@ namespace Blabbers.Game00
 		//public RotateMode rotateMode;
 
 		public override void Play(MotionTweenPlayer tweenPlayer)
-		{
-			tweenPlayer.transform.DORotate(tweenPlayer.transform.eulerAngles + eulerAngles, duration).SetEase(curve).SetUpdate(true);
-		}
+        {
+            var targetValue = tweenPlayer.transform.eulerAngles + eulerAngles;
+            if (duration > 0)
+            {
+                tweenPlayer.transform.DORotate(targetValue, duration).SetEase(curve).SetUpdate(true);    
+            }
+            else
+            {
+                tweenPlayer.transform.eulerAngles = targetValue;
+            }
+        }
 	}
 }

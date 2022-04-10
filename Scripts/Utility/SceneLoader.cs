@@ -19,6 +19,7 @@ namespace Blabbers.Game00
 
         void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
+            UI_RetryButton.HardReset = false;
             if (scene.name.Equals($"{gameData.gameLevelTag}level-select"))
             {
                 isStuckOnThisLevel = false;
@@ -28,7 +29,7 @@ namespace Blabbers.Game00
 
         void OnSceneUnloaded(Scene scene)
         {
-            if (scene.name.Contains("level") && !scene.name.Equals($"{gameData.gameLevelTag}level-select"))
+            if (!UI_RetryButton.HardReset && scene.name.Contains("level") && !scene.name.Equals($"{gameData.gameLevelTag}level-select"))
             {
                 isStuckOnThisLevel = true;
             }

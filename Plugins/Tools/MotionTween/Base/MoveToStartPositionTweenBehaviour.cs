@@ -10,8 +10,15 @@ namespace Blabbers.Game00
 			//var outsidePosition = HideOutsideTweenBehaviour.GetOutsidePosition(tweenPlayer, swipeFrom);
 			//tweenPlayer.rectTransform.position = outsidePosition;
 
-			tweenPlayer.RectTransform.DOAnchorPos(tweenPlayer.StartAnchoredPosition, duration)
-				.SetEase(curve).SetUpdate(true);
+            var newPosition = tweenPlayer.StartAnchoredPosition;
+            if (duration > 0)
+            {
+                tweenPlayer.RectTransform.DOAnchorPos(newPosition, duration).SetEase(curve).SetUpdate(true);
+            }
+            else
+            {
+                tweenPlayer.RectTransform.anchoredPosition = newPosition;
+            }
 		}
 	}
 }

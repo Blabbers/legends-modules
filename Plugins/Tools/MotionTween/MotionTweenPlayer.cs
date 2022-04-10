@@ -1,6 +1,7 @@
 ﻿using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using BeauRoutine;
 using UnityEngine;
 using UnityEngine.UI;
 using NaughtyAttributes;
@@ -26,6 +27,8 @@ namespace Blabbers.Game00
 		public RectTransform RectTransform { get; private set; }
 		public CanvasScaler CanvasScaler { get; private set; }
 
+        private bool hasAwakened;
+        
 		[Button()]
 		public void PreviewAnimation()
 		{
@@ -34,6 +37,9 @@ namespace Blabbers.Game00
 		
 		private void Awake()
 		{
+            if(hasAwakened) return;
+            hasAwakened = true;
+            
 			RectTransform = GetComponent<RectTransform>();
 			CanvasScaler = GetComponentInParent<CanvasScaler>();
 
@@ -47,15 +53,7 @@ namespace Blabbers.Game00
 		{
 			if (playOnEnabled)
 			{
-				StartCoroutine(Routine());
-				IEnumerator Routine()
-				{
-					if (delayOnEnable > 0f)
-					{
-						yield return new WaitForSeconds(delayOnEnable);
-					}
-					PlayTween();
-				}
+				PlayTween(delayOnEnable);
 			}
 		}
 		private void OnDisable()
@@ -63,18 +61,33 @@ namespace Blabbers.Game00
 			//ResetTween();
 		}
 
-		public void PlayTween()
-		{
-			// Remove this if we don't depend on a local coroutine to start the animation anymore
-			if (!this.gameObject.activeSelf)
-				return;
-
-			if (!isLoop || loopType == LoopType.Restart)
+        public void PlayTween()
+        {
+            PlayTween(0f);
+        }
+        
+		public void PlayTween(float delay)
+        {
+            Awake();
+            if (!isLoop || loopType == LoopType.Restart)
 			{
 				ResetTween();
 			}
-			this.tween.PlaySequence(this);
-		}
+
+            if (delay > 0f)
+            {
+                Routine.Start(Run());
+                IEnumerator Run()
+                {
+                    yield return Routine.WaitSeconds(delayOnEnable);
+                    this.tween.PlaySequence(this);
+                }
+            }
+            else
+            {
+                this.tween.PlaySequence(this);
+            }
+        }
 
 		public void ResetTween()
 		{

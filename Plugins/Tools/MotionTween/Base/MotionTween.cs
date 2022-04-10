@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BeauRoutine;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -33,8 +34,8 @@ namespace Blabbers.Game00
 				tweenPlayer.OnAnimationStart?.Invoke();
 			}
 
-			tweenPlayer.StartCoroutine(Routine());
-			IEnumerator Routine()
+            tweenPlayer.StartCoroutine(Run());
+			IEnumerator Run()
 			{
 				foreach (var behaviour in behaviours)
 				{
@@ -43,12 +44,12 @@ namespace Blabbers.Game00
 					{
 						if (behaviour.duration > 0)
 						{
-							yield return new WaitForSecondsRealtime(behaviour.duration);
+							yield return Routine.WaitRealSeconds(behaviour.duration);
 						}
 					}
 				}
 
-				yield return null;
+				yield return Routine.WaitForRealtimeUpdate();
 				if(playEvents)
 				{
 					tweenPlayer.OnAnimationFinished?.Invoke();

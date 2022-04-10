@@ -29,15 +29,20 @@ public class UI_LevelSelect : MonoBehaviour
         {
             for (int i = 0; i < buttonAmount; i++)
             {
-                //yield return Routine.WaitSeconds(buttonDropInterval);
-                buttonMotions[i].gameObject.SetActive(false);
+                if(buttonMotions[i] != null)
+                {
+                    buttonMotions[i].gameObject.SetActive(false);
+                }
             }
             for (int i = 0; i < buttonAmount; i++)
             {
                 yield return Routine.WaitSeconds(buttonDropInterval);
                 var buttonMotion = buttonMotions[i];
-                buttonMotion.gameObject.SetActive(true);
-                startTween.PlaySequence(buttonMotion, false);
+                if(buttonMotion = null)
+                {
+                    buttonMotion.gameObject.SetActive(true);
+                    startTween.PlaySequence(buttonMotion, false);
+                }
             }
         }
     }

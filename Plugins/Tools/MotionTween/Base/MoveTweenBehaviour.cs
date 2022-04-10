@@ -8,8 +8,16 @@ namespace Blabbers.Game00
 		public Vector2 addPosition;
 
 		public override void Play(MotionTweenPlayer tweenPlayer)
-		{
-			tweenPlayer.RectTransform.DOAnchorPos(tweenPlayer.RectTransform.anchoredPosition + addPosition, duration).SetEase(curve).SetUpdate(true);
-		}
+        {
+            var newPosition = tweenPlayer.RectTransform.anchoredPosition + addPosition;
+            if (duration > 0)
+            {
+                tweenPlayer.RectTransform.DOAnchorPos(newPosition, duration).SetEase(curve).SetUpdate(true);
+            }
+            else
+            {
+                tweenPlayer.RectTransform.anchoredPosition = newPosition;
+            }
+        }
 	}
 }
