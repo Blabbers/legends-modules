@@ -23,6 +23,12 @@ public class UI_PopupDialogue : UI_PopupWindow, ISingleton
 	[SerializeField] private bool allowContinue;
 	private CharacterSay currentCharacterSay;
 
+    private Sprite overrideSprite;
+    
+    public void OverrideSprite(Sprite newSprite)
+    {
+        overrideSprite = newSprite;
+    }
 	public void Execute(CharacterSay characterSay, bool allowContinue)
 	{
 		currentCharacterSay = characterSay;
@@ -36,7 +42,7 @@ public class UI_PopupDialogue : UI_PopupWindow, ISingleton
 
 		ShowPopup();
 
-        portraitImg.sprite = characterSay.character;
+        portraitImg.sprite = overrideSprite != null ? overrideSprite : characterSay.character;
         portraitImg.transform.DOKill();
 		portraitImg.DOKill();
 

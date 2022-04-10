@@ -10,8 +10,7 @@ namespace Blabbers.Game00
 {
     public class UI_PopupWindow : MonoBehaviour, ISingleton
     {
-        [NaughtyAttributes.ShowNativeProperty()]
-        public static bool IsAnyPopupOpen => OpenedPopupList.Count > 0;
+        public static bool IsAnyPopupOpen => OpenedPopupList.Count > 0 || Singleton.Get<UI_TutorialController>().CheckTutorialEnabled();
         public static List<GameObject> OpenedPopupList = new List<GameObject>();
 
         public Action OnPopupHidden;

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using NaughtyAttributes;
 using UnityEngine.UI;
 using System.Collections;
@@ -11,6 +12,7 @@ namespace Blabbers.Game00
 		public Slider HoldSlider;
 		public AnimationCurve SliderCurve;
 		public readonly float TapAnywhereDelay = 3f;
+        public bool autoEnableHoldToSkip = true;
 		[ReadOnly] public bool CanTapToDisableScreen;
 		public float duration;
 		public UnityEvent OnWindowOpened;
@@ -18,10 +20,18 @@ namespace Blabbers.Game00
 		private void OnEnable()
 		{
 			OnWindowOpened?.Invoke();
-			ShowTapTextAfterDelay();
+            ShowTapTextAfterDelay();
+            var gameplayHUD = Singleton.Get<UI_GameplayHUD>();
+            if (gameplayHUD) { gameplayHUD.HideFullHUD(); }
 		}
 
-		public abstract void ShowScreen();
+        private void OnDisable()
+        {
+            var gameplayHUD = Singleton.Get<UI_GameplayHUD>();
+            if (gameplayHUD) { gameplayHUD.ShowFullHUD(); }
+        }
+
+        public abstract void ShowScreen();
 		public abstract void HideScreen();
 
 		public void ShowTapTextAfterDelay()
@@ -30,14 +40,23 @@ namespace Blabbers.Game00
 			CanTapToDisableScreen = false;
 			HoldSlider.gameObject.SetActive(false);
 
-			StartCoroutine(Routine());
-			IEnumerator Routine()
-			{
-				yield return new WaitForSecondsRealtime(TapAnywhereDelay);
-				CanTapToDisableScreen = true;
-				HoldSlider.gameObject.SetActive(true);
-			}
-		}
+            if (autoEnableHoldToSkip)
+            {
+                StartCoroutine(Routine());
+
+                IEnumerator Routine()
+                {
+                    yield return new WaitForSecondsRealtime(TapAnywhereDelay);
+                    EnableSkip();
+                }
+            }
+        }
+
+        public void EnableSkip()
+        {
+            CanTapToDisableScreen = true;
+            HoldSlider.gameObject.SetActive(true);
+        }
 
 		private void Update()
 		{
