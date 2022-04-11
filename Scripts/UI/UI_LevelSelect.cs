@@ -38,7 +38,7 @@ public class UI_LevelSelect : MonoBehaviour
             {
                 yield return Routine.WaitSeconds(buttonDropInterval);
                 var buttonMotion = buttonMotions[i];
-                if(buttonMotion = null)
+                if(buttonMotion != null)
                 {
                     buttonMotion.gameObject.SetActive(true);
                     startTween.PlaySequence(buttonMotion, false);

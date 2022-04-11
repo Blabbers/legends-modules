@@ -8,7 +8,7 @@ namespace Blabbers.Game00
 {
     public class AudioController : MonoBehaviour, ISingleton
     {
-        private AudioController Instance => Singleton.Get<AudioController>();
+        public static AudioController Instance => Singleton.Get<AudioController>();
 
         public AudioSource musicSource;
         public AudioSource gameplaySource;
