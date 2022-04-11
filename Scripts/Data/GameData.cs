@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Blabbers.Game00;
-using UnityEngine;
-using SimpleJSON;
+﻿using Blabbers.Game00;
 using NaughtyAttributes;
+using UnityEngine;
 
 public class GameData : ScriptableObject
 {
@@ -51,6 +48,9 @@ public class GameProgress
     {
         isNewGame = true;
         FirstTimeLevelSelect = true;
+        HasClearedWithTwoStars = false;
+        HasShownPlayAgainPopup = false;
+
         levels = new Level[totalLevels];
         for (int i = 0; i < levels.Length; i++)
         {
@@ -62,6 +62,11 @@ public class GameProgress
 
     //Moved variable from GameData to Progress // Used to control if Customization will be open
     public bool FirstTimeLevelSelect = true;
+
+    //Create variable to detect the first time the player gets less than 3 stars
+    public bool HasClearedWithTwoStars = false;
+    public bool HasShownPlayAgainPopup = true;
+
 
     // Level being played at the moment
     public int currentLevelId = 0;

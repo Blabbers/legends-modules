@@ -43,7 +43,7 @@ namespace Blabbers.Game00
             //OpenedPopupList.Add(this.gameObject);
             //this.gameObject.SetActive(true);
 
-
+            //Debug.Log("ShowLevelVictoryScreen: " + starList.Length);
 
             foreach (var item in starsTweens)
             {
@@ -52,7 +52,7 @@ namespace Blabbers.Game00
 
             var starsRemaining = 3;
             // First, separate the stars that were not earned and places the reason for losing them
-            
+
             Debug.Log("starsRemaining " + starsRemaining);
             for (int i = starList.Length - 1; i >= 0; i--)
             {
@@ -66,7 +66,7 @@ namespace Blabbers.Game00
                     Debug.Log("failedStar " + text.name);
                 }
             }
-            
+
             for (int i = 0; i < starsTweens.Count; i++)
             {
                 if (i < starsRemaining)
@@ -83,14 +83,14 @@ namespace Blabbers.Game00
                     Debug.Log("LOSE " + textTween.name);
                 }
             }
-            
+
             // Functionality
             if (ProgressController.GameProgress.levels != null)
             {
                 ProgressController.GameProgress.levels[ProgressController.GameProgress.currentLevelId].starAmount = Mathf.Max(starsRemaining, ProgressController.GameProgress.levels[ProgressController.GameProgress.currentLevelId].starAmount);
                 ProgressController.GameProgress.levels[ProgressController.GameProgress.currentLevelId].score = Mathf.Max(score, ProgressController.GameProgress.levels[ProgressController.GameProgress.currentLevelId].score);
             }
-            
+
             //var i = 1;
             //foreach (var item in stars)
             //{

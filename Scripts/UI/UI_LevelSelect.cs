@@ -4,6 +4,7 @@ using BeauRoutine;
 using Blabbers.Game00;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class UI_LevelSelect : MonoBehaviour
@@ -12,7 +13,10 @@ public class UI_LevelSelect : MonoBehaviour
     public float pathFadeInDuration = 1f;
     public MotionTween startTween;
     public Transform buttonsParent;
-    public Image pathImage; 
+    public Image pathImage;
+
+    public UnityEvent playAgainPopup;
+
     void OnEnable()
     {
         // Path fade in
@@ -20,7 +24,7 @@ public class UI_LevelSelect : MonoBehaviour
         pathImageColor.a = 0f;
         pathImage.color = pathImageColor;
         pathImage.DOFade(1f, pathFadeInDuration);
-        
+
         // Start buttons animation
         var buttonMotions = buttonsParent.GetComponentsInChildren<MotionTweenPlayer>();
         var buttonAmount = buttonMotions.Length;
@@ -29,7 +33,7 @@ public class UI_LevelSelect : MonoBehaviour
         {
             for (int i = 0; i < buttonAmount; i++)
             {
-                if(buttonMotions[i] != null)
+                if (buttonMotions[i] != null)
                 {
                     buttonMotions[i].gameObject.SetActive(false);
                 }
@@ -38,17 +42,32 @@ public class UI_LevelSelect : MonoBehaviour
             {
                 yield return Routine.WaitSeconds(buttonDropInterval);
                 var buttonMotion = buttonMotions[i];
-                if(buttonMotion != null)
+                if (buttonMotion != null)
                 {
                     buttonMotion.gameObject.SetActive(true);
                     startTween.PlaySequence(buttonMotion, false);
                 }
             }
+
+            yield return Routine.WaitSeconds(buttonDropInterval + 0.25f);
+            DisplayPlayAgainPopup();
         }
     }
-    
+
+
+    void DisplayPlayAgainPopup()
+    {
+        //Check if necessary
+        if (ProgressController.GameProgress.HasClearedWithTwoStars && !ProgressController.GameProgress.HasShownPlayAgainPopup)
+        {
+            ProgressController.GameProgress.HasShownPlayAgainPopup = true;
+            playAgainPopup.Invoke();
+        }
+
+    }
+
     void Update()
     {
-        
+
     }
 }
