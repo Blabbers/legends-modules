@@ -17,23 +17,27 @@ public class UI_ButtonPlayTTS : MonoBehaviour
         if (!string.IsNullOrEmpty(overrideTTSkey))
         {
             button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(ManualSpeakText);    
+            button.onClick.AddListener(ManualSpeakText);
             return;
         }
-        
-        if(loaded)
+
+        if (loaded)
             return;
 
         if (!sdkText)
         {
             sdkText = GetComponentInParent<LoadSDKText>();
         }
-            
+
         if (sdkText)
         {
             loaded = true;
-            button.onClick.AddListener(sdkText.PlayThisSpeechText);    
+
+            //Changed this line to override the normal Speech to text that is dependent of the bool
+            //button.onClick.AddListener(sdkText.PlayThisSpeechText);    
+            button.onClick.AddListener(() => ForceSpeakText(sdkText.key));
         }
+
     }
 
     void ManualSpeakText()
@@ -41,5 +45,16 @@ public class UI_ButtonPlayTTS : MonoBehaviour
         Debug.Log("Btn SpeakText: " + overrideTTSkey);
         LOLSDK.Instance.SpeakText(overrideTTSkey);
         LocalizationExtensions.AlreadyPlayedTTS.Add(overrideTTSkey);
+
+        //LOLSDK.Instance.SpeakText(key);
+        //LOLSDK.Instance?.SpeakText(key);
+        //LocalizationExtensions.AlreadyPlayedTTS.Add(key);
+    }
+
+
+    void ForceSpeakText(string key)
+    {
+        LOLSDK.Instance?.SpeakText(key);
+        LocalizationExtensions.AlreadyPlayedTTS.Add(key);
     }
 }
