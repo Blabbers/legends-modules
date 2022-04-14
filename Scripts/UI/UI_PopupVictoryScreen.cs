@@ -40,11 +40,6 @@ namespace Blabbers.Game00
             continueButton.interactable = false;
             base.ShowPopup();
 
-            //OpenedPopupList.Add(this.gameObject);
-            //this.gameObject.SetActive(true);
-
-            //Debug.Log("ShowLevelVictoryScreen: " + starList.Length);
-
             foreach (var item in starsTweens)
             {
                 item.gameObject.SetActive(false);
@@ -52,8 +47,6 @@ namespace Blabbers.Game00
 
             var starsRemaining = 3;
             // First, separate the stars that were not earned and places the reason for losing them
-
-            Debug.Log("starsRemaining " + starsRemaining);
             for (int i = starList.Length - 1; i >= 0; i--)
             {
                 var star = starList[i];
@@ -63,7 +56,6 @@ namespace Blabbers.Game00
                     //starsTweens[starsLost].gameObject.SetActive(false);
                     var text = textsTweens[starsRemaining].GetComponent<TextMeshProUGUI>();
                     text.LocalizeText(star.reason);
-                    Debug.Log("failedStar " + text.name);
                 }
             }
 
@@ -73,34 +65,31 @@ namespace Blabbers.Game00
                 {
                     var star = starsTweens[i];
                     star.PlayTween(star.delayOnEnable);
-                    Debug.Log("WIN " + star.name);
                 }
                 else
                 {
                     // se nao, toca o texto de motivo que perdeu
                     var textTween = textsTweens[i];
                     textTween.PlayTween(textTween.delayOnEnable);
-                    Debug.Log("LOSE " + textTween.name);
                 }
             }
-
+            
+            var newStarAmountForThisLevel = Mathf.Max(starsRemaining, ProgressController.GameProgress.levels[ProgressController.GameProgress.currentLevelId].starAmount); 
+            
             // Functionality
             if (ProgressController.GameProgress.levels != null)
             {
-                ProgressController.GameProgress.levels[ProgressController.GameProgress.currentLevelId].starAmount = Mathf.Max(starsRemaining, ProgressController.GameProgress.levels[ProgressController.GameProgress.currentLevelId].starAmount);
+                ProgressController.GameProgress.levels[ProgressController.GameProgress.currentLevelId].starAmount =
+                    newStarAmountForThisLevel;
                 ProgressController.GameProgress.levels[ProgressController.GameProgress.currentLevelId].score = Mathf.Max(score, ProgressController.GameProgress.levels[ProgressController.GameProgress.currentLevelId].score);
             }
-
-            //var i = 1;
-            //foreach (var item in stars)
-            //{
-            //    if (i > starAmount)
-            //        break;
-            //
-            //    item.SetActive(true);
-            //    i++;
-            //}
-
+            
+            if (newStarAmountForThisLevel < 3)
+            {
+                Debug.Log("UI_PopupPlayAgainWarning.HasClearedWithTwoStars TRUE");
+                UI_PopupPlayAgainWarning.HasClearedWithTwoStars = true;
+            }
+            
             EnableContinueButton();
         }
 
