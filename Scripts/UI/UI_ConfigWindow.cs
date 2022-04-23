@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Blabbers;
+using UnityEngine;
 using Blabbers.Game00;
 
 public class UI_ConfigWindow : MonoBehaviour, ISingleton //can be based on UI PopupWindow later
@@ -16,10 +17,12 @@ public class UI_ConfigWindow : MonoBehaviour, ISingleton //can be based on UI Po
     {
         ProgressController.GameProgress.enableAutomaticTTS = true;
         ProgressController.enableAutomaticTTS = true;
+        Analytics.OnChooseAutomaticTTS();
     }
     public void OnNoButton()
     {
         ProgressController.GameProgress.enableAutomaticTTS = false;
         ProgressController.enableAutomaticTTS = false;
+        Analytics.OnChooseAutomaticTTS();
     }
 }

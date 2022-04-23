@@ -27,6 +27,7 @@ namespace Blabbers.Game00
                 btnContinue.gameObject.SetActive(true);
                 btnNewGame.gameObject.SetActive(true);
             }
+            Analytics.OnGameStart();
         }
     }
 }

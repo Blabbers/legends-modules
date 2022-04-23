@@ -74,6 +74,8 @@ namespace Blabbers.Game00
                 }
             }
             
+            Analytics.OnLevelVictory(starsRemaining);
+            
             var newStarAmountForThisLevel = Mathf.Max(starsRemaining, ProgressController.GameProgress.levels[ProgressController.GameProgress.currentLevelId].starAmount); 
             
             // Functionality

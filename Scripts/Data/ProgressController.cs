@@ -182,11 +182,11 @@ namespace Blabbers.Game00
         /// </summary>
         public void FinishGame()
         {
-            Debug.Log("Game finished!");
             if (LoLSDK.LOLSDK.Instance.IsInitialized)
             {
                 LoLSDK.LOLSDK.Instance.CompleteGame();
             }
+            Analytics.OnGameFinished();
         }
         /// <summary>
         /// Submit progress informing the LOL platform that the student advanced.

@@ -2,6 +2,7 @@
 using Blabbers.Game00;
 using System.Collections.Generic;
 using BeauRoutine;
+using Blabbers;
 using UnityEngine;
 using UnityEngine.Events;
 using DG.Tweening;
@@ -40,7 +41,8 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
         starMotionPlayer.transform.position = clickedBtnTransform.position;
         var clickedBtn = clickedBtnTransform.GetComponent<Button>();
 
-        if (id == (int)CorrectOption)
+        var isCorrect = id == (int) CorrectOption; 
+        if (isCorrect)
         {
             Debug.Log("Correct");
             motionStarCorrect.PlaySequence(starMotionPlayer);
@@ -56,6 +58,8 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
             clickedBtn.image.DOColor(Color.red, 0.5f);
             WrongOptionMethod();
         }
+
+        Analytics.OnQuestionAnswered(isCorrect);
     }
 
     public void ShowQuestion(Question question)

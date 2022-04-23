@@ -199,7 +199,6 @@ GameObject:
   - component: {fileID: 151810128965505154}
   - component: {fileID: 5930342583076123999}
   - component: {fileID: 1286648772987957043}
-  - component: {fileID: 1638125504453359145}
   m_Layer: 8
   m_Name: '[Global]'
   m_TagString: Untagged
@@ -247,7 +246,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 762982237da95724394a8c1099c01a2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameData: {fileID: 11400000, guid: 38b3732994efc2d46a14cf3e773370c3, type: 2}
 --- !u!114 &151810128965505154
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,7 +258,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e09b15e755b8d2d49b1f6fa7c4441ba3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameData: {fileID: 11400000, guid: 38b3732994efc2d46a14cf3e773370c3, type: 2}
 --- !u!114 &5930342583076123999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -287,38 +284,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isMobile: 0
-  gameData: {fileID: 11400000, guid: 38b3732994efc2d46a14cf3e773370c3, type: 2}
   loadMainMenuAfterInitialize: 0
---- !u!114 &1638125504453359145
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6045420697909505616}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -745406591, guid: 220224b43fc464c28bc0e8de8f54a432, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Trigger:
-    m_IsTriggerExpanded: 1
-    m_Type: 0
-    m_LifecycleEvent: 0
-    m_ApplyRules: 0
-    m_Rules:
-      m_Rules: []
-    m_TriggerBool: 0
-    m_InitTime: 5
-    m_RepeatTime: 5
-    m_Repetitions: 0
-    repetitionCount: 0
-  m_EventPayload:
-    m_IsEventExpanded: 1
-    m_StandardEventType: CustomEvent
-    m_Parameters:
-      m_Parameters: []
-    m_Name: 
 --- !u!1 &8966024761269864226
 GameObject:
   m_ObjectHideFlags: 0

@@ -100,6 +100,17 @@ public class GameProgress
     public bool enableAutomaticTTS = true;
 
     public Customization[] customizations;
+
+    public bool AllLevelsWith3Stars()
+    {
+        foreach (var level in levels)
+        {
+            if (level.starAmount < 3)
+                return false;
+        }
+
+        return true;
+    }
 }
 
 [System.Serializable]
