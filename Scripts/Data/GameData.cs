@@ -4,6 +4,18 @@ using UnityEngine;
 
 public class GameData : ScriptableObject
 {
+    #region Instance
+    private static GameData _instance = null;
+    public static GameData Instance
+    {
+        get
+        {
+            if (!_instance) _instance = Resources.Load<GameData>("GameData");
+            return _instance;
+        }
+    }
+    #endregion
+    
     public void OnEnable()
     {
         Application.runInBackground = false;
@@ -11,20 +23,30 @@ public class GameData : ScriptableObject
         SharedState.maxProgress = maxProgress;
     }
 
-    [Header("Settings")]
-    public string applicationID = "com.blabbers.gameName";
+    private bool HasChangedAppID(string value)
+    {
+        return !value.Equals("com.blabbers.gameName");
+    }
+    
+    [HorizontalLine(color: EColor.White)]
     // Progress should be a minimum of 8
+    [BoxGroup("Settings")]
     public int maxProgress = 8;
+    [BoxGroup("Settings")]
     public int totalLevels = 3;
-
+    [BoxGroup("Settings")]
+    [ValidateInput(nameof(HasChangedAppID), "ApplicationID must be have a custom name for the game.")]
+    public string applicationID = "com.blabbers.gameName";
     //Added variables to control customization
+    [BoxGroup("Settings")]
     public bool StartCustomizationFirst = false;
 
     // I will be hiding this for now. This is only usefull if the LL staff asks us to actually use the namespaces and merge all the projects
-    [HideInInspector]//[Header("Custom strings")]
+    [BoxGroup("Settings")][HideInInspector]
     public string gameLevelTag = "blabbers00-";
 
-    [Header("Saved Progress")]
+    [BoxGroup("Saved Progress")]
+    [HorizontalLine(color: EColor.White)]
     public GameProgress progress;
 
     [Button("Test → Finish Current Level")]

@@ -9,7 +9,7 @@ namespace Blabbers.Game00
 
         // If the player has already loaded this level more than once whithout leaving it
         public static bool isStuckOnThisLevel;
-        public GameData gameData;
+        private GameData gameData => GameData.Instance;
 
         public void Awake()
         {

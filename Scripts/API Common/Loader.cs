@@ -15,8 +15,7 @@ public class Loader : MonoBehaviour, ISingleton
     private const string languageJSONFilePath = "language.json";
     //private const string questionsJSONFilePath = "questions.json";
     private const string startGameJSONFilePath = "startGame.json";
-
-    public GameData gameData;
+    private GameData gameData => GameData.Instance;
     public bool loadMainMenuAfterInitialize = true;
 
     public void OnCreated()

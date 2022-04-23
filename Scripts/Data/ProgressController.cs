@@ -10,8 +10,7 @@ namespace Blabbers.Game00
 {
     public class ProgressController : MonoBehaviour, ISingleton
     {
-        [SerializeField]
-        private GameData gameData;
+        private GameData gameData => GameData.Instance;
         public static GameProgress GameProgress => Singleton.Get<ProgressController>().gameData.progress;
         public static bool enableAutomaticTTS = true;
 

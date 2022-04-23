@@ -28,22 +28,21 @@ namespace Blabbers.Game00
 			}
 
 			instance = this;
-			DontDestroyOnLoad(this);			
-
-			SceneManager.sceneLoaded += HandleSceneLoaded;
+			DontDestroyOnLoad(this);
+            SceneManager.sceneUnloaded += HandleSceneLoaded;
 		}
 
-		private void InitializeSingleton()
+        private void HandleSceneLoaded(Scene arg0)
+        {
+            InitializeSingleton();
+        }
+
+        private void InitializeSingleton()
 		{
 			Singleton.ClearAllSingletonInstances();
 			Singleton.InitializeAllSingletonInstances();
 		}
-
-		private void HandleSceneLoaded(Scene arg0, LoadSceneMode arg1)
-		{
-			InitializeSingleton();
-		}
-	}
+    }
 
 	public interface ISingleton
 	{
@@ -56,11 +55,11 @@ namespace Blabbers.Game00
 	public static class Singleton
 	{
 		private static bool hasInitialized;
+        private static GameObject globalInstance;
 		public static Dictionary<Type, MonoBehaviour> Instances { get; private set; } = new Dictionary<Type, MonoBehaviour>();
+        public static readonly Relay<MonoBehaviour> OnAssigned = new Relay<MonoBehaviour>();
 
-		public static readonly Relay<MonoBehaviour> OnAssigned = new Relay<MonoBehaviour>();
-		
-		public static T Get<T>() where T : MonoBehaviour
+        public static T Get<T>() where T : MonoBehaviour
 		{
 			if (!Application.isPlaying)
 				return null;
@@ -95,8 +94,8 @@ namespace Blabbers.Game00
 				{
 					Initialize(mono);
 					// Calls "OnCreated" method the first time this singleton is created or accessed
-					(mono as ISingleton).OnCreated();
-				}
+                    (mono as ISingleton).OnCreated();
+                }
 			}
 			return mono as T;
 		}
@@ -148,7 +147,9 @@ namespace Blabbers.Game00
 			}
 			return default;
 		}
-
+        
+        // TODO: Chamar esse initialize em um callback fora do monobehaviour da Unity (caso ainda nao exista "globalInstance" setada)
+        // Porque por enquanto ele só roda e cria o primeiro [Global] se alguem chamar um Singleton.Get<> (que por coincidencia acontece ja no menu inicial)
 		public static void InitializeAllSingletonInstances()
 		{
 			if (!hasInitialized)
@@ -156,7 +157,13 @@ namespace Blabbers.Game00
 				hasInitialized = true;
 			}
 
-			for (int i = -1; i < SceneManager.sceneCount; i++)
+            if (!globalInstance)
+            {
+                var globalResource = Resources.Load<GameObject>("[Global]");
+                globalInstance = GameObject.Instantiate(globalResource);
+            }
+
+            for (int i = -1; i < SceneManager.sceneCount; i++)
 			{
 				Scene scene;
 				if(i == -1)
