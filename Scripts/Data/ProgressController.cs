@@ -180,13 +180,17 @@ namespace Blabbers.Game00
         /// <summary>
         /// Finishes the game and sends the message to the LOL platform.
         /// </summary>
+        private bool isGameFinished = false;
         public void FinishGame()
         {
+            if(isGameFinished) return;
+            
             if (LoLSDK.LOLSDK.Instance.IsInitialized)
             {
                 LoLSDK.LOLSDK.Instance.CompleteGame();
             }
             Analytics.OnGameFinished();
+            isGameFinished = true;
         }
         /// <summary>
         /// Submit progress informing the LOL platform that the student advanced.
