@@ -11,7 +11,7 @@ namespace Blabbers.Game00
 	{
 		public Slider HoldSlider;
 		public AnimationCurve SliderCurve;
-		public readonly float TapAnywhereDelay = 3f;
+		public float TapAnywhereDelay = 3f;
         public bool autoEnableHoldToSkip = true;
 		[ReadOnly] public bool CanTapToDisableScreen;
 		public float duration;
