@@ -43,11 +43,17 @@ public class GameData : ScriptableObject
 
     // I will be hiding this for now. This is only usefull if the LL staff asks us to actually use the namespaces and merge all the projects
     [BoxGroup("Settings")][HideInInspector]
-    public string gameLevelTag = "blabbers00-";
-
-    [BoxGroup("Saved Progress")]
+    public string gameLevelTag = ""; //"blabbers00-";
+    
     [HorizontalLine(color: EColor.White)]
+    [BoxGroup("Saved Progress")]
     public GameProgress progress;
+    
+    //Fields for debugging only.
+    [ShowNativeProperty]
+    public bool IsStuckOnThisLevel => SceneLoader.isStuckOnThisLevel;
+    [ShowNativeProperty]
+    public bool HardReset => UI_RetryButton.HardReset;
 
     [Button("Test → Finish Current Level")]
     public void TestFinishCurrentLevel()

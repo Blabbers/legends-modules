@@ -18,23 +18,7 @@ namespace Blabbers
             {
                 dataDictionary.Add("reachedLevel", GameData.Instance.progress.reachedLevel);
             }
-
             SendEvent("gameStart", dataDictionary);
-        }
-
-        public static void OnChooseAutomaticTTS()
-        {
-            dataDictionary.Clear();
-            dataDictionary.Add("enabled", ProgressController.enableAutomaticTTS);
-            SendEvent("automaticTTS", dataDictionary);
-        }
-        
-        public static void OnQuestionAnswered(bool answeredCorrectly)
-        {
-            dataDictionary.Clear();
-            dataDictionary.Add("level", GameData.Instance.progress.currentLevelId + 1);
-            dataDictionary.Add("isCorrect", answeredCorrectly);
-            SendEvent("questionAnswered", dataDictionary);
         }
 
         public static void OnLevelStart()
@@ -76,6 +60,12 @@ namespace Blabbers
             dataDictionary.Add("level", GameData.Instance.progress.currentLevelId + 1);
             dataDictionary.Add("duration", Time.timeSinceLevelLoad);
             dataDictionary.Add("starAmount", starAmount);
+            var hasQuestion = Singleton.Get<GameplayController>().ShowLevelQuestion;
+            var answeredCorrectly =   Singleton.Get<UI_PopupQuestion>().answeredCorrectly;
+            if (hasQuestion && answeredCorrectly)
+            {
+                dataDictionary.Add("correctAnswer", answeredCorrectly);
+            }
             SendEvent("levelVictory", dataDictionary);
         }
         
@@ -120,6 +110,7 @@ namespace Blabbers
             dataDictionary.Add("skinSet", skinSet);
             dataDictionary.Add("reachedLevel", GameData.Instance.progress.currentLevelId + 1);
             dataDictionary.Add("timeSinceStart", Time.realtimeSinceStartup);
+            dataDictionary.Add("enabledTTS", ProgressController.enableAutomaticTTS);
             SendEvent("skinSelected", dataDictionary);
         }
 

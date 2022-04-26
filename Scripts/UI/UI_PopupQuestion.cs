@@ -6,6 +6,7 @@ using Blabbers;
 using UnityEngine;
 using UnityEngine.Events;
 using DG.Tweening;
+using NaughtyAttributes;
 using TMPro;
 using UnityEngine.UI;
 
@@ -29,6 +30,9 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
     public MotionTween motionStarCorrect, motionStarWrong;
     public AudioSFX sfxExtraStar;
 
+    [ReadOnly]
+    public bool answeredCorrectly = false;
+    
     public bool ChoseCorrectly { get; private set; }
 
     public void OnCreated() { }
@@ -41,10 +45,9 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
         starMotionPlayer.transform.position = clickedBtnTransform.position;
         var clickedBtn = clickedBtnTransform.GetComponent<Button>();
 
-        var isCorrect = id == (int) CorrectOption; 
-        if (isCorrect)
+        answeredCorrectly = id == (int) CorrectOption; 
+        if (answeredCorrectly)
         {
-            Debug.Log("Correct");
             motionStarCorrect.PlaySequence(starMotionPlayer);
             sfxExtraStar.PlaySelectedIndex(1);
             clickedBtn.image.DOColor(Color.green, 0.5f);
@@ -52,14 +55,11 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
         }
         else
         {
-            Debug.Log("Wrong");
             motionStarWrong.PlaySequence(starMotionPlayer);
             sfxExtraStar.PlaySelectedIndex(0);
             clickedBtn.image.DOColor(Color.red, 0.5f);
             WrongOptionMethod();
         }
-
-        Analytics.OnQuestionAnswered(isCorrect);
     }
 
     public void ShowQuestion(Question question)

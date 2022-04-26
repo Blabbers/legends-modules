@@ -17,6 +17,7 @@ namespace Blabbers.Game00
         private void Awake()
         {
             SceneManager.sceneLoaded += HandleSceneLoaded;
+            isGameFinished = false;
         }
 
         void ISingleton.OnCreated()
@@ -28,6 +29,8 @@ namespace Blabbers.Game00
             // If on a level, set its score to zero?
             if (GameProgress.currentLevelId < GameProgress.levels.Length)
                 GameProgress.CurrentLevel.score = 0;
+            
+            isGameFinished = false;
         }
 
         private void Start()
@@ -183,14 +186,15 @@ namespace Blabbers.Game00
         private bool isGameFinished = false;
         public void FinishGame()
         {
-            if(isGameFinished) return;
-            
             if (LoLSDK.LOLSDK.Instance.IsInitialized)
             {
                 LoLSDK.LOLSDK.Instance.CompleteGame();
             }
-            Analytics.OnGameFinished();
-            isGameFinished = true;
+            if (!isGameFinished)
+            {
+                Analytics.OnGameFinished();
+                isGameFinished = true;
+            }
         }
         /// <summary>
         /// Submit progress informing the LOL platform that the student advanced.

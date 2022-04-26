@@ -88,7 +88,6 @@ namespace Blabbers.Game00
             
             if (newStarAmountForThisLevel < 3)
             {
-                Debug.Log("UI_PopupPlayAgainWarning.HasClearedWithTwoStars TRUE");
                 UI_PopupPlayAgainWarning.HasClearedWithTwoStars = true;
             }
             

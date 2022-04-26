@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Blabbers.Game00
@@ -24,7 +25,6 @@ namespace Blabbers.Game00
             {
                 isStuckOnThisLevel = false;
             }
-            SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 
         void OnSceneUnloaded(Scene scene)
@@ -33,7 +33,6 @@ namespace Blabbers.Game00
             {
                 isStuckOnThisLevel = true;
             }
-            SceneManager.sceneUnloaded -= OnSceneUnloaded;
         }
 
         public void LoadScene(string sceneName)

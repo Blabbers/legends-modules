@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Blabbers.Game00;
@@ -10,11 +11,16 @@ public class UI_TutorialController : MonoBehaviour, ISingleton
     
     public void OnCreated()
     {
+    }
+
+    private void Awake()
+    {
         if (!SceneLoader.isStuckOnThisLevel)
         {
             AlreadyTriggeredInThisLevel.Clear();
         }
     }
+
     public bool CheckTutorialEnabled()
     {
         IsEnabled = false;
