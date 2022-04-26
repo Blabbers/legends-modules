@@ -1,6 +1,8 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using BeauRoutine;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -46,5 +48,22 @@ namespace Blabbers.Game00
             base.HidePopup();
         }
 
+        private bool clicked = false;
+        private void Update()
+        {
+            if (Input.anyKeyDown && !clicked)
+            {
+                clicked = true;
+                Routine.Start(Run());
+                IEnumerator Run()
+                {
+                    // Starts tween to fade out this screen
+                    GetComponent<MotionTweenPlayer>().PlayTween();
+                    yield return Routine.WaitSeconds(1f);
+                    // Then force-hides the screen
+                    HidePopup();
+                }
+            }
+        }
     }
 }

@@ -17,7 +17,6 @@ namespace Blabbers.Game00
         private void Awake()
         {
             SceneManager.sceneLoaded += HandleSceneLoaded;
-            isGameFinished = false;
         }
 
         void ISingleton.OnCreated()
@@ -29,8 +28,6 @@ namespace Blabbers.Game00
             // If on a level, set its score to zero?
             if (GameProgress.currentLevelId < GameProgress.levels.Length)
                 GameProgress.CurrentLevel.score = 0;
-            
-            isGameFinished = false;
         }
 
         private void Start()
@@ -190,10 +187,10 @@ namespace Blabbers.Game00
             {
                 LoLSDK.LOLSDK.Instance.CompleteGame();
             }
-            if (!isGameFinished)
+            if (!Singleton.Get<ProgressController>().isGameFinished)
             {
                 Analytics.OnGameFinished();
-                isGameFinished = true;
+                Singleton.Get<ProgressController>().isGameFinished = true;
             }
         }
         /// <summary>
