@@ -100,6 +100,24 @@ namespace Blabbers.Game00
             }
         }
 
+        public void UpdateText_Concat(string add)
+        {
+            //Adds an asterisk if the text coult not be loaded from the language file
+            if (myTextM)
+            {
+                myTextM.text = LocalizationExtensions.LocalizeText(key) + " " + add;
+            }
+            if (myText)
+            {
+                myText.text = LocalizationExtensions.LocalizeText(key) + " " + add;
+            }
+
+            if (myTextP)
+            {
+                myTextP.text = LocalizationExtensions.LocalizeText(key) + " " + add;
+            }
+        }
+
         public void PlayThisSpeechText()
         {
             LocalizationExtensions.PlayTTS(key);
