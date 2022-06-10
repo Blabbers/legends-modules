@@ -37,7 +37,7 @@ namespace Blabbers
             dataDictionary.Add("situation", situation);
             SendEvent("levelStart", dataDictionary);
         }
-        
+
         public static void OnDefeat(string reason)
         {
             dataDictionary.Clear();
@@ -45,7 +45,7 @@ namespace Blabbers
             dataDictionary.Add("reason", reason);
             SendEvent("defeat", dataDictionary);
         }
-        
+
         public static void OnTutorialShown(string tutorialName)
         {
             dataDictionary.Clear();
@@ -53,7 +53,7 @@ namespace Blabbers
             dataDictionary.Add("name", tutorialName);
             SendEvent("tutorial", dataDictionary);
         }
-        
+
         public static void OnLevelVictory(int starAmount)
         {
             dataDictionary.Clear();
@@ -61,14 +61,14 @@ namespace Blabbers
             dataDictionary.Add("duration", Time.timeSinceLevelLoad);
             dataDictionary.Add("starAmount", starAmount);
             var hasQuestion = Singleton.Get<GameplayController>().ShowLevelQuestion;
-            var answeredCorrectly =   Singleton.Get<UI_PopupQuestion>().answeredCorrectly;
+            var answeredCorrectly = Singleton.Get<UI_PopupQuestion>().answeredCorrectly;
             if (hasQuestion && answeredCorrectly)
             {
                 dataDictionary.Add("correctAnswer", answeredCorrectly);
             }
             SendEvent("levelVictory", dataDictionary);
         }
-        
+
         public static void OnGameFinished()
         {
             dataDictionary.Clear();
@@ -116,8 +116,8 @@ namespace Blabbers
 
         private static void SendEvent(string eventName, Dictionary<string, object> dataDictionary)
         {
-            var result = UnityEngine.Analytics.Analytics.CustomEvent(eventName, dataDictionary);
-#if UNITY_EDITOR
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
             var parameters = "";
             foreach (var data in dataDictionary)
             {
@@ -125,8 +125,14 @@ namespace Blabbers
             }
 
             Debug.Log(
-                $"Analytics → <color=cyan>[{eventName}]</color> event was sent <color=white>[{result.ToString()}]</color>. With the parameters:{parameters}");
+                $"Analytics → <color=cyan>[{eventName}]</color> event was sent. With the parameters:{parameters}");
+#else
+            
+            UnityEngine.Analytics.Analytics.CustomEvent(eventName, dataDictionary);
 #endif
+
+
+
         }
     }
 }
