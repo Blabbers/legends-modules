@@ -1,12 +1,15 @@
 ﻿using Blabbers.Game00;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class UI_RetryButton : MonoBehaviour, ISingleton
 {
     public static bool HardReset;
+    public UnityEvent OnRetry;
+
     public void OnCreated()
     {
-        
+
     }
 
     public void ResetLevelFromScratch()
@@ -15,8 +18,14 @@ public class UI_RetryButton : MonoBehaviour, ISingleton
         SceneLoader.isStuckOnThisLevel = false;
         UI_TutorialController.AlreadyTriggeredInThisLevel.Clear();
         HardReset = true;
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         Debug.Log("→ Hard reset. Level will be reloaded from scratch.");
-        #endif
+#endif
+    }
+
+
+    public void Retry()
+    {
+        OnRetry?.Invoke();
     }
 }
