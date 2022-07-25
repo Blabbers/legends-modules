@@ -44,7 +44,11 @@ public class GameData : ScriptableObject
     // I will be hiding this for now. This is only usefull if the LL staff asks us to actually use the namespaces and merge all the projects
     [BoxGroup("Settings")][HideInInspector]
     public string gameLevelTag = ""; //"blabbers00-";
-    
+
+
+    [BoxGroup("Settings")]
+    public TextConfigs textConfigs;
+
     [HorizontalLine(color: EColor.White)]
     [BoxGroup("Saved Progress")]
     public GameProgress progress;
@@ -133,4 +137,10 @@ public class Customization
     // Info for each specific level instance
     public string name;
     public int id;
+}
+
+[System.Serializable]
+public class TextConfigs
+{
+    public LocalizationColorCode[] colorCodes;
 }

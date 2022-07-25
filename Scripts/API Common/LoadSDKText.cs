@@ -153,7 +153,104 @@ namespace Blabbers.Game00
                 Debug.Log($"<TextNotFound> Localization Key: {localizationKey}, is returning an empty value.");
                 mainText = $"<TNF> {localizationKey}";
             }
+
+            string key, term, plural;
+            string hex;
+
+            bool success = true;
+
+            foreach (var color in GameData.Instance.textConfigs.colorCodes)
+            {
+                key = color.key;
+                term = SharedState.languageDefs[key].Value;
+                plural = term + "S";
+
+                //Debug.Log($"LocalizeText({localizationKey}) | Extras: {color.extraKeys.Count}\nkey: {key} | term: {term}");
+
+                mainText = FindAndColorTerm(plural, mainText, color.color, out success);
+                if (!success) mainText = FindAndColorTerm(term, mainText, color.color, out success);
+
+                if (color.extraKeys.Count > 0)
+                {
+
+                    foreach (var extra in color.extraKeys)
+                    {
+
+
+                        key = extra;
+                        term = SharedState.languageDefs[key].Value;
+                        plural = term + "S";
+
+                        //Debug.Log($"Extra: LocalizeText({localizationKey})\nkey: {key} | term: {term}");
+
+                        mainText = FindAndColorTerm(plural, mainText, color.color, out success);
+                        if (!success) mainText = FindAndColorTerm(term, mainText, color.color, out success);
+
+                    }
+                }
+
+            }
+
+
             return $"{appendLeft}{mainText}{appendRight}";
+        }
+
+        static string FindAndColorTerm(string term, string mainText, Color color, out bool success)
+        {
+
+            //Debug.Log($"CheckForTerm ={term}\nText: {mainText}");
+            success = true;
+
+            string hex = Utils.ColorToHex(color);
+
+            //First check
+            if (mainText.Contains(term))
+            {
+                mainText = mainText.Replace(term, $"<color=#{hex}>{term}</color>");
+                //Debug.Log($"Replacing: {term} -> <color=#{hex}>{term}</color> \n{mainText}");
+                return mainText;
+            }
+
+            //Check all lowercase
+            term = term.ToLower();
+
+            if (mainText.Contains(term))
+            {
+                mainText = mainText.Replace(term, $"<color=#{hex}>{term}</color>");
+                //Debug.Log($"(To lower) Replacing: {term} -> <color=#{hex}>{term}</color> \n{mainText}");
+                return mainText;
+            }
+
+
+            //Check all uppercase
+            term = term.ToUpper();
+
+            if (mainText.Contains(term))
+            {
+                mainText = mainText.Replace(term, $"<color=#{hex}>{term}</color>");
+                //Debug.Log($"(To upper) Replacing: {term} -> <color=#{hex}>{term}</color> \n{mainText}");
+                return mainText;
+            }
+
+
+            //Check first letter capitalized
+
+            term = term.ToLower();
+
+            if (term.Length == 1) term = "" + char.ToUpper(term[0]);
+            else term = char.ToUpper(term[0]) + term.Substring(1);
+
+
+            if (mainText.Contains(term))
+            {
+                mainText = mainText.Replace(term, $"<color=#{hex}>{term}</color>");
+                //Debug.Log($"(first letter cap) Replacing: {term} -> <color=#{hex}>{term}</color> \n{mainText}");
+                return mainText;
+            }
+
+
+            success = false;
+            return mainText;
         }
 
         public static void PlayTTS(string key)
