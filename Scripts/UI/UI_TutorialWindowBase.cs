@@ -36,6 +36,7 @@ namespace Blabbers.Game00
 
 		public void ShowTapTextAfterDelay()
 		{
+			if (!HoldSlider) return;
 			duration = 0;
 			CanTapToDisableScreen = false;
 			HoldSlider.gameObject.SetActive(false);
@@ -60,6 +61,8 @@ namespace Blabbers.Game00
 
 		private void Update()
 		{
+			if(!HoldSlider) return;
+
 			if (CanTapToDisableScreen)
 			{
 				if (Input.anyKey)

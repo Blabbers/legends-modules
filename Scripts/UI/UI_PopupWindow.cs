@@ -64,8 +64,8 @@ namespace Blabbers.Game00
 
             OnPopupHidden?.Invoke();
 
-            //var gameplayHUD = Singleton.Get<UI_GameplayHUD>();
-            //if (gameplayHUD) { gameplayHUD.ShowFullHUD(); }
+            var gameplayHUD = Singleton.Get<UI_GameplayHUD>();
+            if (gameplayHUD && gameplayHUD.shouldHideHUDAfterPopup) { gameplayHUD.ShowFullHUD(); }
         }
 
         private void OnDestroy()
