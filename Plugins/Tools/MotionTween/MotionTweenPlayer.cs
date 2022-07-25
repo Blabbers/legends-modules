@@ -76,13 +76,14 @@ namespace Blabbers.Game00
 
             if (delay > 0f)
             {
-                StartCoroutine(Run());
-                IEnumerator Run()
-                {
-                    yield return Routine.WaitSeconds(delay);
-                    this.tween.PlaySequence(this);
-                }
-            }
+				//StartCoroutine(Run());
+				Routine.Start(Run());
+				IEnumerator Run()
+				{
+					yield return Routine.WaitSeconds(delay);
+					this.tween.PlaySequence(this);
+				}
+			}
             else
             {
                 this.tween.PlaySequence(this);
