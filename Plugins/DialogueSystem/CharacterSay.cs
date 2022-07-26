@@ -14,7 +14,8 @@ public class CharacterSay : ScriptableObject
 	public string key;
 	[ReadOnly] public string text;
 	public bool allowContinue = true;
-    public bool playTTS = true;
+	public bool allowSkip = true;
+	public bool playTTS = true;
     public UnityEvent OnStart;
 	public UnityEvent OnIsOver;
 
