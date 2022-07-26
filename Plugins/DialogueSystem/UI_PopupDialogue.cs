@@ -21,6 +21,7 @@ public class UI_PopupDialogue : UI_PopupWindow, ISingleton
 
 	private string finalText;
 	[SerializeField] private bool allowContinue;
+	[SerializeField] private bool allowSkip;
 	private CharacterSay currentCharacterSay;
 
     private Sprite overrideSprite;
@@ -29,10 +30,12 @@ public class UI_PopupDialogue : UI_PopupWindow, ISingleton
     {
         overrideSprite = newSprite;
     }
-	public void Execute(CharacterSay characterSay, bool allowContinue)
+	public void Execute(CharacterSay characterSay, bool allowContinue, bool allowSkip = true)
 	{
 		currentCharacterSay = characterSay;
 		this.allowContinue = allowContinue;
+		this.allowSkip = allowSkip;
+
 		finalText = characterSay.text;
 		if (firstTime)
 		{
@@ -76,11 +79,13 @@ public class UI_PopupDialogue : UI_PopupWindow, ISingleton
 	{
 		if (allowContinue && Input.anyKeyDown)
 		{
+			Debug.Log("<UI_PopupDialogue> Valid input");
+
 			if (textContinue.gameObject.activeSelf)
 			{
 				HidePopup();
 			}
-			else if (started)
+			else if (started && allowSkip)
 			{
 				Stop();
 				textContinue.gameObject.SetActive(true);

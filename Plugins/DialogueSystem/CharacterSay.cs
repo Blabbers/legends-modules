@@ -40,7 +40,7 @@ public class CharacterSay : ScriptableObject
 				LocalizationExtensions.PlayTTS(key);
 			}
             OnStart?.Invoke();
-			Singleton.Get<UI_PopupDialogue>().Execute(this, allowContinue);
+			Singleton.Get<UI_PopupDialogue>().Execute(this, allowContinue, allowSkip);
 		}
 	}
 
