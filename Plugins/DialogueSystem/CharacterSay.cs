@@ -19,7 +19,7 @@ public class CharacterSay : ScriptableObject
     public UnityEvent OnStart;
 	public UnityEvent OnIsOver;
 
-    public void Execute(float delay = 0f)
+	public void Execute(float delay = 0f)
 	{
 		if (string.IsNullOrEmpty(key))
 			return;
@@ -47,6 +47,15 @@ public class CharacterSay : ScriptableObject
 	public void Stop()
 	{
 		Singleton.Get<UI_PopupDialogue>().HidePopup();
+	}
+
+	public void PauseTimeline(bool value)
+	{
+		var cutsceneController = Singleton.Get<InitialCutsceneController>().Instance;
+		if (cutsceneController)
+		{
+			cutsceneController.PauseTimeline(value);
+		}
 	}
     
     // Inspector button for testing during runtime
