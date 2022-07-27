@@ -92,6 +92,25 @@ public class UI_PopupDialogue : UI_PopupWindow, ISingleton
 				text.text = finalText;
 			}
 		}
+
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+		if (Input.GetKey(KeyCode.PageDown))
+		{
+			if (textContinue.gameObject.activeSelf)
+			{
+				HidePopup();
+			}
+			else if (started)
+			{
+				Stop();
+				textContinue.gameObject.SetActive(true);
+				text.text = finalText;
+			}
+		}
+#endif
+
+
 	}
 
 
