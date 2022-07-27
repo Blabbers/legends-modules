@@ -79,7 +79,7 @@ public class UI_PopupDialogue : UI_PopupWindow, ISingleton
 	{
 		if (allowContinue && Input.anyKeyDown)
 		{
-			Debug.Log("<UI_PopupDialogue> Valid input");
+			//Debug.Log("<UI_PopupDialogue> Valid input");
 
 			if (textContinue.gameObject.activeSelf)
 			{
