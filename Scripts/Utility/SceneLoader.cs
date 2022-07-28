@@ -53,7 +53,7 @@ namespace Blabbers.Game00
 
         public void LoadLevelSelectScene()
         {
-            if (gameData.progress.FirstTimeLevelSelect)
+            if (gameData.progress.FirstTimeLevelSelect && !gameData.StartCustomizationFirst)
             {
                 gameData.progress.FirstTimeLevelSelect = false;
                 LoadSceneByName("customization");
