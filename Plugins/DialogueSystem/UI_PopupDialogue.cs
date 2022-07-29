@@ -24,19 +24,19 @@ public class UI_PopupDialogue : UI_PopupWindow, ISingleton
 	[SerializeField] private bool allowSkip;
 	private CharacterSay currentCharacterSay;
 
-    private Sprite overrideSprite;
-    
-    public void OverrideSprite(Sprite newSprite)
-    {
-        overrideSprite = newSprite;
-    }
+	private Sprite overrideSprite;
+
+	public void OverrideSprite(Sprite newSprite)
+	{
+		overrideSprite = newSprite;
+	}
 	public void Execute(CharacterSay characterSay, bool allowContinue, bool allowSkip = true)
 	{
 		currentCharacterSay = characterSay;
 		this.allowContinue = allowContinue;
 		this.allowSkip = allowSkip;
 
-		finalText = characterSay.text;
+		finalText = LocalizationExtensions.LocalizeText(characterSay.key);
 		if (firstTime)
 		{
 			firstTime = false;
@@ -45,8 +45,8 @@ public class UI_PopupDialogue : UI_PopupWindow, ISingleton
 
 		ShowPopup();
 
-        portraitImg.sprite = overrideSprite != null ? overrideSprite : characterSay.character;
-        portraitImg.transform.DOKill();
+		portraitImg.sprite = overrideSprite != null ? overrideSprite : characterSay.character;
+		portraitImg.transform.DOKill();
 		portraitImg.DOKill();
 
 		portraitImg.DOFade(0f, 0f);
@@ -133,7 +133,7 @@ public class UI_PopupDialogue : UI_PopupWindow, ISingleton
 	private void ReproduceText(CharacterSay characterSay)
 	{
 		Stop();
-		var narratorText = characterSay.text;
+		var narratorText = finalText;
 		started = false;
 		var actualText = "";
 		var index = 0;
@@ -144,16 +144,14 @@ public class UI_PopupDialogue : UI_PopupWindow, ISingleton
 		{
 			yield return new WaitForSecondsRealtime(0.3f);
 			started = true;
-			//if not readied all letters
+			//if didnt read all letters
 			while (index < narratorText.Length)
 			{
 				//get one letter
 				char letter = narratorText[index];
 
-				//Actualize on screen
+				//update on screen
 				text.text = Write(letter);
-
-				//set to go to the next
 				index++;
 
 				switch (letter)
@@ -170,6 +168,21 @@ public class UI_PopupDialogue : UI_PopupWindow, ISingleton
 						break;
 					case ' ':
 						yield return new WaitForSecondsRealtime(pauseInfo.spacePause);
+						break;
+					case '<':
+						// if we find a start of a tag, we dont pause until we find the end of it
+						var maxSearch = 2048;
+						while (index < narratorText.Length && maxSearch > 0)
+						{
+							var possibleEndTag = narratorText[index];							
+							text.text = Write(possibleEndTag);
+							index++;
+							if (possibleEndTag == '>')
+							{
+								break;
+							}							
+							maxSearch--;
+						}
 						break;
 					default:
 						yield return new WaitForSecondsRealtime(pauseInfo.normalPause);

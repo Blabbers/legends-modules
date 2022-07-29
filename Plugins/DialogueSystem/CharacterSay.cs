@@ -27,8 +27,6 @@ public class CharacterSay : ScriptableObject
 		if (!HasKey)
 			return;
 
-		text = LocalizationExtensions.LocalizeText(key);
-
 		Routine.Start(MyRoutine());
 
 		IEnumerator MyRoutine()
