@@ -7,6 +7,7 @@ using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using static Blabbers.Game00.LoadSDKText;
 
 [CreateAssetMenu]
 public class CharacterSay : ScriptableObject
@@ -20,7 +21,6 @@ public class CharacterSay : ScriptableObject
 	public bool playTTS = true;
 	public UnityEvent OnStart;
 	public UnityEvent OnIsOver;
-	public bool HasKey => !string.IsNullOrEmpty(key);
 
 	public void Execute(float delay = 0f)
 	{
@@ -66,7 +66,8 @@ public class CharacterSay : ScriptableObject
 		Execute(0f);
 	}
 
-	// Language json file manipulation, we save and load it through here, but the main function will probably go to the LocalizationExtensions
+	#region SaveLoadFromEditor
+	public bool HasKey => !string.IsNullOrEmpty(key);
 	[Button()]
 	public void SaveToLanguageJson()
 	{
@@ -74,17 +75,7 @@ public class CharacterSay : ScriptableObject
 		{
 			key = this.name;
 		}
-		var json = GetLanguageJson();
-		var langCode = "en";
-		var node = json[langCode];
-		node.Add(key, text);
-		Debug.Log($"<color=cyan>File language.json was updated</color> \n<color=white>[{key}]: {node[key]}</color>", this);
-		const string languageJSONFilePath = "language.json";
-		string langFilePath = Path.Combine(Application.streamingAssetsPath, languageJSONFilePath);
-		if (File.Exists(langFilePath))
-		{
-			File.WriteAllText(langFilePath, json.ToString());
-		}
+		LocalizationExtensions.EditorSaveToLanguageJson(key, text, this);
 	}
 	[Button()]
 	public void LoadFromLanguageJson()
@@ -93,35 +84,8 @@ public class CharacterSay : ScriptableObject
 		{
 			key = this.name;
 		}
-		var json = GetLanguageJson();
-		var langCode = "en";
-		var node = json[langCode];
-		if(node[key] == null)
-		{
-			Debug.Log($"<color=red>File language.json was NOT loaded to this asset bacause key [{key}] is NULL.</color>", this);
-		}
-		else if (node[key] == text)
-		{
-			Debug.Log($"<color=yellow>File language.json was NOT loaded to this asset since it has THE SAME VALUE.</color>", this);
-		}
-		else
-		{
-			Debug.Log($"<color=yellow>File language.json was loaded to this asset</color> \n<color=white>[{key}]: {node[key]}</color>", this);
-			this.text = node[key];
-		}
-	}
 
-	public JSONNode GetLanguageJson()
-	{
-		const string languageJSONFilePath = "language.json";
-		// Load Dev Language File from StreamingAssets
-		string langFilePath = Path.Combine(Application.streamingAssetsPath, languageJSONFilePath);
-		if (File.Exists(langFilePath))
-		{
-			string langDataAsJson = File.ReadAllText(langFilePath);
-			JSONNode langDefs = JSON.Parse(langDataAsJson);
-			return (langDefs);
-		}
-		return "";
+		this.text = LocalizationExtensions.EditorLoadFromLanguageJson(key, this);
 	}
+	#endregion
 }
