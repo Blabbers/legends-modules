@@ -55,7 +55,6 @@ namespace Blabbers
             SendEvent("levelStart", dataDictionary);
         }
 
-
         public static void OnSubLevelVictory(string minigame, int minigameId)
         {
             dataDictionary.Clear();
@@ -69,7 +68,7 @@ namespace Blabbers
             {
                 situation = "isStuck";
             }
-            dataDictionary.Add("situation", situation); 
+            dataDictionary.Add("situation", situation);
             SendEvent("levelVictory", dataDictionary);
 
         }
