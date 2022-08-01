@@ -55,6 +55,25 @@ namespace Blabbers
             SendEvent("levelStart", dataDictionary);
         }
 
+
+        public static void OnSubLevelVictory(string minigame, int minigameId)
+        {
+            dataDictionary.Clear();
+            dataDictionary.Add("level", $"{GameData.Instance.progress.currentLevelId + 1}_{minigame}_{minigameId}");
+            var situation = "isFirstTime";
+            if (GameData.Instance.progress.reachedLevel > GameData.Instance.progress.currentLevelId)
+            {
+                situation = "isReplaying";
+            }
+            else if (SceneLoader.isStuckOnThisLevel)
+            {
+                situation = "isStuck";
+            }
+            dataDictionary.Add("situation", situation); 
+            SendEvent("levelVictory", dataDictionary);
+
+        }
+
         public static void OnDefeat(string reason)
         {
             dataDictionary.Clear();
