@@ -34,7 +34,10 @@ namespace Blabbers.Game00
 				tweenPlayer.OnAnimationStart?.Invoke();
 			}
 
-            tweenPlayer.StartCoroutine(Run());
+			if (tweenPlayer.isActiveAndEnabled)
+			{
+				tweenPlayer.StartCoroutine(Run());
+			}            
 			IEnumerator Run()
 			{
 				foreach (var behaviour in behaviours)

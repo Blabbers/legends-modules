@@ -9,6 +9,7 @@ using NaughtyAttributes;
 
 namespace Blabbers.Game00
 {
+	[DefaultExecutionOrder(+1000)]
 	public class LoadSDKText : MonoBehaviour
 	{
 		//Key in which the text is placed on the JSON file
@@ -101,7 +102,6 @@ namespace Blabbers.Game00
 			{
 				myText.text = LocalizationExtensions.LocalizeText(key);
 			}
-
 			if (myTextP)
 			{
 				myTextP.text = LocalizationExtensions.LocalizeText(key);
@@ -119,7 +119,6 @@ namespace Blabbers.Game00
 			{
 				myText.text = LocalizationExtensions.LocalizeText(key) + " " + add;
 			}
-
 			if (myTextP)
 			{
 				myTextP.text = LocalizationExtensions.LocalizeText(key) + " " + add;
@@ -144,8 +143,7 @@ namespace Blabbers.Game00
 			LoadPossibleTextComponents();
 			if (myText) textValue = myText.text;
 			if (myTextM) textValue = myTextM.text;
-			if (myTextP) textValue = myTextP.text;
-			Debug.Log(key + " / " + textValue);
+			if (myTextP) textValue = myTextP.text;			
 			LocalizationExtensions.EditorSaveToLanguageJson(key, textValue, this);
 		}
 
@@ -198,59 +196,39 @@ namespace Blabbers.Game00
 				mainText = $"<TNF> {localizationKey}";
 			}
 
-			string key, term, plural;
-			string hex;
-
-			bool success = true;
-
-			foreach (var color in GameData.Instance.textConfigs.colorCodes)
-			{
-				key = color.key;
-				try
-				{
-					term = SharedState.languageDefs[key].Value;
-				}
-				catch (System.Exception)
-				{
-					//Debug.LogError("key: " + key + " / "<>);
-					throw;
-				}
-				plural = term + "S";
-
-				//Debug.Log($"LocalizeText({localizationKey}) | Extras: {color.extraKeys.Count}\nkey: {key} | term: {term}");
-
-				mainText = FindAndColorTerm(plural, mainText, color.color, out success);
-				if (!success) mainText = FindAndColorTerm(term, mainText, color.color, out success);
-
-				if (color.extraKeys.Count > 0)
-				{
-
-					foreach (var extra in color.extraKeys)
-					{
-
-
-						key = extra;
-						term = SharedState.languageDefs[key].Value;
-						plural = term + "S";
-
-						//Debug.Log($"Extra: LocalizeText({localizationKey})\nkey: {key} | term: {term}");
-
-						mainText = FindAndColorTerm(plural, mainText, color.color, out success);
-						if (!success) mainText = FindAndColorTerm(term, mainText, color.color, out success);
-
-					}
-				}
-
-			}
-
+			mainText = ApplyColorCodes(mainText);
 
 			return $"{appendLeft}{mainText}{appendRight}";
 		}
 
-		static string FindAndColorTerm(string term, string mainText, Color color, out bool success)
+		private static string ApplyColorCodes(string mainText)
 		{
+			string key, term, plural;
+			foreach (var color in GameData.Instance.textConfigs.colorCodes)
+			{
+				key = color.key;
+				term = SharedState.languageDefs[key].Value;
+				plural = term + "S";				
+				mainText = FindAndColorTerm(plural, mainText, color.color, out var success);
+				if (!success) mainText = FindAndColorTerm(term, mainText, color.color, out success);
 
-			//Debug.Log($"CheckForTerm ={term}\nText: {mainText}");
+				if (color.extraKeys.Count > 0)
+				{
+					foreach (var extra in color.extraKeys)
+					{
+						key = extra;
+						term = SharedState.languageDefs[key].Value;
+						plural = term + "S";
+						mainText = FindAndColorTerm(plural, mainText, color.color, out success);
+						if (!success) mainText = FindAndColorTerm(term, mainText, color.color, out success);
+					}
+				}
+			}
+			return mainText;
+		}
+
+		private static string FindAndColorTerm(string term, string mainText, Color color, out bool success)
+		{
 			success = true;
 
 			string hex = Utils.ColorToHex(color);
@@ -340,13 +318,13 @@ namespace Blabbers.Game00
 			var langCode = "en";
 			var node = json[langCode];
 			node.Add(key, value);
-			
+
 			const string languageJSONFilePath = "language.json";
 			string langFilePath = Path.Combine(Application.streamingAssetsPath, languageJSONFilePath);
 			if (File.Exists(langFilePath))
 			{
-				File.WriteAllText(langFilePath, json.ToString());
-				Debug.Log($"<color=cyan>File language.json was updated</color> \n<color=white>[{key}]: {node[key]}</color>", unityObject);
+				File.WriteAllText(langFilePath, json.ToString(1));
+				Debug.Log($"<color=cyan>File language.json was updated</color>: <color=white>[{key}]: {node[key]}</color>", unityObject);
 			}
 		}
 		public static string EditorLoadFromLanguageJson(string key, Object unityObject = null)
