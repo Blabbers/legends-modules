@@ -1,6 +1,7 @@
 ﻿using NaughtyAttributes;
 using System.Collections;
 using UnityEngine;
+using BeauRoutine;
 
 namespace Blabbers.Game00
 {
@@ -11,6 +12,8 @@ namespace Blabbers.Game00
 		[SerializeField]
 		private bool playOnEnable = true;
 		[SerializeField]
+		private bool playOnDisable = false;
+		[SerializeField]
 		private bool playSelectedIndex = false;
 		[ShowIf("playSelectedIndex")]
 		[SerializeField]
@@ -19,23 +22,35 @@ namespace Blabbers.Game00
 		public AudioSFX sfxClip;
 		void OnEnable()
 		{
-			StartCoroutine(Routine());
-			IEnumerator Routine()
+			if (playOnEnable)
+			{
+				Play();
+			}
+		}
+		void OnDisable()
+		{
+			if (playOnDisable)
+			{
+				Play();
+			}
+		}
+
+		public void Play()
+		{
+			Routine.Start(Run());
+			IEnumerator Run()
 			{
 				if (delay > 0f)
 				{
 					yield return new WaitForSeconds(delay);
 				}
-				if (playOnEnable)
+				if (playSelectedIndex)
 				{
-					if (playSelectedIndex)
-					{
-						sfxClip.PlaySelectedIndex(selectedIndex);
-					}
-					else
-					{
-						sfxClip.Play();
-					}
+					sfxClip.PlaySelectedIndex(selectedIndex);
+				}
+				else
+				{
+					sfxClip.Play();
 				}
 			}
 		}
