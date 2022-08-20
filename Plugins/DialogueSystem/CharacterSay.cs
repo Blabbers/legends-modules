@@ -52,7 +52,7 @@ public class CharacterSay : ScriptableObject
 
 	public void PauseTimeline(bool value)
 	{
-		var cutsceneController = Singleton.Get<InitialCutsceneController>().Instance;
+		var cutsceneController = CutsceneController.Instance;
 		if (cutsceneController)
 		{
 			cutsceneController.PauseTimeline(value);
