@@ -75,7 +75,6 @@ namespace Blabbers.Game00
 		{
 			if (sceneToLoadAfter != null)
 			{
-				Debug.Log("porq");
 				Singleton.Get<SceneLoader>().LoadSceneByName(sceneToLoadAfter);
 			}
 			else
