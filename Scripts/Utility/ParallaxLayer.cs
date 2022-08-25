@@ -16,6 +16,7 @@ public class ParallaxLayer : MonoBehaviour
 		cameraTransform = Camera.main.transform;
 		lastCameraPosition = cameraTransform.position;
 		SetupExtraLayers();
+		this.transform.SetParent(null);
 	}
 
 	private void SetupExtraLayers()
@@ -24,22 +25,22 @@ public class ParallaxLayer : MonoBehaviour
 		extraLeftLayer = new GameObject("Left_" + this.name);
 		foreach (Transform child in this.transform)
 		{
-			Instantiate(child.gameObject, extraLeftLayer.transform);
+			Instantiate(child.gameObject, extraLeftLayer.transform, true);
 		}
-		var leftPos = extraLeftLayer.transform.position;
+		var leftPos = extraLeftLayer.transform.localPosition;		
 		leftPos.z += 0.001f;
 		leftPos.x -= parallaxArea.x;
-		extraLeftLayer.transform.position = leftPos;
+		extraLeftLayer.transform.localPosition = leftPos;
 		// Create and set the right side layer
 		extraRightLayer = new GameObject("Right_" + this.name);
 		foreach (Transform child in this.transform)
 		{
-			Instantiate(child.gameObject, extraRightLayer.transform);
+			Instantiate(child.gameObject, extraRightLayer.transform, true);
 		}
-		var rightPos = extraRightLayer.transform.position;
+		var rightPos = extraRightLayer.transform.localPosition;
 		rightPos.z -= 0.001f;
 		rightPos.x += parallaxArea.x;
-		extraRightLayer.transform.position = rightPos;
+		extraRightLayer.transform.localPosition = rightPos;
 		// Then parent them
 		extraLeftLayer.transform.SetParent(this.transform);
 		extraRightLayer.transform.SetParent(this.transform);
