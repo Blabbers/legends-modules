@@ -73,14 +73,14 @@ namespace Blabbers.Game00
             {
                 scoreText.transform.DOKill();
                 scoreText.transform.localPosition = originalPos;
-                scoreText.transform.DOPunchPosition(Vector3.one * 20f, 0.2f); 
+                //scoreText.transform.DOPunchPosition(Vector3.one * 20f, 0.2f); 
             }
 
             if (scoreTextM)
             {
                 scoreTextM.transform.DOKill();
                 scoreTextM.transform.localPosition = originalPos;
-                scoreTextM.transform.DOPunchPosition(Vector3.one * 20f, 0.2f);
+                //scoreTextM.transform.DOPunchPosition(Vector3.one * 20f, 0.2f);
             }
             //if (scoreText) scoreText.transform.DOPunchScale(Vector3.one * 1.25f, 0.2f);
             //if (scoreTextM) scoreTextM.transform.DOPunchScale(Vector3.one * 1.25f, 0.2f);
