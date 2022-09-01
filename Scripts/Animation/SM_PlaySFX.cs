@@ -4,11 +4,6 @@ using NaughtyAttributes;
 using System.Collections;
 using UnityEngine;
 
-public enum StateMachineState
-{
-	OnStateEnter, OnStateUpdate, OnStateExit
-}
-
 public class SM_PlaySFX : StateMachineBehaviour
 {
 	[SerializeField]
