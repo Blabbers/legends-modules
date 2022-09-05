@@ -205,8 +205,8 @@ public class UI_PopupDialogue : UI_PopupWindow, ISingleton
 [Serializable]
 public class PauseInfo
 {
-	public float dotPause;
-	public float commaPause;
-	public float spacePause;
-	public float normalPause;
+	public float dotPause = 0.2f;
+	public float commaPause = 0.2f;
+	public float spacePause = 0.06f;
+	public float normalPause = 0.04f;
 }

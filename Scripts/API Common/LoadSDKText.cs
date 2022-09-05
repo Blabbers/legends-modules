@@ -29,6 +29,8 @@ namespace Blabbers.Game00
 
 		private string placeholderText;
 		public bool HasKey => !string.IsNullOrEmpty(key);
+		public bool hasLoadedKey =false;
+
 
 		private void Awake()
 		{
@@ -97,16 +99,22 @@ namespace Blabbers.Game00
 			if (myTextM)
 			{
 				myTextM.text = LocalizationExtensions.LocalizeText(key);
+				hasLoadedKey = true;
+
 			}
 			if (myText)
 			{
 				myText.text = LocalizationExtensions.LocalizeText(key);
+				hasLoadedKey = true;
 			}
 			if (myTextP)
 			{
 				myTextP.text = LocalizationExtensions.LocalizeText(key);
+				hasLoadedKey = true;
 			}
 		}
+
+
 
 		public void UpdateText_Concat(string add)
 		{
@@ -114,14 +122,17 @@ namespace Blabbers.Game00
 			if (myTextM)
 			{
 				myTextM.text = LocalizationExtensions.LocalizeText(key) + " " + add;
+				hasLoadedKey = true;
 			}
 			if (myText)
 			{
 				myText.text = LocalizationExtensions.LocalizeText(key) + " " + add;
+				hasLoadedKey = true;
 			}
 			if (myTextP)
 			{
 				myTextP.text = LocalizationExtensions.LocalizeText(key) + " " + add;
+				hasLoadedKey = true;
 			}
 		}
 
@@ -130,6 +141,7 @@ namespace Blabbers.Game00
 			LocalizationExtensions.PlayTTS(key);
 		}
 
+		#region Editor Buttons
 		[Button()]
 		public void SaveToLanguageJson()
 		{
@@ -143,7 +155,7 @@ namespace Blabbers.Game00
 			LoadPossibleTextComponents();
 			if (myText) textValue = myText.text;
 			if (myTextM) textValue = myTextM.text;
-			if (myTextP) textValue = myTextP.text;			
+			if (myTextP) textValue = myTextP.text;
 			LocalizationExtensions.EditorSaveToLanguageJson(key, textValue, this);
 		}
 
@@ -163,7 +175,8 @@ namespace Blabbers.Game00
 				if (myTextM) myTextM.text = text;
 				if (myTextP) myTextP.text = text;
 			}
-		}
+		} 
+		#endregion
 	}
 
 	public static class LocalizationExtensions
