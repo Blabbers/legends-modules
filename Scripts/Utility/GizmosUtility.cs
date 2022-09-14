@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 public static class GizmosUtility
@@ -48,18 +49,27 @@ public static class GizmosUtility
 
 
 
-    public static void DrawRectangle(Vector3 center, Vector2 dimensions, Color color, Vector2 offset)
-    {
-        Vector3 adjustedCenter;
-        Gizmos.color = color;
+	public static void DrawRectangle(Vector3 center, Vector2 dimensions, Color color, Vector2 offset, float alpha = 1.0f)
+	{
+		Vector3 adjustedCenter;
+		Gizmos.color = new Color(color.r, color.g, color.b, color.a * alpha);
 
-        adjustedCenter = new Vector3(center.x + offset.x, center.y + offset.y, center.z);
-        Gizmos.DrawCube(adjustedCenter, dimensions);
-        //DrawRectangle(adjustedCenter, dimensions, color);
+		adjustedCenter = new Vector3(center.x + offset.x, center.y + offset.y, center.z);
+		Gizmos.DrawCube(adjustedCenter, dimensions);
+	}
 
-    }
+	//public static void DrawRectangle(Vector3 center, Vector2 dimensions, Color color, Vector2 offset)
+	//{
+	//    Vector3 adjustedCenter;
+	//    Gizmos.color = color;
 
-    public static void DrawWireRectangle(Vector3 center, Vector2 dimensions, Color color, Vector2 offset)
+	//    adjustedCenter = new Vector3(center.x + offset.x, center.y + offset.y, center.z);
+	//    Gizmos.DrawCube(adjustedCenter, dimensions);
+	//    //DrawRectangle(adjustedCenter, dimensions, color);
+
+	//}
+
+	public static void DrawWireRectangle(Vector3 center, Vector2 dimensions, Color color, Vector2 offset)
     {
         Vector3 adjustedCenter;
         adjustedCenter = new Vector3(center.x + offset.x, center.y + offset.y, center.z);
