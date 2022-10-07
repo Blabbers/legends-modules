@@ -60,7 +60,15 @@ namespace Blabbers.Game00
             }
             else
             {
-                SceneManager.LoadScene($"{gameData.gameLevelTag}level-select");
+                if (gameData.AlwaysShowStatsScreen)
+                {
+					LoadSceneByName("customization");
+                }
+                else
+                {
+					SceneManager.LoadScene($"{gameData.gameLevelTag}level-select");
+				}
+               
             }
 
         }

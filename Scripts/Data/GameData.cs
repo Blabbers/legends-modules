@@ -41,8 +41,12 @@ public class GameData : ScriptableObject
     [BoxGroup("Settings")]
     public bool StartCustomizationFirst = false;
 
-    // I will be hiding this for now. This is only usefull if the LL staff asks us to actually use the namespaces and merge all the projects
-    [BoxGroup("Settings")][HideInInspector]
+	[BoxGroup("Settings")]
+	public bool AlwaysShowStatsScreen = false;
+
+
+	// I will be hiding this for now. This is only usefull if the LL staff asks us to actually use the namespaces and merge all the projects
+	[BoxGroup("Settings")][HideInInspector]
     public string gameLevelTag = ""; //"blabbers00-";
 
 
