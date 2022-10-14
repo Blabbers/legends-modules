@@ -18,11 +18,11 @@ namespace Blabbers.Game00
 		public UnityEvent OnWindowOpened;
 		public UnityEvent OnWindowClosed;
 		private void OnEnable()
-		{
-			OnWindowOpened?.Invoke();
+		{			
             ShowTapTextAfterDelay();
             var gameplayHUD = Singleton.Get<UI_GameplayHUD>();
             if (gameplayHUD) { gameplayHUD.HideFullHUD(); }
+			OnWindowOpened?.Invoke();
 		}
 
         private void OnDisable()
