@@ -29,7 +29,8 @@ namespace Blabbers.Game00
         {
             var gameplayHUD = Singleton.Get<UI_GameplayHUD>();
             if (gameplayHUD) { gameplayHUD.ShowFullHUD(); }
-        }
+			OnWindowClosed?.Invoke();
+		}
 
         public abstract void ShowScreen();
 		public abstract void HideScreen();
@@ -92,7 +93,6 @@ namespace Blabbers.Game00
 		private void Finish()
 		{
 			HideScreen();
-			OnWindowClosed?.Invoke();
 			CanTapToDisableScreen = false;
 		}
 	}

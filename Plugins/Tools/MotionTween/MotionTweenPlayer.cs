@@ -16,6 +16,8 @@ namespace Blabbers.Game00
 		[ShowIf(nameof(isLoop))]
 		public LoopType loopType;
 		public bool playOnEnabled = true;
+		public bool playOnlyOnce = false;
+		private bool hasPlayed;
 		[ShowIf(nameof(playOnEnabled))]
 		public float delayOnEnable;
 		public UnityEvent OnAnimationStart, OnAnimationFinished;
@@ -68,6 +70,8 @@ namespace Blabbers.Game00
         
 		public void PlayTween(float delay)
         {
+			if (playOnlyOnce && hasPlayed)
+				return;			
             Awake();
             if (!isLoop || loopType == LoopType.Restart)
 			{
@@ -88,7 +92,8 @@ namespace Blabbers.Game00
             {
                 this.tween.PlaySequence(this);
             }
-        }
+			hasPlayed = true;
+		}
 
 		public void ResetTween()
 		{
