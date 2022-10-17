@@ -53,24 +53,41 @@ namespace Blabbers.Game00
 
         public void LoadLevelSelectScene()
         {
-            if (gameData.progress.FirstTimeLevelSelect && !gameData.StartCustomizationFirst)
-            {
-                gameData.progress.FirstTimeLevelSelect = false;
-                LoadSceneByName("customization");
-            }
-            else
-            {
-                if (gameData.AlwaysShowStatsScreen)
-                {
-					LoadSceneByName("customization");
-                }
-                else
-                {
-					SceneManager.LoadScene($"{gameData.gameLevelTag}level-select");
-				}
-               
-            }
+            //if (gameData.progress.FirstTimeLevelSelect && !gameData.StartCustomizationFirst)
+            //{
+            //    gameData.progress.FirstTimeLevelSelect = false;
+            //    LoadSceneByName("customization");
+            //}
+            //else
+            //{
+            //    if (gameData.AlwaysShowStatsScreen)
+            //    {
+            //		LoadSceneByName("customization");
+            //    }
+            //    else
+            //    {
+            //		SceneManager.LoadScene($"{gameData.gameLevelTag}level-select");
+            //	}
+            //   
+            //}
 
+            //Gambeta pra build beta:
+            var currentScene = SceneManager.GetActiveScene().name;
+            switch (currentScene)
+			{
+                case "level-1":
+                    LoadSceneByName("simulation-1");
+                    break;
+                case "level-2":
+                    LoadSceneByName("simulation-2");
+                    break;
+                case "level-3":
+                    LoadSceneByName("customization");
+                    break;
+                default:
+                    SceneManager.LoadScene($"{gameData.gameLevelTag}level-select");
+                    break;
+            }
         }
 
         public void LoadMainMenuScene()
