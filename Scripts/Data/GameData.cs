@@ -74,6 +74,13 @@ public class GameData : ScriptableObject
     {
         Singleton.Get<ProgressController>().Save();
     }
+
+    [Button("Reset Save → Clear All Player Prefs")]
+    public void ClearAllPlayerPrefs()
+    {
+        PlayerPrefs.DeleteAll();
+        Debug.Log("Save was reset. All PlayerPrefs are cleared.");
+    }
 }
 
 [System.Serializable]
