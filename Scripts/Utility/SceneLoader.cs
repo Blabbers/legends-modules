@@ -103,11 +103,11 @@ namespace Blabbers.Game00
         //Added
         public void LoadNewGame()
         {
-            if (gameData.StartCustomizationFirst)
-            {
-                LoadSceneByName("customization");
-            }
-            else
+            //if (gameData.StartCustomizationFirst)
+            //{
+            //    LoadSceneByName("customization");
+            //}
+            //else
             {
                 LoadSceneByName("cutscene-start");
             }
