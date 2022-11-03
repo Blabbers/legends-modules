@@ -78,35 +78,10 @@ public class UI_ObjetiveArrow : MonoBehaviour, ISingleton
 	{
 		Vector2 targetPos;
 
-		//targetPos = CameraToWorldUtility.WorldToCameraPosition_Clamped(target, cam);
 		targetPos = CameraToWorldUtility.WorldToCameraPosition_Clamped(target, cam, borders.x, borders.y);
-
-		// 0.005f, float offsetY = 0.015f
-
-		//clamp
-		//Vector3 screenPos = cam.WorldToViewportPoint(targetPos);
-
-
-		//if(screenPos.x)
-
-		//Debug.Log($"PositionPointer() {targetPos}");
 		pointer.position = targetPos;
-
-	
-
-
-
-		//CameraToWorldUtility.SetUIToRelativeWorldPosition(ref pointer, target, cam);
 	}
 
-
-	//Vector2 CalculateCanvasPosition()
-	//{
-	//	Vector2 pos = 
-
-
-			
-	//}
 
 	public void OnCreated()
 	{
