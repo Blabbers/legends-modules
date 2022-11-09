@@ -1,9 +1,10 @@
 using Blabbers.Game00;
 using DG.Tweening;
 using NaughtyAttributes;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
+//using System.Collections;
+//using System.Collections.Generic;
+//using System.Drawing;
+//using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -13,10 +14,13 @@ public class UI_ObjetiveArrow : MonoBehaviour, ISingleton
 	[Foldout("Runtime")][SerializeField] private Camera cam;
 	[Foldout("Runtime")][SerializeField] private Transform origin;
 	[Foldout("Runtime")][SerializeField] private Transform target;
+	[Foldout("Runtime")][SerializeField] bool isActive;
 	private Vector2 dir;
+	[SerializeField] float distance;
 
 	[Foldout("Configs")]
 	[SerializeField] Vector2 borders = Vector2.zero;
+	[Foldout("Configs")][SerializeField] Vector2 fadeRange;
 
 	[Foldout("Components")][SerializeField] private CanvasGroup pointerGroup;
 	[Foldout("Components")]	[SerializeField] private Transform pointer;
@@ -34,6 +38,7 @@ public class UI_ObjetiveArrow : MonoBehaviour, ISingleton
 
 		PositionPointer();
 		PointTowardsTarget();
+		UpdatePointerAlpha();
 	}
 
 
@@ -54,10 +59,10 @@ public class UI_ObjetiveArrow : MonoBehaviour, ISingleton
 	public void ToggleArrow(bool active)
 	{
 		Debug.Log($"<UI_ObjetiveArrow> ToggleArrow {active}");
+		isActive = active;
 
 		if (active) {
-			pointerGroup.DOFade(1.0f, 0.5f);
-			
+			pointerGroup.DOFade(1.0f, 0.5f);		
 		} 
 		else
 		{
@@ -80,11 +85,30 @@ public class UI_ObjetiveArrow : MonoBehaviour, ISingleton
 
 		targetPos = CameraToWorldUtility.WorldToCameraPosition_Clamped(target, cam, borders.x, borders.y);
 		pointer.position = targetPos;
+
+		distance = Vector2.Distance(target.position, origin.position);
+	}
+
+	void UpdatePointerAlpha()
+	{
+		if (!isActive) return;
+		pointerGroup.alpha = Mathf.InverseLerp(fadeRange.x, fadeRange.y, distance);
 	}
 
 
 	public void OnCreated()
 	{
 
+	}
+
+	void OnDrawGizmos()
+	{
+		if (!target) return;
+
+		Gizmos.color = Color.red;
+		Gizmos.DrawWireSphere(target.position, fadeRange.x);
+
+		Gizmos.color = Color.black;
+		Gizmos.DrawWireSphere(target.position, fadeRange.y);
 	}
 }
