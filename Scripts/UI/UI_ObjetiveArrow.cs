@@ -29,6 +29,7 @@ public class UI_ObjetiveArrow : MonoBehaviour, ISingleton
 	void Start()
 	{		
 		if (!cam) cam = Camera.main;
+		isActive = true;
 	}
 
 	// Update is called once per frame
