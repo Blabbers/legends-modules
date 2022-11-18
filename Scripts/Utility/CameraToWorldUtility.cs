@@ -5,17 +5,17 @@ using UnityEngine;
 public static class CameraToWorldUtility
 {
 	#region World to UI
-	public static void SetUIToRelativeWorldPosition(ref Transform currentUI ,Transform target, Camera cam)
+	public static void SetUIToRelativeWorldPosition(ref Transform currentUI ,Transform target, Camera cam, float offsetX = 0, float offsetY = 0)
 	{
-		currentUI.position = WorldToCameraPosition(target, cam);
+		currentUI.position = WorldToCameraPosition(target, cam, offsetX,offsetY);
 	}
 
 
 
 
-	public static Vector3 WorldToCameraPosition(Transform target, Camera cam)
+	public static Vector3 WorldToCameraPosition(Transform target, Camera cam, float offsetX = 0, float offsetY = 0)
 	{
-		return WorldToCameraPosition(target, cam, Vector2.zero);
+		return WorldToCameraPosition(target, cam, new Vector2(offsetX,offsetY));
 	}
 
 	public static Vector3 WorldToCameraPosition_Clamped(Transform target, Camera cam, float offsetX = 0, float offsetY = 0)
