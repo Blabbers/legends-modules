@@ -1,3 +1,4 @@
+using Blabbers.Game00;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -13,11 +14,13 @@ public class InputPressCheck : MonoBehaviour
         {
             ButtonDownInvoke();
         }
+
     }
 
     // Public for the possibility of external inspector re-use
     public void ButtonDownInvoke()
 	{
+        if (!this.isActiveAndEnabled) return;
         OnButtonDown?.Invoke();
     }
 }

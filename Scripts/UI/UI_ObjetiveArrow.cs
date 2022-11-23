@@ -19,6 +19,7 @@ public class UI_ObjetiveArrow : MonoBehaviour, ISingleton
 	[SerializeField] float distance;
 
 	[Foldout("Configs")]
+	[SerializeField] bool drawGizmos =false;
 	[SerializeField] Vector2 borders = Vector2.zero;
 	[Foldout("Configs")][SerializeField] Vector2 fadeRange;
 
@@ -105,6 +106,7 @@ public class UI_ObjetiveArrow : MonoBehaviour, ISingleton
 	void OnDrawGizmos()
 	{
 		if (!target) return;
+		if (!drawGizmos) return;
 
 		Gizmos.color = Color.red;
 		Gizmos.DrawWireSphere(target.position, fadeRange.x);
