@@ -5,6 +5,7 @@ using BeauRoutine;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using Bolt;
 
 namespace Blabbers.Game00
 {
@@ -56,7 +57,7 @@ namespace Blabbers.Game00
                     //starsTweens[starsLost].gameObject.SetActive(false);
                     var text = textsTweens[starsRemaining].GetComponent<TextMeshProUGUI>();
                     text.LocalizeText(star.reason);
-                }
+				}
             }
 
             for (int i = 0; i < starsTweens.Count; i++)
@@ -68,9 +69,9 @@ namespace Blabbers.Game00
                 }
                 else
                 {
-                    // se nao, toca o texto de motivo que perdeu
-                    var textTween = textsTweens[i];
-                    textTween.PlayTween(textTween.delayOnEnable);
+					// se nao, toca o texto de motivo que perdeu
+					var textTween = textsTweens[i];
+					textTween.PlayTween(textTween.delayOnEnable);
                 }
             }
             

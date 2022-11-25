@@ -13,16 +13,18 @@ public enum InputType
 {
 	GetButtonDown,
 	GetAxis,
+	GetAxisRaw,
 }
 
 public class InputPressCheck : MonoBehaviour
 {
-	public InputType inputType;	
-	
+	public InputType inputType;
+	public string inputName;
+
 	// Get Button Down
 	private bool editorShowButtonDown => inputType == InputType.GetButtonDown;	
-	[ShowIf(nameof(editorShowButtonDown))]
-	public string inputName;
+	//[ShowIf(nameof(editorShowButtonDown))]
+	//public string inputName;
 
 	// Get Axis
 	private bool editorShowGetAxis => inputType == InputType.GetAxis;
@@ -30,6 +32,13 @@ public class InputPressCheck : MonoBehaviour
 	public float axisValue;
 	[ShowIf(nameof(editorShowGetAxis))]
 	public InputComparison axisCheck;
+
+	// Get Axis Raw
+	private bool editorShowGetAxisRaw => inputType == InputType.GetAxisRaw;
+	[ShowIf(nameof(editorShowGetAxisRaw))]
+	public float axisValueRaw;
+	[ShowIf(nameof(editorShowGetAxisRaw))]
+	public InputComparison axisCheckRaw;
 
 	// On Pressed generic event
 	public UnityEvent OnPressed;
@@ -47,6 +56,7 @@ public class InputPressCheck : MonoBehaviour
 		if (inputType == InputType.GetAxis)
 		{
 			var axis = Input.GetAxis(inputName);
+
 			switch (axisCheck)
 			{
 				case InputComparison.EqualsTo:
@@ -60,6 +70,25 @@ public class InputPressCheck : MonoBehaviour
 					break;
 			}
 		}
+
+		if (inputType == InputType.GetAxisRaw)
+		{
+			var axis = Input.GetAxisRaw(inputName);
+
+			switch (axisCheckRaw)
+			{
+				case InputComparison.EqualsTo:
+					if (axis == axisValueRaw) OnPressedInvoke();
+					break;
+				case InputComparison.BiggerThan:
+					if (axis > axisValueRaw) OnPressedInvoke();
+					break;
+				case InputComparison.SmallerThan:
+					if (axis < axisValueRaw) OnPressedInvoke();
+					break;
+			}
+		}
+
 	}
 
 	// Public for the possibility of external inspector re-use
