@@ -84,6 +84,15 @@ namespace Blabbers.Game00
                 case "level-3":
                     LoadSceneByName("customization");
                     break;
+                case "level-4":
+                    LoadSceneByName("customization");
+                    break;
+                case "level-5":
+                    LoadSceneByName("simulation-3");
+                    break;
+                case "level-6":
+                    LoadSceneByName("cutscene-final");
+                    break;
                 default:
                     SceneManager.LoadScene($"{gameData.gameLevelTag}level-select");
                     break;
