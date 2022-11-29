@@ -82,7 +82,7 @@ namespace Blabbers.Game00
 				HoldSlider.value = SliderCurve.Evaluate(duration);
 			}
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
 			if (Input.GetKeyDown(KeyCode.PageDown))
 			{
 				Finish();
