@@ -30,6 +30,8 @@ namespace Blabbers.Game00
 
         [SerializeField]
         private Button continueButton;
+        [SerializeField]
+        private TextMeshProUGUI textScoreValue;
 
         private float continueDelay = 3.0f;
 
@@ -38,6 +40,11 @@ namespace Blabbers.Game00
         /// </summary>
         public void ShowLevelVictoryScreen(VictoryStar[] starList, int score)
         {
+			if (textScoreValue != null)
+			{
+                textScoreValue.text = score.ToString();
+            }
+            
             continueButton.interactable = false;
             base.ShowPopup();
 
