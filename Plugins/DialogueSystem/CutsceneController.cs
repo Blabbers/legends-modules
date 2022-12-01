@@ -2,6 +2,7 @@ using BeauRoutine;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Playables;
+using DG.Tweening;
 
 namespace Blabbers.Game00
 {
@@ -9,11 +10,12 @@ namespace Blabbers.Game00
 	{
 		public bool HasCutscene = false;
 		public static CutsceneController Instance => Singleton.Get<CutsceneController>();
-		[Header("Configs")]
-		public string cutsceneNameKey;
+		
 		public SceneReference sceneToLoadAfter;
 		public float musicVolume = 0.05f;
 		public PlayableDirector playableDirector;
+		[Header("Analytics")]
+		public string cutsceneNameKey = "cutscene-start";
 
 		public void OnCreated()
 		{
@@ -81,6 +83,12 @@ namespace Blabbers.Game00
 			{
 				Debug.Log("There's no scene to load for this cutscene.".Colored("red"), this);
 			}
+		}
+
+		public void ScreenShake(float duration)
+		{
+			Camera.main.DOShakePosition(duration, 1);
+			Debug.Log("Screen Shaked");
 		}
 	}
 }
