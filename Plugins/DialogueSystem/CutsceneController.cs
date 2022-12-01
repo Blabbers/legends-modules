@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Playables;
 using DG.Tweening;
+using UnityEngine.Events;
 
 namespace Blabbers.Game00
 {
@@ -16,6 +17,7 @@ namespace Blabbers.Game00
 		public PlayableDirector playableDirector;
 		[Header("Analytics")]
 		public string cutsceneNameKey = "cutscene-start";
+		public UnityEvent OnStart;
 
 		public void OnCreated()
 		{
@@ -34,6 +36,7 @@ namespace Blabbers.Game00
 			Analytics.OnCutsceneStart(cutsceneNameKey);
 
 			Fade.Out(0.2f);
+			OnStart?.Invoke();
 		}
 
 		private void Update()
@@ -89,6 +92,11 @@ namespace Blabbers.Game00
 		{
 			Camera.main.DOShakePosition(duration, 1);
 			Debug.Log("Screen Shaked");
+		}
+
+		public void DebugLog(string text)
+		{
+			Debug.Log(text);
 		}
 	}
 }
