@@ -1,5 +1,6 @@
 ﻿using LoLSDK;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Blabbers.Game00
@@ -12,13 +13,18 @@ namespace Blabbers.Game00
         private Button btnContinue;
         [SerializeField]
         private Button btnNewGame;
-
+        public UnityEvent OnStart;
         public void OnCreated()
         {
             Singleton.Get<ProgressController>().OnGameDataLoaded += HandleGameDataLoaded;
         }
 
-        public void HandleGameDataLoaded(GameProgress progress)
+        public void Start()
+		{
+            OnStart?.Invoke();
+        }
+
+		public void HandleGameDataLoaded(GameProgress progress)
         {
 
             //Debug.Log("isNewGame:" + progress.isNewGame);
