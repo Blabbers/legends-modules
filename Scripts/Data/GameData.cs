@@ -15,7 +15,7 @@ public class GameData : ScriptableObject
         }
     }
     #endregion
-    
+
     public void OnEnable()
     {
         Application.runInBackground = false;
@@ -27,7 +27,7 @@ public class GameData : ScriptableObject
     {
         return !value.Equals("com.blabbers.gameName");
     }
-    
+
     [HorizontalLine(color: EColor.White)]
     // Progress should be a minimum of 8
     [BoxGroup("Settings")]
@@ -41,17 +41,30 @@ public class GameData : ScriptableObject
     [BoxGroup("Settings")]
     public bool StartCustomizationFirst = false;
 
-	[BoxGroup("Settings")]
-	public bool AlwaysShowStatsScreen = false;
+    [BoxGroup("Settings")]
+    public bool AlwaysShowStatsScreen = false;
 
 
-	// I will be hiding this for now. This is only usefull if the LL staff asks us to actually use the namespaces and merge all the projects
-	[BoxGroup("Settings")][HideInInspector]
+    // I will be hiding this for now. This is only usefull if the LL staff asks us to actually use the namespaces and merge all the projects
+    [BoxGroup("Settings")] [HideInInspector]
     public string gameLevelTag = ""; //"blabbers00-";
 
 
     [BoxGroup("Settings")]
     public TextConfigs textConfigs;
+
+    [HorizontalLine(color: EColor.White)]
+    [BoxGroup("Scene Loading")]
+    [Tooltip("Everytime a level finishes it automatically goes to the level select scene. If you populate this list, you can override this behaviour and go to a simulation screen instead for example.")]
+    [ReorderableList]
+    public SceneToLoad[] levelSelectOverrideScenes;
+
+    [System.Serializable]
+    public struct SceneToLoad
+	{
+        public SceneReference previousScene;
+        public SceneReference targetScene;
+	}
 
     [HorizontalLine(color: EColor.White)]
     [BoxGroup("Saved Progress")]
