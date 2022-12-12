@@ -15,6 +15,7 @@ namespace Blabbers.Game00
 		//Key in which the text is placed on the JSON file
 		public string key;
 		public bool playTTSOnEnable = false;
+		public bool applyColorCodes = true;
 		[Header("Level Options"), Tooltip("Se esse texto tiver separado por algum underscore '_' e tiver um level na frente, marque essa caixa pra ele trocar sozinho o que tiver na frente do simbolo pelo level atual, automaticamente.")]
 		public bool replaceUnderscoreWithCurrentLevel;
 
@@ -98,18 +99,21 @@ namespace Blabbers.Game00
 			//Adds an asterisk if the text coult not be loaded from the language file
 			if (myTextM)
 			{
-				myTextM.text = LocalizationExtensions.LocalizeText(key);
+				//myTextM.text = LocalizationExtensions.LocalizeText(key);
+				myTextM.text = LocalizationExtensions.LocalizeText(key,null,null, applyColorCodes);
 				hasLoadedKey = true;
 
 			}
 			if (myText)
 			{
-				myText.text = LocalizationExtensions.LocalizeText(key);
+				//myText.text = LocalizationExtensions.LocalizeText(key);
+				myText.text = LocalizationExtensions.LocalizeText(key, null, null, applyColorCodes);
 				hasLoadedKey = true;
 			}
 			if (myTextP)
 			{
-				myTextP.text = LocalizationExtensions.LocalizeText(key);
+				//myTextP.text = LocalizationExtensions.LocalizeText(key);
+				myTextP.text = LocalizationExtensions.LocalizeText(key, null, null, applyColorCodes);
 				hasLoadedKey = true;
 			}
 		}
@@ -192,7 +196,13 @@ namespace Blabbers.Game00
 		{
 			textObj.text = LocalizeText(localizationKey, appendLeft, appendRight);
 		}
-		public static string LocalizeText(string localizationKey, string appendLeft = null, string appendRight = null)
+
+		public static void LocalizeText(this TextMeshProUGUI textObj, string localizationKey, bool applyColorCode)
+		{
+			textObj.text = LocalizeText(localizationKey, null, null, applyColorCode);
+		}
+
+		public static string LocalizeText(string localizationKey, string appendLeft = null, string appendRight = null, bool applyColorCode = true)
 		{
 			if (!Application.isPlaying)
 			{
@@ -210,7 +220,7 @@ namespace Blabbers.Game00
 			}
 			if (GameData.Instance.textConfigs != null)
 			{
-				if (GameData.Instance.textConfigs.colorCodes !=null && GameData.Instance.textConfigs.colorCodes.Length > 0)
+				if (GameData.Instance.textConfigs.colorCodes !=null && GameData.Instance.textConfigs.colorCodes.Length > 0 && applyColorCode)
 				{
 					mainText = ApplyColorCodes(mainText);
 				}

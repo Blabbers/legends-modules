@@ -9,6 +9,7 @@ using DG.Tweening;
 using NaughtyAttributes;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.Scripting.APIUpdating;
 
 [System.Serializable]
 public class Question
@@ -80,8 +81,10 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
         {
             var answerKey = question.answersKeys[i];
             var textMesh = AnswerTests[i];
-            textMesh.LocalizeText(answerKey);
-            var buttonObject = textMesh.transform.parent.gameObject;
+			//textMesh.LocalizeText(answerKey);
+			textMesh.LocalizeText(answerKey,false);
+
+			var buttonObject = textMesh.transform.parent.gameObject;
             // Enable back the needed ones
             buttonObject.gameObject.SetActive(true);
 
