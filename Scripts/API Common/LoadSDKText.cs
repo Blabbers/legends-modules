@@ -16,6 +16,8 @@ namespace Blabbers.Game00
 		public string key;
 		public bool playTTSOnEnable = false;
 		public bool applyColorCodes = true;
+		public bool isAnimated = false;
+
 		[Header("Level Options"), Tooltip("Se esse texto tiver separado por algum underscore '_' e tiver um level na frente, marque essa caixa pra ele trocar sozinho o que tiver na frente do simbolo pelo level atual, automaticamente.")]
 		public bool replaceUnderscoreWithCurrentLevel;
 
@@ -29,6 +31,7 @@ namespace Blabbers.Game00
 		public TextMeshPro myTextP;
 
 		private string placeholderText;
+		string targetText;
 		public bool HasKey => !string.IsNullOrEmpty(key);
 		public bool hasLoadedKey =false;
 
@@ -43,18 +46,30 @@ namespace Blabbers.Game00
 			if (!myTextM)
 			{
 				myTextM = GetComponent<TextMeshProUGUI>();
-				if (myTextM) placeholderText = $"<TNF> {myTextM.text}";
+				if (myTextM)
+				{
+					myTextM.text = "";
+					placeholderText = $"<TNF> {myTextM.text}";
+				}
 			}
 			if (!myText)
 			{
 				myText = GetComponent<Text>();
-				if (myText) placeholderText = $"<TNF> {myText.text}";
+				if (myText)
+				{
+					myText.text = "";
+					placeholderText = $"<TNF> {myText.text}";
+				}
 			}
 
 			if (!myTextP)
 			{
 				myTextP = GetComponent<TextMeshPro>();
-				if (myTextP) placeholderText = $"<TNF> {myTextP.text}";
+				if (myTextP)
+				{
+					myTextP.text = "";
+					placeholderText = $"<TNF> {myTextP.text}";
+				}
 			}
 		}
 
@@ -96,13 +111,19 @@ namespace Blabbers.Game00
 		//Updates the UI text that is shown
 		public void UpdateText()
 		{
+			if(isAnimated)
+			{
+				targetText = LocalizationExtensions.LocalizeText(key, null, null, applyColorCodes);
+				hasLoadedKey = true;
+				return;
+			}
+				
 			//Adds an asterisk if the text coult not be loaded from the language file
 			if (myTextM)
 			{
 				//myTextM.text = LocalizationExtensions.LocalizeText(key);
 				myTextM.text = LocalizationExtensions.LocalizeText(key,null,null, applyColorCodes);
 				hasLoadedKey = true;
-
 			}
 			if (myText)
 			{
@@ -118,6 +139,11 @@ namespace Blabbers.Game00
 			}
 		}
 
+
+		public string GetTargetText()
+		{
+			return targetText;
+		}
 
 
 		public void UpdateText_Concat(string add)
