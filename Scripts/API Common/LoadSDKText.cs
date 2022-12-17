@@ -175,6 +175,7 @@ namespace Blabbers.Game00
 		[Button()]
 		public void SaveToLanguageJson()
 		{
+#if UNITY_EDITOR
 			if (!HasKey)
 			{
 				Debug.Log("<color=red>Please insert a key to this text or it won't be saved. [Click to highlight]", this);
@@ -183,15 +184,32 @@ namespace Blabbers.Game00
 
 			var textValue = "";
 			LoadPossibleTextComponents();
-			if (myText) textValue = myText.text;
-			if (myTextM) textValue = myTextM.text;
-			if (myTextP) textValue = myTextP.text;
+			if (myText) 
+			{
+				UnityEditor.Undo.RecordObject(myTextM, "LoadSDK Save Text");
+				textValue = myText.text;			
+				UnityEditor.EditorUtility.SetDirty(myText);				
+			}
+			if (myTextM) 
+			{ 
+				UnityEditor.Undo.RecordObject(myTextM, "LoadSDK Save Text");
+				textValue = myTextM.text;
+				UnityEditor.EditorUtility.SetDirty(myTextM);				
+			}
+			if (myTextP)
+			{
+				UnityEditor.Undo.RecordObject(myTextM, "LoadSDK Save Text");
+				textValue = myTextP.text;				
+				UnityEditor.EditorUtility.SetDirty(myTextP);				
+			}
 			LocalizationExtensions.EditorSaveToLanguageJson(key, textValue, this);
+#endif
 		}
 
 		[Button()]
 		public void LoadFromLanguageJson()
 		{
+#if UNITY_EDITOR
 			if (!HasKey)
 			{
 				Debug.Log("<color=red>There's no key to load this text from, insert a key to this text. [Click to highlight]", this);
@@ -201,12 +219,28 @@ namespace Blabbers.Game00
 			if (!string.IsNullOrEmpty(text))
 			{
 				LoadPossibleTextComponents();
-				if (myText) myText.text = text;
-				if (myTextM) myTextM.text = text;
-				if (myTextP) myTextP.text = text;
+				if (myText)
+				{
+					UnityEditor.Undo.RecordObject(myTextM, "LoadSDK Load Text");
+					myText.text = text;
+					UnityEditor.EditorUtility.SetDirty(myTextM);
+				}
+				if (myTextM)
+				{
+					UnityEditor.Undo.RecordObject(myTextM, "LoadSDK Load Text");
+					myTextM.text = text;
+					UnityEditor.EditorUtility.SetDirty(myTextM);
+				}
+				if (myTextP)
+				{
+					UnityEditor.Undo.RecordObject(myTextM, "LoadSDK Load Text");
+					myTextP.text = text;
+					UnityEditor.EditorUtility.SetDirty(myTextM);
+				}
 			}
-		} 
-		#endregion
+#endif
+		}
+#endregion
 	}
 
 	public static class LocalizationExtensions
