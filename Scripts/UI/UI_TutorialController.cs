@@ -28,8 +28,10 @@ public class UI_TutorialController : MonoBehaviour, ISingleton
         for (int i = 0; i < transform.childCount; i++)
         {
             var child = transform.GetChild(i);
-            var isTutorial = child.GetComponent<UI_TutorialLevel1>() != null;
-            if (child.gameObject.activeSelf && isTutorial)
+			//var isTutorial = child.GetComponent<UI_TutorialLevel1>() != null;
+			var isTutorial = child.GetComponent<UI_TutorialWindowBase>() != null;
+			
+			if (child.gameObject.activeSelf && isTutorial)
             {
                 IsEnabled = true;
                 break;

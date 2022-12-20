@@ -10,6 +10,7 @@ using NaughtyAttributes;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.Scripting.APIUpdating;
+using YamlDotNet.Core.Tokens;
 
 [System.Serializable]
 public class Question
@@ -21,6 +22,8 @@ public class Question
 
 public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 {
+    public bool enableQuestionTTS = true;
+
     private CorrectOption CorrectOption;
     public Transform PopupParent;
     public Transform ButtonsParent;
@@ -71,6 +74,8 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
         // Loads the question
         this.QuestionDescriptionText.LocalizeText(question.questionDescriptionKey);
         this.CorrectOption = question.correctAnswer;
+
+
         // Disable all
         foreach (var answerTexts in AnswerTests)
         {
@@ -97,9 +102,10 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
                 button.interactable = true;
             }
         }
-
         ShuffleAnswers();
-    }
+         
+        if(enableQuestionTTS) LocalizationExtensions.PlayTTS(question.questionDescriptionKey);
+	}
 
     public void ShuffleAnswers()
     {
