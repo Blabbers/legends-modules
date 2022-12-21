@@ -12,6 +12,19 @@ namespace Blabbers.Game00
 		public override void Play(MotionTweenPlayer tweenPlayer)
 		{
             var targetValue = fadeTo;
+            var canvasGroup = tweenPlayer.GetComponent<CanvasGroup>();
+            if (canvasGroup)
+            {
+                if (duration > 0)
+                {
+                    canvasGroup.DOFade(fadeTo, duration).SetEase(curve).SetUpdate(true);
+                }
+                else
+                {
+                    canvasGroup.alpha = targetValue;
+                }
+                return;
+            }
             var textMeshProUGUI = tweenPlayer.GetComponent<TextMeshProUGUI>();
             if (textMeshProUGUI)
             {
@@ -42,20 +55,7 @@ namespace Blabbers.Game00
                     image.color = color;
                 }
                 return;
-            }
-            var canvasGroup = tweenPlayer.GetComponent<CanvasGroup>();
-            if (canvasGroup)
-            {
-                if (duration > 0)
-                {
-                    canvasGroup.DOFade(fadeTo, duration).SetEase(curve).SetUpdate(true);    
-                }
-                else
-                {
-                    canvasGroup.alpha = targetValue;
-                }
-                return;
-            }
+            }            
             var text = tweenPlayer.GetComponent<Text>();
             if (text)
             {

@@ -64,7 +64,7 @@ namespace Blabbers.Game00
                 }
                 return;
             }
-            Debug.Log($"<color=red>Trying to tween the object's [{tweenPlayer.name}] color, but it has not image or text.</color>", tweenPlayer);
+            Debug.Log($"<color=red>Trying to tween [{this.name}] the object's [{tweenPlayer.name}] color, but it has not image or text.</color>", tweenPlayer);
 		}
 	}
 }
