@@ -15,14 +15,18 @@ public class EnableByProgressComponent : MonoBehaviour
 	{
 		if (CheckCondition())
 		{
+			Debug.Log($"EnableByProgressComponent - Condition: {condition} {level}\nSetting " +
+				$"[{this.name}] ".Colored("white") +
+				$"as " +
+				$"[{enableOnCondition}]".Colored("orange"));
 			this.gameObject.SetActive(enableOnCondition);
 		}
 	}
 
 	bool CheckCondition()
 	{
-		int currentLevel = ProgressController.GameProgress.currentLevelId;
-		int reachedLevel = ProgressController.GameProgress.reachedLevel;
+		int currentLevel = ProgressController.GameProgress.currentLevelId + 1;
+		int reachedLevel = ProgressController.GameProgress.reachedLevel + 1;
 
 		switch (condition)
 		{
