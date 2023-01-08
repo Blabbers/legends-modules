@@ -1,13 +1,10 @@
 ﻿using System.Collections;
-using System.IO;
 using BeauRoutine;
 using Blabbers.Game00;
 using NaughtyAttributes;
-using SimpleJSON;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
-using static Blabbers.Game00.LoadSDKText;
 
 [CreateAssetMenu]
 public class CharacterSay : ScriptableObject

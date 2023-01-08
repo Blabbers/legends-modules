@@ -40,7 +40,7 @@ public class IconAlternator : MonoBehaviour
             }
         }
 
-		if (!Singleton.Get<Loader>().isMobile)
+		if (!Game.IsMobile)
 		{
             //Debug.Log($"Device.isMobile: {Singleton.Get<Loader>().isMobile}".Colored("orange"));
             Routine.Start(_IconCoroutine(delay));

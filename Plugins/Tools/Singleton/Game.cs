@@ -7,9 +7,12 @@ using UnityEngine.SceneManagement;
 namespace Blabbers.Game00
 {
 	[DefaultExecutionOrder(-1000)]
-	public class CreateEventCaller : MonoBehaviour
+	public class Game : MonoBehaviour
 	{
-		public static CreateEventCaller instance;
+		public static bool IsMobile { get; private set; }
+		public static Action<bool> OnIsMobileChanged;
+		// Singleton instances management
+		public static Game instance;
 		public List<MonoBehaviour> instances;
 
 #if UNITY_EDITOR
@@ -26,7 +29,9 @@ namespace Blabbers.Game00
 				Destroy(this.gameObject);
 				return;
 			}
-
+			
+			IsMobile = CheckDeviceType();
+			
 			instance = this;
 			DontDestroyOnLoad(this);
             SceneManager.sceneUnloaded += HandleSceneLoaded;
@@ -42,6 +47,42 @@ namespace Blabbers.Game00
 			Singleton.ClearAllSingletonInstances();
 			Singleton.InitializeAllSingletonInstances();
 		}
+        
+        //Method to check which platform the game is running in
+        public static bool CheckDeviceType()
+        {
+	        if (SystemInfo.deviceType == DeviceType.Handheld)
+	        {
+		        return true;
+	        }
+
+	        if (Contains(SystemInfo.operatingSystem.ToString(), "MacOS"))
+	        {
+		        return true;
+	        }
+
+	        if (Contains(SystemInfo.operatingSystem.ToString(), "iPhone"))
+	        { 
+		        return true;
+	        }
+
+	        if (Contains(SystemInfo.operatingSystem.ToString(), "iPad"))
+	        {
+		        return true;
+	        }
+	        return false;
+        }
+
+        public static void ForceMobileMode(bool value)
+        {
+	        IsMobile = value;
+	        OnIsMobileChanged?.Invoke(value);
+        }
+
+        public static bool Contains(string text, string searchString)
+        {
+	        return text.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0;
+        }
     }
 
 	public interface ISingleton
@@ -169,7 +210,7 @@ namespace Blabbers.Game00
 				if(i == -1)
 				{
 					// Current scene from this guy is "DontDestroyOnLoad" and we use it to access others that are possibly in it
-					scene = CreateEventCaller.instance.gameObject.scene;
+					scene = Game.instance.gameObject.scene;
 				}
 				else
 				{
