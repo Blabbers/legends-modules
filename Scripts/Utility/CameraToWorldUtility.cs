@@ -10,12 +10,26 @@ public static class CameraToWorldUtility
 		currentUI.position = WorldToCameraPosition(target, cam, offsetX,offsetY);
 	}
 
-
-
-
 	public static Vector3 WorldToCameraPosition(Transform target, Camera cam, float offsetX = 0, float offsetY = 0)
 	{
 		return WorldToCameraPosition(target, cam, new Vector2(offsetX,offsetY));
+	}
+
+
+	public static Vector3 WorldToCameraPosition_Clamped(Transform target, Camera cam, float offsetX = 0, float offsetY = 0, float paddingX = 0, float paddingY = 0)
+	{
+		Vector3 pos;
+		Vector3 clampedPos;
+		Vector3 finalPos;
+
+		pos = cam.WorldToViewportPoint(target.position + new Vector3(offsetX, offsetY, 0));
+		//pos += new Vector3(offsetX, offsetY,0);
+		clampedPos = new Vector3(Mathf.Clamp(pos.x, paddingX, 1.0f - paddingX), Mathf.Clamp(pos.y, paddingY, 1.0f - paddingY), pos.z);
+		finalPos = new Vector3(clampedPos.x * Screen.width, clampedPos.y * Screen.height, 0);
+
+		//Debug.Log($"WorldToCameraPosition_Clamped() \nviewport pos: {pos} | finalPos {finalPos}");
+
+		return finalPos;
 	}
 
 	public static Vector3 WorldToCameraPosition_Clamped(Transform target, Camera cam, float offsetX = 0, float offsetY = 0)
