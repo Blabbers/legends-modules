@@ -280,7 +280,7 @@ namespace Blabbers.Game00
 				Debug.Log($"<TextNotFound> Localization Key: {localizationKey}, is returning an empty value.");
 				mainText = $"<TNF> {localizationKey}";
 			}
-			if (GameData.Instance.textConfigs != null)
+			if (GameData.Instance.textConfigs != null && SharedState.languageDefs !=null)
 			{
 				if (GameData.Instance.textConfigs.colorCodes !=null && GameData.Instance.textConfigs.colorCodes.Length > 0 && applyColorCode)
 				{
@@ -317,6 +317,7 @@ namespace Blabbers.Game00
 					}
 				}
 			}
+
 			return mainText;
 		}
 
