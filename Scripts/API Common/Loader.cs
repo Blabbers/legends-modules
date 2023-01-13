@@ -128,24 +128,34 @@ public class Loader : MonoBehaviour, ISingleton
 	}
 
 	//Method to check which platform the game is running in
-	void CheckDeviceType()
+	bool CheckDeviceType()
 	{
+		if (Contains(SystemInfo.operatingSystem.ToString(), "Android"))
+		{
+			return true;
+		}
+
+		if (Contains(SystemInfo.operatingSystem.ToString(), "MacOS"))
+		{
+			return true;
+		}
+
+		if (Contains(SystemInfo.operatingSystem.ToString(), "iPhone"))
+		{
+			return true;
+		}
+
+		if (Contains(SystemInfo.operatingSystem.ToString(), "iPad"))
+		{
+			return true;
+		}
+
 		if (SystemInfo.deviceType == DeviceType.Handheld)
 		{
-			isMobile = true;
+			return true;
 		}
-		else if (Contains(SystemInfo.operatingSystem.ToString(), "MacOS"))
-		{
-			isMobile = true;
-		}
-		else if (Contains(SystemInfo.operatingSystem.ToString(), "iPhone"))
-		{
-			isMobile = true;
-		}
-		else if (Contains(SystemInfo.operatingSystem.ToString(), "iPad"))
-		{
-			isMobile = true;
-		}
+
+		return false;
 	}
 
 	public static bool Contains(string text, string searchString)
