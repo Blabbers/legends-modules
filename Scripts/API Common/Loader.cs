@@ -27,6 +27,10 @@ public class Loader : MonoBehaviour, ISingleton
 	{
 		CheckDeviceType();
 
+		Debug.Log($"Post CheckDeviceType() \nDeviceType: {SystemInfo.deviceType} | operatingSystem: {SystemInfo.operatingSystem.ToString()}" +
+		$"| isMobile: {Singleton.Get<Loader>().isMobile}");
+
+
 		if (LOLSDK.Instance != null && LOLSDK.Instance.IsInitialized)
 		{
 			return;
@@ -130,6 +134,9 @@ public class Loader : MonoBehaviour, ISingleton
 	//Method to check which platform the game is running in
 	bool CheckDeviceType()
 	{
+
+		Debug.Log($"CheckDeviceType()");
+
 		if (Contains(SystemInfo.operatingSystem.ToString(), "Android"))
 		{
 			return true;
