@@ -28,7 +28,7 @@ public class Loader : MonoBehaviour, ISingleton
 		CheckDeviceType();
 
 		Debug.Log($"Post CheckDeviceType() \nDeviceType: {SystemInfo.deviceType} | operatingSystem: {SystemInfo.operatingSystem.ToString()}" +
-		$"| isMobile: {Singleton.Get<Loader>().isMobile}");
+		$"| isMobile: {isMobile}");
 
 
 		if (LOLSDK.Instance != null && LOLSDK.Instance.IsInitialized)
