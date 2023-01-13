@@ -25,7 +25,7 @@ public class Loader : MonoBehaviour, ISingleton
 
 	void Awake()
 	{
-		CheckDeviceType();
+		isMobile = CheckDeviceType();
 
 		Debug.Log($"Post CheckDeviceType() \nDeviceType: {SystemInfo.deviceType} | operatingSystem: {SystemInfo.operatingSystem.ToString()}" +
 		$"| isMobile: {isMobile}");
