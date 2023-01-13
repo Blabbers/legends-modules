@@ -51,12 +51,12 @@ namespace Blabbers.Game00
         //Method to check which platform the game is running in
         public static bool CheckDeviceType()
         {
-	        if (SystemInfo.deviceType == DeviceType.Handheld)
-	        {
-		        return true;
-	        }
+			if (Contains(SystemInfo.operatingSystem.ToString(), "Android"))
+			{
+				return true;
+			}
 
-	        if (Contains(SystemInfo.operatingSystem.ToString(), "MacOS"))
+			if (Contains(SystemInfo.operatingSystem.ToString(), "MacOS"))
 	        {
 		        return true;
 	        }
@@ -70,6 +70,12 @@ namespace Blabbers.Game00
 	        {
 		        return true;
 	        }
+
+	        if (SystemInfo.deviceType == DeviceType.Handheld)
+	        {
+		        return true;
+	        }
+
 	        return false;
         }
 
