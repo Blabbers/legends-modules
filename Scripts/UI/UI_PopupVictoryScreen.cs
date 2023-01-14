@@ -5,7 +5,6 @@ using BeauRoutine;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using Bolt;
 
 namespace Blabbers.Game00
 {
