@@ -86,16 +86,16 @@ namespace Blabbers.Game00
                     previousScene = ConvertScenePathToName(scene.previousScene.ScenePath);
 
 
-					Debug.Log($"currentScene: {SceneManager.GetActiveScene().name}" +
-						$"\n[{previousScene}]");
+					//Debug.Log($"currentScene: {SceneManager.GetActiveScene().name}" +
+					//	$"\n[{previousScene}]");
 
                     if(previousScene == SceneManager.GetActiveScene().name)
                     {
 
 						targetScene = ConvertScenePathToName(scene.targetScene.ScenePath);
 
-						Debug.Log($"activeScene: {SceneManager.GetActiveScene().name}\n" +
-	                    $"previousScene: [{previousScene}] | targetScene: [{targetScene}]");
+						//Debug.Log($"activeScene: {SceneManager.GetActiveScene().name}\n" +
+	     //               $"previousScene: [{previousScene}] | targetScene: [{targetScene}]");
 
 						LoadSceneByName(targetScene);
                         return;

@@ -241,7 +241,7 @@ namespace Blabbers.Game00
                 SubmitProgress();
             }
 
-            Debug.Log("Total Score: " + GameProgress.score + " | Level Score: " + GameProgress.CurrentLevel.score);
+            //Debug.Log("Total Score: " + GameProgress.score + " | Level Score: " + GameProgress.CurrentLevel.score);
         }
         #endregion
     }

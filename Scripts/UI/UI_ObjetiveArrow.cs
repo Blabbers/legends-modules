@@ -60,7 +60,7 @@ public class UI_ObjetiveArrow : MonoBehaviour, ISingleton
 
 	public void ToggleArrow(bool active)
 	{
-		Debug.Log($"<UI_ObjetiveArrow> ToggleArrow {active}");
+		//Debug.Log($"<UI_ObjetiveArrow> ToggleArrow {active}");
 		isActive = active;
 
 		if (active) {
