@@ -186,12 +186,14 @@ namespace Blabbers.Game00
             if (LoLSDK.LOLSDK.Instance.IsInitialized)
             {
                 LoLSDK.LOLSDK.Instance.CompleteGame();
-            }
+            }            
             if (!Singleton.Get<ProgressController>().isGameFinished)
             {
                 Analytics.OnGameFinished();
                 Singleton.Get<ProgressController>().isGameFinished = true;
             }
+
+            UI_MainMenu.hasFinishedTheGameOnce = true;
         }
         /// <summary>
         /// Submit progress informing the LOL platform that the student advanced.
