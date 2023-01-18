@@ -91,7 +91,7 @@ namespace Blabbers.Game00
 		public void ScreenShake(float duration)
 		{
 			Camera.main.DOShakePosition(duration, 1);
-			Debug.Log("Screen Shaked");
+			//Debug.Log("Screen Shaked");
 		}
 
 		public void DebugLog(string text)

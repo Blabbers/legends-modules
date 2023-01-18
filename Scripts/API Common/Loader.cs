@@ -27,8 +27,8 @@ public class Loader : MonoBehaviour, ISingleton
 	{
 		isMobile = CheckDeviceType();
 
-		Debug.Log($"Post CheckDeviceType() \nDeviceType: {SystemInfo.deviceType} | operatingSystem: {SystemInfo.operatingSystem.ToString()}" +
-		$"| isMobile: {isMobile}");
+		//Debug.Log($"Post CheckDeviceType() \nDeviceType: {SystemInfo.deviceType} | operatingSystem: {SystemInfo.operatingSystem.ToString()}" +
+		//$"| isMobile: {isMobile}");
 
 
 		if (LOLSDK.Instance != null && LOLSDK.Instance.IsInitialized)
@@ -105,7 +105,7 @@ public class Loader : MonoBehaviour, ISingleton
 		string startDataFilePath = Path.Combine(Application.streamingAssetsPath, startGameJSONFilePath);
 		string langCode = "en";
 
-		Debug.Log(File.Exists(startDataFilePath));
+		//Debug.Log(File.Exists(startDataFilePath));
 
 		if (File.Exists(startDataFilePath))
 		{
@@ -135,7 +135,7 @@ public class Loader : MonoBehaviour, ISingleton
 	bool CheckDeviceType()
 	{
 
-		Debug.Log($"CheckDeviceType()");
+		//Debug.Log($"CheckDeviceType()");
 
 		if (Contains(SystemInfo.operatingSystem.ToString(), "Android"))
 		{
