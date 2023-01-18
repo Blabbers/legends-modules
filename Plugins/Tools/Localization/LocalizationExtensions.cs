@@ -34,8 +34,8 @@ namespace Blabbers.Game00
 				// TODO: Read fro json file and get the text from here
 			}
 
-			if (SharedState.languageDefs == null)
-				Debug.Log($"<TextNotFound> SharedState.languageDefs is not loaded yet. Localization Key: {localizationKey}");
+			if (SharedState.languageDefs == null) { }
+				//Debug.Log($"<TextNotFound> SharedState.languageDefs is not loaded yet. Localization Key: {localizationKey}");
 
 			var mainText = SharedState.languageDefs != null ? SharedState.languageDefs[localizationKey].Value : $"<TNF> {localizationKey}";
 			if (string.IsNullOrEmpty(mainText))

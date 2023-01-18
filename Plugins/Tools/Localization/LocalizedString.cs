@@ -13,6 +13,7 @@ public class LocalizedString
 	//This has to be hidden from view or "read only" in inspector by default
 	[SerializeField] private string key;
 	[SerializeField] private string text;
+	[SerializeField] private bool overrideKey = false;
 
 	public void Changed()
 	{
