@@ -1,6 +1,8 @@
 // This code is part of the Fungus library (https://github.com/snozbot/fungus)
 // It is released for free under the MIT open source license (https://github.com/snozbot/fungus/blob/master/LICENSE)
 
+using Blabbers.Game00;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace Fungus
@@ -8,15 +10,15 @@ namespace Fungus
     /// <summary>
     /// Writes text in a dialog box.
     /// </summary>
-    [CommandInfo("Narrative", 
-                 "Say", 
+    [CommandInfo("Narrative",
+                 "Say",
                  "Writes text in a dialog box.")]
     [AddComponentMenu("")]
     public class Say : Command, ILocalizable
     {
         // Removed this tooltip as users's reported it obscures the text box
-        [TextArea(5,10)]
-        [SerializeField] protected string storyText = "";
+        //[TextArea(5,10)]
+        [SerializeField] protected LocalizedString storyText;
 
         [Tooltip("Notes about this story text for other authors, localization, etc.")]
         [SerializeField] protected string description = "";
@@ -47,12 +49,11 @@ namespace Fungus
 
         [Tooltip("Stop playing voiceover when text finishes writing.")]
         [SerializeField] protected bool stopVoiceover = true;
-
+        
         [Tooltip("Wait for the Voice Over to complete before continuing")]
-        [SerializeField] protected bool waitForVO = false;
-
+        [SerializeField] protected bool waitForVO = false;        
+        
         //add wait for vo that overrides stopvo
-
         [Tooltip("Sets the active Say dialog with a reference to a Say Dialog object in the scene. All story text will now display using this Say Dialog.")]
         [SerializeField] protected SayDialog setSayDialog;
 
@@ -75,7 +76,7 @@ namespace Fungus
         /// </summary>
         public virtual bool ExtendPrevious { get { return extendPrevious; } }
 
-        public override void OnEnter()
+		public override void OnEnter()
         {
             if (!showAlways && executionCount >= showCount)
             {
@@ -110,7 +111,9 @@ namespace Fungus
             sayDialog.SetCharacter(character);
             sayDialog.SetCharacterImage(portrait);
 
-            string displayText = storyText;
+            // Using our own localization system
+            storyText.OverrideLocKey(GetFlowchartLocalizationId());
+            string displayText = storyText;            
 
             var activeCustomTags = CustomTag.activeCustomTags;
             for (int i = 0; i < activeCustomTags.Count; i++)
@@ -141,6 +144,7 @@ namespace Fungus
             {
                 namePrefix = "EXTEND" + ": ";
             }
+            // Creates a new loc key in case there's none yet, so the text can be previewed            
             return namePrefix + "\"" + storyText + "\"";
         }
 
@@ -176,7 +180,7 @@ namespace Fungus
 
         public virtual void SetStandardText(string standardText)
         {
-            storyText = standardText;
+            storyText.Text = standardText;
         }
 
         public virtual string GetDescription()

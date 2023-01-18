@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Fungus.EditorUtils
 {
-    [CustomEditor (typeof(Say))]
+    //[CustomEditor (typeof(Say))]
     public class SayEditor : CommandEditor
     {
         public static bool showTagHelp;
