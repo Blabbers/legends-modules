@@ -3,34 +3,29 @@ using UnityEngine;
 using System;
 using Blabbers.Game00;
 using static UnityEditor.PlayerSettings;
+using static Animancer.Validate;
 
 [CustomPropertyDrawer(typeof(LocalizedString))]
 public class LocalizedStringDrawer : PropertyDrawer
 {
 	//Criar alguma variável para guardar a ultima key, deletar a antiga quando criar uma nova
+	int selectedLanguage = 0;
+	bool editingKey = false;
+	bool editTriggeredOnce = false;
+	bool languageTriggeredOnce = false;
+	string internalText = "";
 
 	public override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
 	{
+
+		string controlKeyName;
+		string controlTextName;
+
 		var internalKeyProp = property.FindPropertyRelative("key");
 		var internalTextProp = property.FindPropertyRelative("text");
-		var internalBoolProp = property.FindPropertyRelative("overrideKey");
 
 		var internalKey = internalKeyProp.stringValue;
-		var internalText = internalTextProp.stringValue;
-		var overrideKey = internalBoolProp.boolValue;
-
-		#region MyRegion
-		//GenerateLocKey(property, internalKey);
-
-		//EditorGUI.PropertyField(rect, internalTextProp, label, true);
-		//rect.y += 20;
-
-		//var keyLabel = new GUIContent("BATATA", "aaaaa eu sou batata");
-		//EditorGUI.PropertyField(rect, internalKeyProp, keyLabel, true);
-
-		////------------------------------------------ 
-		#endregion
-
+		internalText = internalTextProp.stringValue;
 
 		Rect horizontalLine1, leftBlock, rightBlock;
 		float sizePercent = 0.075f;
@@ -76,9 +71,7 @@ public class LocalizedStringDrawer : PropertyDrawer
 
 			if (GUI.Button(currentRect, buttonContent))
 			{
-				internalTextProp.stringValue = LoadBtn(property, internalKey);
-				internalText = internalTextProp.stringValue;
-
+				internalText = LoadText(internalTextProp, internalKey);
 				GUI.FocusControl(null);
 			}
 
@@ -92,80 +85,20 @@ public class LocalizedStringDrawer : PropertyDrawer
 			if (GUI.Button(currentRect, buttonContent))
 			{
 				//if(overrideKey) internalKey = 
-				SaveBtn(property, internalKey, internalText);
+				SaveBtn(internalKey, internalText);
 			}
 
 			remainingSize = leftBlock.width - ((buttonSize * 2) + 10);
 			currentRect.x = 10;
 			currentRect.width = remainingSize -10;
-			EditorGUI.LabelField(currentRect, "Story Text");
+
+			GUIStyle style = new GUIStyle(GUI.skin.label);
+			style.richText = true;
+			EditorGUI.LabelField(currentRect, $"Story Text <color=yellow><i><b>({GetLanguageCode()})</b></i></color>", style);
 
 		}
 		EditorGUILayout.EndHorizontal();
 		#endregion
-
-
-		#region Left block anchored left
-		//EditorGUILayout.BeginHorizontal();
-		//{
-		//	Rect currentRect;
-		//	float buttonWidth, remainingSize;
-		//	float startX, finalX;
-		//	float buttonSize = 30.0f;
-
-		//	startX = 0;
-		//	finalX = startX + (leftBlock.width * 1.0f);
-
-		//	currentRect = leftBlock;
-		//	currentRect.width = leftBlock.width * 0.75f;
-		//	EditorGUI.LabelField(currentRect, "Story Text");
-
-		//	currentRect.x += leftBlock.width * 0.75f;
-		//	remainingSize = leftBlock.width - currentRect.x;
-
-
-
-		//	buttonWidth = buttonSize;
-		//	if (remainingSize / 2 < buttonSize)
-		//	{
-		//		buttonWidth = remainingSize / 2;
-		//	}
-
-		//	currentRect.width = buttonWidth;
-
-		//	#region Button save
-		//	var icon = EditorGUIUtility.IconContent(@"d_SaveAs").image;
-		//	GUIContent buttonContent = new GUIContent(null, icon, "Save text to language.json");
-
-		//	if (GUI.Button(currentRect, buttonContent))
-		//	{
-		//		//if(overrideKey) internalKey = 
-		//		SaveBtn(property, internalKey, internalText);
-		//	}
-		//	#endregion
-
-		//	currentRect.x += buttonWidth;
-		//	currentRect.width = buttonWidth;
-
-		//	#region Button load
-
-
-		//	icon = EditorGUIUtility.IconContent(@"d_Refresh").image;
-		//	buttonContent = new GUIContent(null, icon, "Load text from language.json");
-
-		//	if (GUI.Button(currentRect, buttonContent))
-		//	{
-		//		internalTextProp.stringValue = LoadBtn(property, internalKey);
-		//		internalText = internalTextProp.stringValue;
-
-		//		GUI.FocusControl(null);
-		//	}
-
-		//	#endregion
-		//}
-		//EditorGUILayout.EndHorizontal();
-		#endregion
-
 
 		#region Right block
 		EditorGUILayout.BeginHorizontal();
@@ -173,27 +106,69 @@ public class LocalizedStringDrawer : PropertyDrawer
 			Rect currentRect;
 			float startX, finalX;
 
-
 			currentRect = rightBlock;
 			startX = leftBlock.width;
 			finalX = startX + (rightBlock.width * 1.0f);
 
 
 			currentRect.x = finalX - 10;
-			internalBoolProp.boolValue = EditorGUI.Toggle(currentRect, overrideKey);
 
-			//DrawSpace(ref currentRect, spacing, horizontalLine1.width);
+			//internalBoolProp.boolValue = EditorGUI.Toggle(currentRect, overrideKey);
 
-			EditorGUI.BeginDisabledGroup(overrideKey);
+			currentRect.width = 20;
+			var icon = EditorGUIUtility.IconContent(@"_Menu@2x").image;
+			GUIContent buttonContent = new GUIContent(null, icon, null);
 
+			Rect temp =currentRect;
+
+
+			EditorGUI.BeginDisabledGroup(!editingKey);
 			currentRect.x = startX;
 			currentRect.width = rightBlock.width - 15;
+
+			//controlKeyName = "ValueFld" + GUIUtility.GetControlID(FocusType.Keyboard);
+			controlKeyName = "controlKeyName";
+			GUI.SetNextControlName(controlKeyName);
 			internalKeyProp.stringValue = EditorGUI.TextField(currentRect, internalKey);
 
-
 			EditorGUI.EndDisabledGroup();
-			//currentRect.x = leftBlock.width + (rightBlock.width * 1.0f) - 10;
-			//internalBoolProp.boolValue = EditorGUI.Toggle(currentRect, overrideKey);
+
+			//EditorGUIUtility.
+			//EditorGUI.foc
+
+
+			if (EditorGUI.DropdownButton(temp, buttonContent, FocusType.Passive))
+			{
+				GenericMenu menu = new GenericMenu();
+				menu.AddItem(new GUIContent("Select Language/English"), selectedLanguage == 0, SetEnglish);
+				menu.AddItem(new GUIContent("Select Language/Spanish"), selectedLanguage == 1, SetSpanish);
+
+				menu.AddItem(new GUIContent("Edit"), false, EnableEdit);
+
+				void SetEnglish()
+				{
+					languageTriggeredOnce = true;
+					selectedLanguage = 0;
+
+				}
+				void SetSpanish()
+				{
+					languageTriggeredOnce = true;
+					selectedLanguage = 1;
+				}
+
+				void EnableEdit()
+				{
+					editTriggeredOnce = true;
+				}
+
+				menu.ShowAsContext();
+			}
+
+
+
+
+
 
 		}
 		EditorGUILayout.EndHorizontal();
@@ -206,6 +181,15 @@ public class LocalizedStringDrawer : PropertyDrawer
 		horizontalLine2.x = 10;
 		horizontalLine2.width = horizontalLine1.width - 10;
 
+
+		if (languageTriggeredOnce)
+		{
+			languageTriggeredOnce = false;
+			internalText = LoadText(internalTextProp, internalKey);
+			GUI.FocusControl(null);
+		}
+
+
 		EditorGUILayout.BeginHorizontal();
 		{
 			Rect currentRect;
@@ -213,56 +197,61 @@ public class LocalizedStringDrawer : PropertyDrawer
 			currentRect = horizontalLine2;
 			currentRect.height = 60f;
 
+
+			EditorStyles.textField.wordWrap = true;
+
+			//controlTextName = "ValueFld" + GUIUtility.GetControlID(FocusType.Keyboard);
+			controlTextName = "controlTextName";
+			GUI.SetNextControlName(controlTextName);
 			internalTextProp.stringValue = EditorGUI.TextArea(currentRect, internalText);
-
-			if (!overrideKey)
-			{
-				GenerateLocKey(internalKeyProp, internalKey);
-			}
-
+			EditorStyles.textField.wordWrap = false;
 		}
 		EditorGUILayout.EndHorizontal();
 
-		#region old
 
-		#region Internal key
-		//DrawSpace(ref rect, spacing, horizontalLine1.width);
+		if(Event.current.type == EventType.Repaint)
+		{
 
-		////GUI.enabled = overrideKey;
-		//EditorGUI.BeginDisabledGroup(overrideKey);
+			if (editTriggeredOnce)
+			{
+				editingKey = true;
+				editTriggeredOnce = false;
+				EditorGUI.FocusTextInControl(controlKeyName);
+			}
 
-		//rect.width = horizontalLine1.width * 0.5f;
-		//rect.x += horizontalLine1.width * sizePercent;
-		//internalKeyProp.stringValue = EditorGUI.TextField(rect, internalKey);
-		#endregion
+			if (EditorGUIUtility.editingTextField)
+			{
+				var currentFocusedControlName = GUI.GetNameOfFocusedControl();
+				//Debug.Log($"Está editando [{currentFocusedControlName}] | {Event.current.type}");
 
-		//DrawSpace(ref rect, spacing, horizontalLine1.width);
+				if (!(currentFocusedControlName == controlKeyName))
+				{
+					//Debug.Log($"Deu certo! [{currentFocusedControlName}] != [{controlKeyName}] | {Event.current.type}");
+					GenerateLocKey(internalKeyProp, internalKey);
+					editingKey = false;
+				}
+			}
+			else
+			{
+				//Debug.Log("NÃOO Está editando");
 
-		//EditorGUI.EndDisabledGroup();
-		////GUI.enabled = true;
+				GenerateLocKey(internalKeyProp, internalKey);
+				editingKey = false;
 
-		//rect.x += horizontalLine1.width * 0.5f;
-		//internalBoolProp.boolValue = EditorGUI.Toggle(rect, overrideKey);
+			}
+		}
 
-		//rect.y += 25f;
-		//rect.x = 0;
-		//rect.height = 60f;
-		//rect.width = horizontalLine1.width * 0.95f;
 
-		//DrawSpace(ref rect, spacing, horizontalLine1.width);
 
-		//internalTextProp.stringValue = EditorGUI.TextArea(rect, internalText);
-
-		//if (!overrideKey)
-		//{
-		//	GenerateLocKey(internalKeyProp, internalKey);
-		//} 
-		#endregion
 	}
 
-
-
-
+	private string LoadText(SerializedProperty internalTextProp, string internalKey)
+	{
+		string internalText;
+		internalTextProp.stringValue = LoadBtn(internalKey);
+		internalText = internalTextProp.stringValue;
+		return internalText;
+	}
 
 	void DrawSpace(ref Rect rect, float size, float totalWidth)
 	{
@@ -281,21 +270,14 @@ public class LocalizedStringDrawer : PropertyDrawer
 		EditorGUI.DrawPreviewTexture(current, icon);
 	}
 
-	void SaveBtn(SerializedProperty property, string key, string value)
+	void SaveBtn(string key, string value)
 	{
-		// Em caso de salvar e ainda nao tiver uma key, a gente cria ela aqui em runtime, seta no objeto e só depois salva.
-		LocalizationExtensions.EditorSaveToLanguageJson(key, value);
+		LocalizationExtensions.EditorSaveToLanguageJson(key, value, langCode: GetLanguageCode());
 	}
 
-	string LoadBtn(SerializedProperty property, string key)
+	string LoadBtn(string key)
 	{
-		// Dai no btn de load, quando clicar atualiza o texto da property para o texto que tava no arquivo.
-		//var internalTextProp = property.FindPropertyRelative("text");
-		//internalTextProp.stringValue = LocalizationExtensions.EditorLoadFromLanguageJson(key);
-
-
-		return LocalizationExtensions.EditorLoadFromLanguageJson(key);
-		//LocalizationExtensions.EditorLoadFromLanguageJson(key);
+		return LocalizationExtensions.EditorLoadFromLanguageJson(key, langCode: GetLanguageCode());
 	}
 
 	// Acho que um ultimo passo legal vai ser tipo um botao ou um atalho generico que faz dar load em TOOODOS os Flowcharts/LoadSDKtext da scene que voce ta aberto e tal.
@@ -304,6 +286,23 @@ public class LocalizedStringDrawer : PropertyDrawer
 	{
 		float extraHeight = 20.0f + 20f + 20f + 10f;
 		return base.GetPropertyHeight(property, label) + extraHeight;
+	}
+
+
+	string GetLanguageCode()
+	{
+		switch (selectedLanguage)
+		{
+			case 0:
+				return "en";
+
+			case 1:
+				return "es";
+
+			default:
+				return "en";
+		}
+
 	}
 
 	public void GenerateLocKey(SerializedProperty property, string key)

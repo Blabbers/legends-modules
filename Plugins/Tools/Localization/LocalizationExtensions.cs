@@ -157,9 +157,9 @@ namespace Blabbers.Game00
 			catch { }
 		}
 		private static JSONNode localLanguageJson;
-		public static JSONNode GetLanguageJson()
+		public static JSONNode GetLanguageJson(bool forceLoadJsonFile =false)
 		{
-			if (localLanguageJson != null) return localLanguageJson;
+			if (!forceLoadJsonFile && localLanguageJson != null) return localLanguageJson;
 
 			const string languageJSONFilePath = "language.json";
 			// Load Dev Language File from StreamingAssets
@@ -175,10 +175,9 @@ namespace Blabbers.Game00
 
 		}
 
-		public static void EditorSaveToLanguageJson(string key, string value, Object unityObject = null)
+		public static void EditorSaveToLanguageJson(string key, string value, Object unityObject = null, string langCode = "en")
 		{
 			var json = LocalizationExtensions.GetLanguageJson();
-			var langCode = "en";
 			var node = json[langCode];
 			node.Add(key, value);
 
@@ -191,10 +190,9 @@ namespace Blabbers.Game00
 				localLanguageJson = json;
 			}
 		}
-		public static string EditorLoadFromLanguageJson(string key, Object unityObject = null, bool displayMessages = true)
+		public static string EditorLoadFromLanguageJson(string key, Object unityObject = null, bool displayMessages = true,bool forceLoadJsonFile = false ,string langCode = "en")
 		{
-			var json = LocalizationExtensions.GetLanguageJson();
-			var langCode = "en";
+			var json = LocalizationExtensions.GetLanguageJson(forceLoadJsonFile);
 			var node = json[langCode];
 			if (node[key] == null)
 			{
@@ -213,5 +211,6 @@ namespace Blabbers.Game00
 				return node[key];
 			}			
 		}
+
 	}
 }
