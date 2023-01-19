@@ -141,7 +141,11 @@ namespace Fungus
             if (extendPrevious)
             {
                 namePrefix = "EXTEND" + ": ";
-            }                        
+            }
+			if (storyText.HasUnsavedChanges())
+			{
+                namePrefix = "<color=red><b>* UNSAVED CHANGES *</b></color> " + namePrefix;
+            }
             return namePrefix + "\"" + storyText + "\"";
         }
 

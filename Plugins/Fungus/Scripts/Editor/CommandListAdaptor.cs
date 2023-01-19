@@ -340,7 +340,7 @@ namespace Fungus.EditorUtils
                 commandLabelColor = Color.grey;
             }
 
-            GUI.backgroundColor = commandLabelColor;
+            GUI.backgroundColor = commandLabelColor;            
 
             if (isComment)
             {

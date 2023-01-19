@@ -54,27 +54,9 @@ namespace Fungus
         [Tooltip("Description text displayed in the Flowchart editor window")]
         [SerializeField] protected string description = "";
 
-        [Range(0f, 5f)]
-        [Tooltip("Adds a pause after each execution step to make it easier to visualise program flow. Editor only, has no effect in platform builds.")]
-        [SerializeField] protected float stepPause = 0f;
-
-        [Tooltip("Use command color when displaying the command list in the Fungus Editor window")]
-        [SerializeField] protected bool colorCommands = true;
-
-        [Tooltip("Hides the Flowchart block and command components in the inspector. Deselect to inspect the block and command components that make up the Flowchart.")]
-        [SerializeField] protected bool hideComponents = true;
-
-        [Tooltip("Saves the selected block and commands when saving the scene. Helps avoid version control conflicts if you've only changed the active selection.")]
-        [SerializeField] protected bool saveSelection = true;
-
+        // Jesse Note: We will probably remove their localization system and use our own. But I'm this here to try to understand it better later.
         [Tooltip("Unique identifier for this flowchart in localized string keys. If no id is specified then the name of the Flowchart object will be used.")]
         [SerializeField] protected string localizationId = "";
-
-        [Tooltip("Display line numbers in the command list in the Block inspector.")]
-        [SerializeField] protected bool showLineNumbers = false;
-
-        [Tooltip("List of commands to hide in the Add Command menu. Use this to restrict the set of commands available when editing a Flowchart.")]
-        [SerializeField] protected List<string> hideCommands = new List<string>();
 
         protected static List<Flowchart> cachedFlowcharts = new List<Flowchart>();
 
@@ -380,17 +362,17 @@ namespace Fungus
         /// <summary>
         /// Slow down execution in the editor to make it easier to visualise program flow.
         /// </summary>
-        public virtual float StepPause { get { return stepPause; } }
+        public virtual float StepPause { get { return FungusSettings.Instance.StepPause; } }
 
         /// <summary>
         /// Use command color when displaying the command list in the inspector.
         /// </summary>
-        public virtual bool ColorCommands { get { return colorCommands; } }
+        public virtual bool ColorCommands { get { return FungusSettings.Instance.ColorCommands; } }
 
         /// <summary>
         /// Saves the selected block and commands when saving the scene. Helps avoid version control conflicts if you've only changed the active selection.
         /// </summary>
-        public virtual bool SaveSelection { get { return saveSelection; } }
+        public virtual bool SaveSelection { get { return FungusSettings.Instance.SaveSelection; } }
 
         /// <summary>
         /// Unique identifier for identifying this flowchart in localized string keys.
@@ -400,7 +382,10 @@ namespace Fungus
         /// <summary>
         /// Display line numbers in the command list in the Block inspector.
         /// </summary>
-        public virtual bool ShowLineNumbers { get { return showLineNumbers; } }
+        public virtual bool ShowLineNumbers { get { return FungusSettings.Instance.ShowLineNumbers; } }
+
+        public virtual bool HideComponents { get { return FungusSettings.Instance.HideComponents; } }
+        public virtual List<string> HideCommands { get { return FungusSettings.Instance.HideCommands; } }
 
         /// <summary>
         /// Position in the center of all blocks in the flowchart.
@@ -1063,7 +1048,7 @@ namespace Fungus
         /// </summary>
         public virtual void UpdateHideFlags()
         {
-            if (hideComponents)
+            if (HideComponents)
             {
                 var blocks = GetComponents<Block>();
                 for (int i = 0; i < blocks.Length; i++)
@@ -1229,10 +1214,10 @@ namespace Fungus
         /// </summary>
         public virtual bool IsCommandSupported(CommandInfoAttribute commandInfo)
         {
-            for (int i = 0; i < hideCommands.Count; i++)
+            for (int i = 0; i < HideCommands.Count; i++)
             {
                 // Match on category or command name (case insensitive)
-                var key = hideCommands[i];
+                var key = HideCommands[i];
                 if (String.Compare(commandInfo.Category, key, StringComparison.OrdinalIgnoreCase) == 0 || String.Compare(commandInfo.CommandName, key, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     return false;

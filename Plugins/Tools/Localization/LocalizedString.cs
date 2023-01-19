@@ -15,10 +15,6 @@ public class LocalizedString
 	[SerializeField] private string text;
 	[SerializeField] private bool overrideKey = false;
 
-	public void Changed()
-	{
-		Debug.Log("VALUE CHANGED!! " + text);
-	}
 	public string Text
 	{
 		get { return LocalizationExtensions.LocalizeText(key); }
@@ -34,6 +30,15 @@ public class LocalizedString
 	}
 
 	public string Key => key;
+	/// <summary>
+	/// This text will only be different thant the "Text" prop if the string is not saved to the laguage file yet.
+	/// </summary>
+	public string InternalText => text;
+
+	public bool HasUnsavedChanges()
+	{
+		return text != Text;
+	}
 
 	public void OverrideLocKey(string key)
 	{
@@ -44,4 +49,5 @@ public class LocalizedString
 	{
 		return Text;
 	}
+
 }

@@ -12,20 +12,11 @@ namespace Fungus.EditorUtils
     [CustomEditor (typeof(Flowchart))]
     public class FlowchartEditor : Editor 
     {
-        protected SerializedProperty descriptionProp;
-        protected SerializedProperty colorCommandsProp;
-        protected SerializedProperty hideComponentsProp;
-        protected SerializedProperty stepPauseProp;
-        protected SerializedProperty saveSelectionProp;
-        protected SerializedProperty localizationIdProp;
+        protected SerializedProperty descriptionProp;        
+        //protected SerializedProperty localizationIdProp;
         protected SerializedProperty variablesProp;
-        protected SerializedProperty showLineNumbersProp;
-        protected SerializedProperty hideCommandsProp;
-
         protected Texture2D addTexture;
-
         protected VariableListAdaptor variableListAdaptor;
-
 
         public static bool FlowchartDataStale { get; set; }
 
@@ -34,15 +25,9 @@ namespace Fungus.EditorUtils
             if (NullTargetCheck()) // Check for an orphaned editor instance
                 return;
 
-            descriptionProp = serializedObject.FindProperty("description");
-            colorCommandsProp = serializedObject.FindProperty("colorCommands");
-            hideComponentsProp = serializedObject.FindProperty("hideComponents");
-            stepPauseProp = serializedObject.FindProperty("stepPause");
-            saveSelectionProp = serializedObject.FindProperty("saveSelection");
-            localizationIdProp = serializedObject.FindProperty("localizationId");
-            variablesProp = serializedObject.FindProperty("variables");
-            showLineNumbersProp = serializedObject.FindProperty("showLineNumbers");
-            hideCommandsProp = serializedObject.FindProperty("hideCommands");
+            descriptionProp = serializedObject.FindProperty("description");            
+            //localizationIdProp = serializedObject.FindProperty("localizationId");
+            variablesProp = serializedObject.FindProperty("variables");            
 
             addTexture = FungusEditorResources.AddSmall;
 
@@ -59,18 +44,8 @@ namespace Fungus.EditorUtils
 
             EditorGUI.BeginChangeCheck();
 
-            EditorGUILayout.PropertyField(descriptionProp);
-            EditorGUILayout.PropertyField(colorCommandsProp);
-            EditorGUILayout.PropertyField(hideComponentsProp);
-            EditorGUILayout.PropertyField(stepPauseProp);
-            EditorGUILayout.PropertyField(saveSelectionProp);
-            EditorGUILayout.PropertyField(localizationIdProp);
-            EditorGUILayout.PropertyField(showLineNumbersProp);
-
-            // Show list of commands to hide in Add Command menu
-            //ReorderableListGUI.Title(new GUIContent(hideCommandsProp.displayName, hideCommandsProp.tooltip));
-            //ReorderableListGUI.ListField(hideCommandsProp);
-            EditorGUILayout.PropertyField(hideCommandsProp, new GUIContent(hideCommandsProp.displayName, hideCommandsProp.tooltip), true);
+            EditorGUILayout.PropertyField(descriptionProp);            
+            //EditorGUILayout.PropertyField(localizationIdProp);
 
             if(EditorGUI.EndChangeCheck())
             {

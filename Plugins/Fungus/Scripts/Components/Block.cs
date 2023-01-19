@@ -34,7 +34,7 @@ namespace Fungus
         [Tooltip("The name of the block node as displayed in the Flowchart window")]
         [SerializeField] protected string blockName = "New Block";
 
-        [TextArea(2, 5)]
+        [TextArea(1, 1)]
         [Tooltip("Description text to display under the block node")]
         [SerializeField] protected string description = "";
 
