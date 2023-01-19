@@ -31,11 +31,14 @@ namespace Blabbers.Game00
 		{
 			if (!Application.isPlaying)
 			{
-				// TODO: Read fro json file and get the text from here
+				var editorMainText = EditorLoadFromLanguageJson(localizationKey, null, false);
+				return $"{appendLeft}{editorMainText}{appendRight}";
 			}
 
-			if (SharedState.languageDefs == null) { }
-				//Debug.Log($"<TextNotFound> SharedState.languageDefs is not loaded yet. Localization Key: {localizationKey}");
+			if (SharedState.languageDefs == null)
+			{
+				Debug.Log($"<TextNotFound> SharedState.languageDefs is not loaded yet. Localization Key: {localizationKey}");
+			}
 
 			var mainText = SharedState.languageDefs != null ? SharedState.languageDefs[localizationKey].Value : $"<TNF> {localizationKey}";
 			if (string.IsNullOrEmpty(mainText))
@@ -153,9 +156,11 @@ namespace Blabbers.Game00
 			}
 			catch { }
 		}
-
+		private static JSONNode localLanguageJson;
 		public static JSONNode GetLanguageJson()
 		{
+			if (localLanguageJson != null) return localLanguageJson;
+
 			const string languageJSONFilePath = "language.json";
 			// Load Dev Language File from StreamingAssets
 			string langFilePath = Path.Combine(Application.streamingAssetsPath, languageJSONFilePath);
@@ -163,6 +168,7 @@ namespace Blabbers.Game00
 			{
 				string langDataAsJson = File.ReadAllText(langFilePath);
 				JSONNode langDefs = JSON.Parse(langDataAsJson);
+				localLanguageJson = langDefs;
 				return (langDefs);
 			}
 			return "";
@@ -182,21 +188,28 @@ namespace Blabbers.Game00
 			{
 				File.WriteAllText(langFilePath, json.ToString(1));
 				Debug.Log($"<color=cyan>File language.json was updated</color>: <color=white>[{key}]: {node[key]}</color>", unityObject);
+				localLanguageJson = json;
 			}
 		}
-		public static string EditorLoadFromLanguageJson(string key, Object unityObject = null)
+		public static string EditorLoadFromLanguageJson(string key, Object unityObject = null, bool displayMessages = true)
 		{
 			var json = LocalizationExtensions.GetLanguageJson();
 			var langCode = "en";
 			var node = json[langCode];
 			if (node[key] == null)
 			{
-				Debug.Log($"<color=red>File language.json was NOT loaded to this asset bacause key [{key}] is NULL.</color>", unityObject);
+				if (displayMessages)
+				{
+					Debug.Log($"<color=red>File language.json was NOT loaded to this asset bacause key [{key}] is NULL.</color>", unityObject);
+				}
 				return "";
 			}
 			else
 			{
-				Debug.Log($"<color=yellow>File language.json was loaded to this asset</color> \n<color=white>[{key}]: {node[key]}</color>", unityObject);
+				if (displayMessages)
+				{
+					Debug.Log($"<color=yellow>File language.json was loaded to this asset</color> \n<color=white>[{key}]: {node[key]}</color>", unityObject);
+				}
 				return node[key];
 			}			
 		}

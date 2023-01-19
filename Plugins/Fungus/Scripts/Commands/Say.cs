@@ -111,8 +111,6 @@ namespace Fungus
             sayDialog.SetCharacter(character);
             sayDialog.SetCharacterImage(portrait);
 
-            // Using our own localization system
-            storyText.OverrideLocKey(GetFlowchartLocalizationId());
             string displayText = storyText;            
 
             var activeCustomTags = CustomTag.activeCustomTags;
@@ -143,8 +141,7 @@ namespace Fungus
             if (extendPrevious)
             {
                 namePrefix = "EXTEND" + ": ";
-            }
-            // Creates a new loc key in case there's none yet, so the text can be previewed            
+            }                        
             return namePrefix + "\"" + storyText + "\"";
         }
 

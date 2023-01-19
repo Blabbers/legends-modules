@@ -33,6 +33,8 @@ public class LocalizedString
 		}
 	}
 
+	public string Key => key;
+
 	public void OverrideLocKey(string key)
 	{
 		this.key = key;
