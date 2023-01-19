@@ -2,8 +2,6 @@ using UnityEditor;
 using UnityEngine;
 using System;
 using Blabbers.Game00;
-using static UnityEditor.PlayerSettings;
-using static Animancer.Validate;
 
 [CustomPropertyDrawer(typeof(LocalizedString))]
 public class LocalizedStringDrawer : PropertyDrawer
@@ -17,26 +15,20 @@ public class LocalizedStringDrawer : PropertyDrawer
 
 	public override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
 	{
-
 		string controlKeyName;
 		string controlTextName;
 
 		var internalKeyProp = property.FindPropertyRelative("key");
 		var internalTextProp = property.FindPropertyRelative("text");
-
 		var internalKey = internalKeyProp.stringValue;
+
 		internalText = internalTextProp.stringValue;
 
 		Rect horizontalLine1, leftBlock, rightBlock;
-		float sizePercent = 0.075f;
-		float spacing = 0.025f;
 
-		#region Confgiure horizontal line 1
 		horizontalLine1 = rect;
 		horizontalLine1.height = 20f;
-		horizontalLine1.width = rect.width * 1.0f; 
-		#endregion
-
+		horizontalLine1.width = rect.width * 1.0f;
 
 		leftBlock = horizontalLine1;
 		rightBlock = horizontalLine1;
@@ -44,7 +36,6 @@ public class LocalizedStringDrawer : PropertyDrawer
 		leftBlock.width = horizontalLine1.width * 0.60f;
 		rightBlock.width = horizontalLine1.width * 0.40f;
 		rightBlock.x = leftBlock.width;
-
 
 		#region Left block
 		EditorGUILayout.BeginHorizontal();
@@ -60,9 +51,6 @@ public class LocalizedStringDrawer : PropertyDrawer
 
 			GUIContent buttonContent;
 
-
-			//Buttons first
-
 			var icon = EditorGUIUtility.IconContent(@"d_Refresh").image;
 			buttonContent = new GUIContent(null, icon, "Load text from language.json");
 
@@ -74,7 +62,6 @@ public class LocalizedStringDrawer : PropertyDrawer
 				internalText = LoadText(internalTextProp, internalKey);
 				GUI.FocusControl(null);
 			}
-
 
 			currentRect.x -= buttonSize;
 			currentRect.width = buttonSize;
@@ -110,10 +97,7 @@ public class LocalizedStringDrawer : PropertyDrawer
 			startX = leftBlock.width;
 			finalX = startX + (rightBlock.width * 1.0f);
 
-
 			currentRect.x = finalX - 10;
-
-			//internalBoolProp.boolValue = EditorGUI.Toggle(currentRect, overrideKey);
 
 			currentRect.width = 20;
 			var icon = EditorGUIUtility.IconContent(@"_Menu@2x").image;
@@ -125,16 +109,11 @@ public class LocalizedStringDrawer : PropertyDrawer
 			EditorGUI.BeginDisabledGroup(!editingKey);
 			currentRect.x = startX;
 			currentRect.width = rightBlock.width - 15;
-
-			//controlKeyName = "ValueFld" + GUIUtility.GetControlID(FocusType.Keyboard);
 			controlKeyName = "controlKeyName";
 			GUI.SetNextControlName(controlKeyName);
 			internalKeyProp.stringValue = EditorGUI.TextField(currentRect, internalKey);
 
 			EditorGUI.EndDisabledGroup();
-
-			//EditorGUIUtility.
-			//EditorGUI.foc
 
 
 			if (EditorGUI.DropdownButton(temp, buttonContent, FocusType.Passive))
@@ -165,11 +144,6 @@ public class LocalizedStringDrawer : PropertyDrawer
 				menu.ShowAsContext();
 			}
 
-
-
-
-
-
 		}
 		EditorGUILayout.EndHorizontal();
 		#endregion
@@ -189,7 +163,6 @@ public class LocalizedStringDrawer : PropertyDrawer
 			GUI.FocusControl(null);
 		}
 
-
 		EditorGUILayout.BeginHorizontal();
 		{
 			Rect currentRect;
@@ -199,8 +172,6 @@ public class LocalizedStringDrawer : PropertyDrawer
 
 
 			EditorStyles.textField.wordWrap = true;
-
-			//controlTextName = "ValueFld" + GUIUtility.GetControlID(FocusType.Keyboard);
 			controlTextName = "controlTextName";
 			GUI.SetNextControlName(controlTextName);
 			internalTextProp.stringValue = EditorGUI.TextArea(currentRect, internalText);
@@ -211,7 +182,6 @@ public class LocalizedStringDrawer : PropertyDrawer
 
 		if(Event.current.type == EventType.Repaint)
 		{
-
 			if (editTriggeredOnce)
 			{
 				editingKey = true;
@@ -222,26 +192,19 @@ public class LocalizedStringDrawer : PropertyDrawer
 			if (EditorGUIUtility.editingTextField)
 			{
 				var currentFocusedControlName = GUI.GetNameOfFocusedControl();
-				//Debug.Log($"Está editando [{currentFocusedControlName}] | {Event.current.type}");
-
 				if (!(currentFocusedControlName == controlKeyName))
 				{
-					//Debug.Log($"Deu certo! [{currentFocusedControlName}] != [{controlKeyName}] | {Event.current.type}");
 					GenerateLocKey(internalKeyProp, internalKey);
 					editingKey = false;
 				}
 			}
 			else
 			{
-				//Debug.Log("NÃOO Está editando");
-
 				GenerateLocKey(internalKeyProp, internalKey);
 				editingKey = false;
 
 			}
 		}
-
-
 
 	}
 
@@ -309,9 +272,6 @@ public class LocalizedStringDrawer : PropertyDrawer
 	{
 		if (string.IsNullOrEmpty(key))
 		{
-			// TEEM QUE DAR "SET PROPERTY" DAQUI COM O NOME NOVO DA KEY.
-			//property..key = System.Guid.NewGuid().ToString();
-
 			property.stringValue = System.Guid.NewGuid().ToString();
 		}
 	}
