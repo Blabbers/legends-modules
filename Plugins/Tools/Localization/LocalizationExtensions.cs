@@ -157,9 +157,15 @@ namespace Blabbers.Game00
 			catch { }
 		}
 		private static JSONNode localLanguageJson;
-		public static JSONNode GetLanguageJson(bool forceLoadJsonFile =false)
+		public static void ResetLanguageJson()
 		{
-			if (!forceLoadJsonFile && localLanguageJson != null) return localLanguageJson;
+			localLanguageJson = null;
+			GetLanguageJson();
+		}
+		public static JSONNode GetLanguageJson()
+		{
+			//Debug.Log("Force? "+ forceLoadJsonFile + " / Null? " + (localLanguageJson == null));
+			if (localLanguageJson != null) return localLanguageJson;
 
 			const string languageJSONFilePath = "language.json";
 			// Load Dev Language File from StreamingAssets
@@ -190,11 +196,19 @@ namespace Blabbers.Game00
 				localLanguageJson = json;
 			}
 		}
-		public static string EditorLoadFromLanguageJson(string key, Object unityObject = null, bool displayMessages = true,bool forceLoadJsonFile = false ,string langCode = "en")
+		public static string EditorLoadFromLanguageJson(string key, Object unityObject = null, bool displayMessages = true, string langCode = "en")
 		{
-			var json = LocalizationExtensions.GetLanguageJson(forceLoadJsonFile);
+			var json = LocalizationExtensions.GetLanguageJson();
 			var node = json[langCode];
-			if (node[key] == null)
+			if (string.IsNullOrEmpty(key))
+			{
+				if (displayMessages)
+				{
+					Debug.Log($"<color=yellow>Key is EMPTY. Set a key value. File language.json was NOT loaded to this asset bacause key is EMPTY.</color>", unityObject);
+				}
+				return "";
+			}
+			else if (node[key] == null)
 			{
 				if (displayMessages)
 				{

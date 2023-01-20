@@ -24,6 +24,7 @@ public class LocalizedStringDrawer : PropertyDrawer
 	{	
 		hideAttribute = fieldInfo.GetCustomAttribute<HideLocalizationTextArea>(true);
 		shouldShowTextArea = (hideAttribute == null);
+		LocalizationExtensions.ResetLanguageJson();
 	}
 
 	public override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
