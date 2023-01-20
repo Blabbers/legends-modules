@@ -20,3 +20,10 @@ public class TimeSpanBoxAttribute : PropertyAttribute
 
 	public string Format { get; }
 }
+
+
+
+[AttributeUsage(AttributeTargets.Field)]
+public class HideLocalizationTextArea : PropertyAttribute
+{
+}

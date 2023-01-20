@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Blabbers.Game00;
 using NaughtyAttributes;
+using System;
 
 [System.Serializable]
 public class LocalizedString
@@ -13,6 +14,8 @@ public class LocalizedString
 	//This has to be hidden from view or "read only" in inspector by default
 	[SerializeField] private string key;
 	[SerializeField] private string text;
+
+	public Action<string> OnLoad;
 
 	public string Text
 	{
@@ -49,4 +52,9 @@ public class LocalizedString
 		return Text;
 	}
 
+
+	public string GetRawText()
+	{
+		return text;
+	}
 }

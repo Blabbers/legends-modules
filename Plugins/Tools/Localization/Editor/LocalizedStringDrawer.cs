@@ -2,6 +2,9 @@ using UnityEditor;
 using UnityEngine;
 using System;
 using Blabbers.Game00;
+using Animancer;
+using Animancer.Editor;
+using System.Reflection;
 
 [CustomPropertyDrawer(typeof(LocalizedString))]
 public class LocalizedStringDrawer : PropertyDrawer
@@ -11,10 +14,26 @@ public class LocalizedStringDrawer : PropertyDrawer
 	bool editingKey = false;
 	bool editTriggeredOnce = false;
 	bool languageTriggeredOnce = false;
+
+	bool firstCheck = true;
+	HideLocalizationTextArea hideAttribute;
+	bool shouldShowTextArea = true;
 	string internalText = "";
+
+	public void OnEnable()
+	{	
+		hideAttribute = fieldInfo.GetCustomAttribute<HideLocalizationTextArea>(true);
+		shouldShowTextArea = (hideAttribute == null);
+	}
 
 	public override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
 	{
+		if (firstCheck)
+		{
+			OnEnable();
+			firstCheck = false;
+		}
+
 		string controlKeyName;
 		string controlTextName;
 
@@ -59,7 +78,7 @@ public class LocalizedStringDrawer : PropertyDrawer
 
 			if (GUI.Button(currentRect, buttonContent))
 			{
-				internalText = LoadText(internalTextProp, internalKey);
+				internalText = LoadText(property,internalTextProp, internalKey);
 				GUI.FocusControl(null);
 			}
 
@@ -81,7 +100,7 @@ public class LocalizedStringDrawer : PropertyDrawer
 
 			GUIStyle style = new GUIStyle(GUI.skin.label);
 			style.richText = true;
-			EditorGUI.LabelField(currentRect, $"Story Text <color=yellow><i><b>({GetLanguageCode()})</b></i></color>", style);
+			EditorGUI.LabelField(currentRect, $"{property.displayName} <color=yellow><i><b>({GetLanguageCode()})</b></i></color>", style);
 
 		}
 		EditorGUILayout.EndHorizontal();
@@ -159,25 +178,30 @@ public class LocalizedStringDrawer : PropertyDrawer
 		if (languageTriggeredOnce)
 		{
 			languageTriggeredOnce = false;
-			internalText = LoadText(internalTextProp, internalKey);
+			internalText = LoadText(property,internalTextProp, internalKey);
 			GUI.FocusControl(null);
 		}
 
-		EditorGUILayout.BeginHorizontal();
+		if (shouldShowTextArea)
 		{
-			Rect currentRect;
+			EditorGUILayout.BeginHorizontal();
+			{
+				Rect currentRect;
 
-			currentRect = horizontalLine2;
-			currentRect.height = 60f;
+				currentRect = horizontalLine2;
+				currentRect.height = 60f;
 
 
-			EditorStyles.textField.wordWrap = true;
-			controlTextName = "controlTextName";
-			GUI.SetNextControlName(controlTextName);
-			internalTextProp.stringValue = EditorGUI.TextArea(currentRect, internalText);
-			EditorStyles.textField.wordWrap = false;
+				EditorStyles.textField.wordWrap = true;
+				controlTextName = "controlTextName";
+				GUI.SetNextControlName(controlTextName);
+				internalTextProp.stringValue = EditorGUI.TextArea(currentRect, internalText);
+				EditorStyles.textField.wordWrap = false;
+			}
+			EditorGUILayout.EndHorizontal();
 		}
-		EditorGUILayout.EndHorizontal();
+
+
 
 
 		if(Event.current.type == EventType.Repaint)
@@ -208,13 +232,7 @@ public class LocalizedStringDrawer : PropertyDrawer
 
 	}
 
-	private string LoadText(SerializedProperty internalTextProp, string internalKey)
-	{
-		string internalText;
-		internalTextProp.stringValue = LoadBtn(internalKey);
-		internalText = internalTextProp.stringValue;
-		return internalText;
-	}
+
 
 	void DrawSpace(ref Rect rect, float size, float totalWidth)
 	{
@@ -238,9 +256,17 @@ public class LocalizedStringDrawer : PropertyDrawer
 		LocalizationExtensions.EditorSaveToLanguageJson(key, value, langCode: GetLanguageCode());
 	}
 
-	string LoadBtn(string key)
+	private string LoadText(SerializedProperty property, SerializedProperty internalTextProp, string internalKey)
 	{
-		return LocalizationExtensions.EditorLoadFromLanguageJson(key, langCode: GetLanguageCode());
+		string internalText;
+		internalTextProp.stringValue = LocalizationExtensions.EditorLoadFromLanguageJson(internalKey, langCode: GetLanguageCode());
+		internalText = internalTextProp.stringValue;
+
+		LocalizedString locString;
+		locString = (LocalizedString)property.GetValue();
+		locString.OnLoad?.Invoke(internalText);
+
+		return internalText;
 	}
 
 	// Acho que um ultimo passo legal vai ser tipo um botao ou um atalho generico que faz dar load em TOOODOS os Flowcharts/LoadSDKtext da scene que voce ta aberto e tal.
@@ -248,6 +274,12 @@ public class LocalizedStringDrawer : PropertyDrawer
 	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 	{
 		float extraHeight = 20.0f + 20f + 20f + 10f;
+
+		if (!shouldShowTextArea)
+		{
+			extraHeight = 10.0f;
+		}
+	
 		return base.GetPropertyHeight(property, label) + extraHeight;
 	}
 
