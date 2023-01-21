@@ -8,7 +8,7 @@ public class LegendsBuildPostProcess
     [PostProcessBuild(1)]
     public static void OnPostprocessBuild(BuildTarget target, string pathToBuiltProject)
     {
-        TransferLolSpecFile(pathToBuiltProject);
+        //TransferLolSpecFile(pathToBuiltProject);
     }
     
     private static void TransferLolSpecFile(string pathToBuiltProject)
