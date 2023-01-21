@@ -16,7 +16,7 @@ namespace Blabbers.Game00
 
         private void Awake()
         {
-            SceneManager.sceneLoaded += HandleSceneLoaded;
+            SceneManager.sceneLoaded += HandleSceneLoaded;            
         }
 
         void ISingleton.OnCreated()
