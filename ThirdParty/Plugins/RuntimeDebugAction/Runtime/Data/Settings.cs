@@ -16,8 +16,8 @@ namespace BennyKok.RuntimeDebug.Data
         #region Const Field
         public const string settingsAssetName = "RDASettings";
 
-        public const string settingsFolderPath = "Assets/Blabbers.Module/Plugins/RuntimeDebugAction/Resources/";
-
+        public const string settingsFolderPath = "Assets/Blabbers.Module/ThirdParty/Plugins/RuntimeDebugAction/Resources/";
+        
         public const string settingsPath = settingsFolderPath + settingsAssetName + ".asset";
         #endregion
 
