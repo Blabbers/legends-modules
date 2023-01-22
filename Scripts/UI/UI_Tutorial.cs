@@ -2,6 +2,8 @@
 using BeauRoutine;
 using Blabbers;
 using Blabbers.Game00;
+using Fungus;
+using NaughtyAttributes;
 using UnityEngine;
 
 public class UI_Tutorial : UI_TutorialWindowBase
@@ -11,6 +13,10 @@ public class UI_Tutorial : UI_TutorialWindowBase
     public bool pause;
     public bool showOnlyOnce;
     public bool autoHideShowHUD;
+    [Foldout("Components")]
+    public Writer writer;
+    [Foldout("Components")]
+    public TextLocalized text;
 
     public override void ShowScreen()
     {
@@ -32,11 +38,18 @@ public class UI_Tutorial : UI_TutorialWindowBase
             Analytics.OnTutorialShown(this.name);
 
             Debug.Log($"<UI_TutorialLevel1> ShowScreen(): {pause}");
-            Singleton.Get<GameplayController>().TogglePause(pause);
+            Singleton.Get<GameplayController>()?.TogglePause(pause);
             if (autoHideShowHUD)
             {
                 Singleton.Get<UI_GameplayHUD>()?.HideFullHUD();                
             }
+
+			// Needs to wait a frame, for execution order purposes.
+			if (!writer.HasInitialized)
+			{
+                yield return new WaitUntil(() => writer.HasInitialized);
+			}
+            StartCoroutine(writer.Write(text.Localization));
         }
     }
 
@@ -45,13 +58,13 @@ public class UI_Tutorial : UI_TutorialWindowBase
         this.gameObject.SetActive(false);
         if (Singleton.Get<GameplayController>() != null)
         {
-            Singleton.Get<GameplayController>().TogglePause(false);
+            Singleton.Get<GameplayController>()?.TogglePause(false);
             
         }
 		if (autoHideShowHUD)
 		{
             Singleton.Get<UI_GameplayHUD>()?.ShowFullHUD();
         }
-		AudioController.Instance.FadeResetGameplayVolume(0.25f);
+		AudioController.Instance?.FadeResetGameplayVolume(0.25f);
     }
 }

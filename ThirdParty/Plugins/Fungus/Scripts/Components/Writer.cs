@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Globalization;
+using UnityEngine.Events;
 
 namespace Fungus
 {
@@ -59,6 +60,8 @@ namespace Fungus
         [SerializeField] protected bool instantComplete = true;
 
         [SerializeField] protected bool doReadAheadText = true;
+
+        [SerializeField] protected UnityEvent OnWritingComplete;
 
         // This property is true when the writer is waiting for user input to continue
         protected bool isWaitingForInput;
@@ -122,9 +125,11 @@ namespace Fungus
         protected int visibleCharacterCount = 0;
         protected int readAheadStartIndex = 0;
         public WriterAudio AttachedWriterAudio { get; set; }
+        public bool HasInitialized { get; private set; } = false;
 
-        protected virtual void Awake()
+        protected void Awake()
         {
+            HasInitialized = true;
             GameObject go = targetTextObject;
             if (go == null)
             {
@@ -521,6 +526,7 @@ namespace Fungus
 
             NotifyEnd(stopAudio);
 
+            OnWritingComplete?.Invoke();
             if (onComplete != null)
             {
                 onComplete();
@@ -956,7 +962,7 @@ namespace Fungus
         /// <param name="waitForVO">Wait for the Voice over to complete before proceeding</param>
         /// <param name="audioClip">Audio clip to play when text starts writing.</param>
         /// <param name="onComplete">Callback to call when writing is finished.</param>
-        public virtual IEnumerator Write(string content, bool clear, bool waitForInput, bool stopAudio, bool waitForVO, AudioClip audioClip, System.Action onComplete)
+        public virtual IEnumerator Write(string content, bool clear = true, bool waitForInput = false, bool stopAudio = false, bool waitForVO = false, AudioClip audioClip = null, System.Action onComplete = null)
         {
             if (clear)
             {

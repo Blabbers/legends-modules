@@ -27,26 +27,45 @@ namespace Blabbers.Game00
 			textObj.text = LocalizeText(localizationKey, null, null, applyColorCode);
 		}
 
-		public static string LocalizeText(string localizationKey, string appendLeft = null, string appendRight = null, bool applyColorCode = true)
+		public static string LocalizeText(string localizationKey, string appendLeft = null, string appendRight = null, bool applyColorCode = false)
 		{
+			var isDevBuild = false;
+#if DEVELOPMENT_BUILD
+			// If we are on a dev build, we will load the texts without the LoL platform.
+			isDevBuild = true;
+#endif
+
+#if UNITY_EDITOR
+			// This is just for Editor use. Our "LocalizedString" property goes through this path for example. (no need for color codes and other features)
 			if (!Application.isPlaying)
 			{
 				var editorMainText = EditorLoadFromLanguageJson(localizationKey, null, false);
 				return $"{appendLeft}{editorMainText}{appendRight}";
 			}
+#endif
 
-			if (SharedState.languageDefs == null)
+			if (SharedState.languageDefs == null && !isDevBuild)
 			{
 				Debug.Log($"<TextNotFound> SharedState.languageDefs is not loaded yet. Localization Key: {localizationKey}");
 			}
 
+			// Regular call for LoL builds
 			var mainText = SharedState.languageDefs != null ? SharedState.languageDefs[localizationKey].Value : $"<TNF> {localizationKey}";
+			// Dev builds (for running on webgl for mobile devices)
+			if (isDevBuild)
+			{
+				mainText = EditorLoadFromLanguageJson(localizationKey, null, false);
+			}
+
+			// Logs error if no text is found in any path
 			if (string.IsNullOrEmpty(mainText))
 			{
 				Debug.Log($"<TextNotFound> Localization Key: {localizationKey}, is returning an empty value.");
 				mainText = $"<TNF> {localizationKey}";
 			}
-			if (GameData.Instance.textConfigs != null && SharedState.languageDefs !=null)
+
+			// Applies color codes to words
+			if (GameData.Instance.textConfigs != null && !string.IsNullOrEmpty(mainText))
 			{
 				if (GameData.Instance.textConfigs.colorCodes !=null && GameData.Instance.textConfigs.colorCodes.Length > 0 && applyColorCode)
 				{
@@ -61,12 +80,16 @@ namespace Blabbers.Game00
 		{
 			string key, term, plural;
 
-
+			var isDevBuild = false;
+#if DEVELOPMENT_BUILD
+			// If we are on a dev build, we will load the texts without the LoL platform.
+			isDevBuild = true;
+#endif
 
 			foreach (var color in GameData.Instance.textConfigs.colorCodes)
 			{
 				key = color.key;
-				term = SharedState.languageDefs[key].Value;
+				term = isDevBuild ? localLanguageJson[key].Value : SharedState.languageDefs[key].Value;
 				plural = term + "S";				
 				mainText = FindAndColorTerm(plural, mainText, color.color, out var success);
 				if (!success) mainText = FindAndColorTerm(term, mainText, color.color, out success);
@@ -76,7 +99,7 @@ namespace Blabbers.Game00
 					foreach (var extra in color.extraKeys)
 					{
 						key = extra;
-						term = SharedState.languageDefs[key].Value;
+						term = isDevBuild ? localLanguageJson[key].Value : SharedState.languageDefs[key].Value;
 						plural = term + "S";
 						mainText = FindAndColorTerm(plural, mainText, color.color, out success);
 						if (!success) mainText = FindAndColorTerm(term, mainText, color.color, out success);

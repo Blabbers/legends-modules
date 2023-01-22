@@ -1,33 +1,38 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using NaughtyAttributes;
 using UnityEngine.UI;
-using System.Collections;
 using UnityEngine.Events;
 
 namespace Blabbers.Game00
 {
 	public abstract class UI_TutorialWindowBase : MonoBehaviour
 	{
+		[Foldout("Components")]
 		public Slider HoldSlider;
+		[Foldout("Components")]
 		public AnimationCurve SliderCurve;
-		public float TapAnywhereDelay = 3f;
-        public bool autoEnableHoldToSkip = true;
-		[ReadOnly] public bool CanTapToDisableScreen;
-		public float duration;
+		[Foldout("Components")]
+		[SerializeField, ReadOnly] 
+		private bool CanTapToDisableScreen;
 		public UnityEvent OnWindowOpened;
 		public UnityEvent OnWindowClosed;
+		private float holdDuration;
+
 		private void OnEnable()
-		{			
-            ShowTapTextAfterDelay();
-            var gameplayHUD = Singleton.Get<UI_GameplayHUD>();
+		{
+			// Calls "ShowScreen" to be sure this works out of the box.
+			ShowScreen();
+			HideHoldSlider();
+			var gameplayHUD = Singleton.Get<UI_GameplayHUD>();
             if (gameplayHUD) { gameplayHUD.HideFullHUD(); }
 			OnWindowOpened?.Invoke();
 		}
 
         private void OnDisable()
         {
-            var gameplayHUD = Singleton.Get<UI_GameplayHUD>();
+			// Calls "HideScreen" to be sure this works out of the box.
+			HideScreen();
+			var gameplayHUD = Singleton.Get<UI_GameplayHUD>();
             if (gameplayHUD) { gameplayHUD.ShowFullHUD(); }
 			OnWindowClosed?.Invoke();
 		}
@@ -35,23 +40,12 @@ namespace Blabbers.Game00
         public abstract void ShowScreen();
 		public abstract void HideScreen();
 
-		public void ShowTapTextAfterDelay()
+		public void HideHoldSlider()
 		{
 			if (!HoldSlider) return;
-			duration = 0;
+			holdDuration = 0;
 			CanTapToDisableScreen = false;
 			HoldSlider.gameObject.SetActive(false);
-
-            if (autoEnableHoldToSkip)
-            {
-                StartCoroutine(Routine());
-
-                IEnumerator Routine()
-                {
-                    yield return new WaitForSecondsRealtime(TapAnywhereDelay);
-                    EnableSkip();
-                }
-            }
         }
 
         public void EnableSkip()
@@ -68,7 +62,7 @@ namespace Blabbers.Game00
 			{
 				if (Input.anyKey)
 				{
-					duration += Time.unscaledDeltaTime;
+					holdDuration += Time.unscaledDeltaTime;
 					if (HoldSlider.value >= 1)
 					{
 						Finish();
@@ -76,10 +70,10 @@ namespace Blabbers.Game00
 				}
 				else
 				{
-					duration -= Time.unscaledDeltaTime;
+					holdDuration -= Time.unscaledDeltaTime;
 				}
-				duration = Mathf.Clamp01(duration);
-				HoldSlider.value = SliderCurve.Evaluate(duration);
+				holdDuration = Mathf.Clamp01(holdDuration);
+				HoldSlider.value = SliderCurve.Evaluate(holdDuration);
 			}
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD

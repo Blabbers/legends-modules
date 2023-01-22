@@ -1,7 +1,4 @@
-using Animancer;
 using Blabbers.Game00;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,8 +6,10 @@ using UnityEngine.Events;
 [ExecuteInEditMode]
 public class TextLocalized : TextMeshProUGUI
 {
+	[SerializeField] 
 	[HideLocalizationTextArea]
-	[SerializeField] LocalizedString localization;
+	private LocalizedString localization;
+	public LocalizedString Localization => localization;
 
 	[SerializeField] bool playTTSOnEnable = false;
 	[SerializeField] bool isAnimated = false;
@@ -29,7 +28,7 @@ public class TextLocalized : TextMeshProUGUI
 			UpdateText();
 			if (playTTSOnEnable)
 			{
-				LocalizationExtensions.PlayTTS(key);
+				PlayThisSpeechText();
 			}
 		}
 		else
@@ -48,11 +47,7 @@ public class TextLocalized : TextMeshProUGUI
 		{
 			//LocalizationExtensions.LocalizeText(localization.Key, null, null, localization.applyColorCodes);
 		}
-
-
-
 	}
-
 
 	public void PlayThisSpeechText()
 	{

@@ -30,6 +30,8 @@ public class TextLocalizedEditor : TMP_EditorPanelUI
 		locString = (LocalizedString)localizedStringProp.GetValue();
 		locString.OnLoad += HandleLocalizedStringLoad;
 
+		Debug.Log($"locString: {locString}");
+
 		base.OnEnable();
 	}
 
