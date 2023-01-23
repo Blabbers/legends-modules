@@ -1,4 +1,5 @@
 using Blabbers.Game00;
+using Fungus;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -6,8 +7,9 @@ using UnityEngine.Events;
 [ExecuteInEditMode]
 public class TextLocalized : TextMeshProUGUI
 {
-	[SerializeField] 
-	[HideLocalizationTextArea]
+
+	//[HideLocalizationTextArea]
+	[SerializeField]
 	private LocalizedString localization;
 	public LocalizedString Localization => localization;
 
@@ -17,6 +19,9 @@ public class TextLocalized : TextMeshProUGUI
 
 	protected override void OnEnable()
 	{
+
+		Debug.Log("TextLocalized - OnEnable()");
+
 		var key = "";
 		if(localization != null)
 		{
@@ -39,14 +44,7 @@ public class TextLocalized : TextMeshProUGUI
 
 	public void UpdateText()
 	{
-		if (isAnimated)
-		{
-			
-		}
-		else
-		{
-			//LocalizationExtensions.LocalizeText(localization.Key, null, null, localization.applyColorCodes);
-		}
+		text = LocalizationExtensions.LocalizeText(Localization.Key,null,null);
 	}
 
 	public void PlayThisSpeechText()

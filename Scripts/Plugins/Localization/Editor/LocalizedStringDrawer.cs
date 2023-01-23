@@ -259,6 +259,8 @@ public class LocalizedStringDrawer : PropertyDrawer
 
 	private string LoadText(SerializedProperty property, SerializedProperty internalTextProp, string internalKey)
 	{
+		Debug.Log("LocalizedStringDrawer - LoadText");
+
 		string internalText;
 		internalTextProp.stringValue = LocalizationExtensions.EditorLoadFromLanguageJson(internalKey, langCode: GetLanguageCode());
 		internalText = internalTextProp.stringValue;

@@ -30,7 +30,7 @@ public class TextLocalizedEditor : TMP_EditorPanelUI
 		locString = (LocalizedString)localizedStringProp.GetValue();
 		locString.OnLoad += HandleLocalizedStringLoad;
 
-		Debug.Log($"locString: {locString}");
+		//Debug.Log($"locString: {locString}");
 
 		base.OnEnable();
 	}
@@ -42,6 +42,7 @@ public class TextLocalizedEditor : TMP_EditorPanelUI
 	}
 
 	#endregion
+
 	public override void OnInspectorGUI()
 	{
 		serializedObject.Update();

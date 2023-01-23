@@ -1,32 +1,35 @@
 using Blabbers.Game00;
+using Sigtrap.Relays;
 using UnityEngine;
 
 namespace Fungus
 {
 	[CommandInfo("Blabbers",
-				 "Toggle Cinematic BlackBars",
+				 "Show Circle In/Out",
 				 "Toggles Cinematic Black Bars")]
 	[AddComponentMenu("")]
-	public class ToggleCinematicBlackBars : Command
+	public class ToggleCircleIn : Command
 	{
 
-		public bool show = true;
+		public bool isIn = true;
+		public Transform target;
+		public float delay = 0.0f;
+
+
 		#region Public members
 
 		public override void OnEnter()
 		{
-			//TODO: Implement PAUSE call.
 
-			if (show)
+			if (isIn)
 			{
-				//Singleton.Get<UI_CameraFX>().ShowCinematicBlackBars();
 
-				//UI_CameraFX.Instance.ShowCinematicBlackBars();
-				UI_CameraFX.Instance.ShowCinematicBlackBars(AnimationFinished);
+				UI_CameraFX.Instance.CircleIn(target.position, AnimationFinished, delay);
 			}
 			else
 			{
-				UI_CameraFX.Instance.HideCinematicBlackBars(AnimationFinished);
+
+				UI_CameraFX.Instance.CircleOut(target.position, AnimationFinished, delay);
 			}
 			
 

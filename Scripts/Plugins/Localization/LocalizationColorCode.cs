@@ -8,12 +8,19 @@ using UnityEngine;
 [CreateAssetMenu]
 public class LocalizationColorCode : ScriptableObject
 {
+
+	public LocalizedString localization;
+
     public string key;
     public string text;
-    public List<string> extraKeys;
 
-    public Color color;
+	//To remove
+    public List<string> extraKeys;
+	public Color color;
     public bool includePlural = true;
+
+
+	public List<string> tags = new List<string>();
 
 	#region SaveLoadFromEditor
 	public bool HasKey => !string.IsNullOrEmpty(key);	

@@ -14,13 +14,17 @@ public class LocalizedString
 	//This has to be hidden from view or "read only" in inspector by default
 	[SerializeField] private string key;
 	[SerializeField] private string text;
-	[field: SerializeField] public bool applyKeyCodes { get; private set; }
-
+	//[field: SerializeField] public bool applyKeyCodes { get; private set; }
+	[SerializeField] public bool applyKeyCodes;
+	public bool ApplyKeyCodes => applyKeyCodes;
 	public Action<string> OnLoad;
 
 	public string Text
 	{
-		get { return LocalizationExtensions.LocalizeText(key); }
+		get {
+			//Debug.Log("LocalizedString.GetText");
+			return LocalizationExtensions.LocalizeText(key); 
+		}
 		set
 		{
 			//TODO: Salvar o texto no load tambem
