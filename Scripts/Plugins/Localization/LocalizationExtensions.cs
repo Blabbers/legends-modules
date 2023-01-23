@@ -29,48 +29,35 @@ namespace Blabbers.Game00
 
 		public static string LocalizeText(string localizationKey, string appendLeft = null, string appendRight = null, bool applyColorCode = false)
 		{
-			var isDevBuild = false;
-#if DEVELOPMENT_BUILD
-			// If we are on a dev build, we will load the texts without the LoL platform.
-			isDevBuild = true;
-#endif
-
-#if UNITY_EDITOR
-			// This is just for Editor use. Our "LocalizedString" property goes through this path for example. (no need for color codes and other features)
-			if (!Application.isPlaying)
-			{
-				var editorMainText = EditorLoadFromLanguageJson(localizationKey, null, false);
-				return $"{appendLeft}{editorMainText}{appendRight}";
-			}
-#endif
-
-			if (SharedState.languageDefs == null && !isDevBuild)
-			{
-				Debug.Log($"<TextNotFound> SharedState.languageDefs is not loaded yet. Localization Key: {localizationKey}");
-			}
-
-			// Regular call for LoL builds
-			var mainText = SharedState.languageDefs != null ? SharedState.languageDefs[localizationKey].Value : $"<TNF> {localizationKey}";
-			// Dev builds (for running on webgl for mobile devices)
-			if (isDevBuild)
-			{
-				mainText = EditorLoadFromLanguageJson(localizationKey, null, false);
-			}
-
-			// Logs error if no text is found in any path
+			var mainText = "";
+#if DEVELOPMENT_BUILD || UNITY_EDITOR
+			// If we are on a dev build, we will load the texts without the LoL platform.			
+			// This is just for Editor use and CloudBuilds. Our "LocalizedString" property goes through this path for example.
+			// (no need for color codes and other features)
+			mainText = EditorLoadFromLanguageJson(localizationKey, null, false);
+#endif			
 			if (string.IsNullOrEmpty(mainText))
 			{
-				Debug.Log($"<TextNotFound> Localization Key: {localizationKey}, is returning an empty value.");
-				mainText = $"<TNF> {localizationKey}";
+				// If this text was loaded by the LoL platform.
+				if(SharedState.languageDefs != null)
+				{
+					mainText = SharedState.languageDefs[localizationKey].Value;
+				}
 			}
 
 			// Applies color codes to words
 			if (GameData.Instance.textConfigs != null && !string.IsNullOrEmpty(mainText))
 			{
-				if (GameData.Instance.textConfigs.colorCodes !=null && GameData.Instance.textConfigs.colorCodes.Length > 0 && applyColorCode)
+				if (GameData.Instance.textConfigs.colorCodes != null && GameData.Instance.textConfigs.colorCodes.Length > 0 && applyColorCode)
 				{
 					mainText = ApplyColorCodes(mainText);
 				}
+			}
+
+			// Shows error if no text is found in any path
+			if (string.IsNullOrEmpty(mainText))
+			{
+				mainText = $"<TNF> {localizationKey}";
 			}
 		
 			return $"{appendLeft}{mainText}{appendRight}";
