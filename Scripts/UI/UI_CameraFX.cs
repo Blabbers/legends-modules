@@ -5,12 +5,58 @@ using UnityEngine;
 
 public class UI_CameraFX : MonoBehaviour, ISingleton
 {
+
+
     [SerializeField] private GameObject vignette;
     [SerializeField] private GameObject circleIn;
     [SerializeField] private GameObject circleOut;
     [SerializeField] private GameObject cinematicBlackBars;
     [SerializeField] private MotionTweenPlayer cinematicBarTop, cinematicBarBot;
     private Camera camera;
+
+
+	#region Instance
+	private static UI_CameraFX _instance = null;
+	public static UI_CameraFX Instance
+	{
+		get
+		{
+			if (!_instance) _instance = Resources.Load<UI_CameraFX>("CameraFXPrefab");
+            _instance.gameObject.name = "--Screen--CameraFX";
+			DontDestroyOnLoad(_instance);
+
+			return _instance;
+		}
+	}
+	#endregion
+
+
+
+	//private static void InstantiateIfNull()
+ //   {
+ //       if(instance == null)
+ //       {
+ //           GameObject temp = Instantiate(Resources.Load("CameraFXPrefab")) as GameObject;
+ //           temp.name = "--Screen--CameraFX";
+ //           instance = temp.GetComponent<UI_CameraFX>();
+
+ //           DontDestroyOnLoad(temp);
+
+	//	}
+           
+
+
+	//}
+
+
+
+    [Button]
+    void CircleInTest()
+    {
+        CircleIn(Vector3.zero, 0.5f);
+
+	}
+
     
     public void OnCreated()
     {
@@ -45,12 +91,17 @@ public class UI_CameraFX : MonoBehaviour, ISingleton
 
     public void ShowCinematicBlackBars()
     {
-        //cinematicBarTop.PlaySequence();
-        cinematicBlackBars.SetActive(true);
+        Debug.Log("UI_CameraFX - ShowCinematicBlackBars");
+
+        //InstantiateIfNull();
+		//cinematicBarTop.PlaySequence();
+		cinematicBlackBars.SetActive(true);
     }
     public void HideCinematicBlackBars()
     {
-        //cinematicBarTop.PlaySequence();
-        cinematicBlackBars.SetActive(false);
+        //InstantiateIfNull();
+
+		//cinematicBarTop.PlaySequence();
+		cinematicBlackBars.SetActive(false);
     }
 }

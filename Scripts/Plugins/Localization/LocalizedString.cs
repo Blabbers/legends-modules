@@ -14,6 +14,7 @@ public class LocalizedString
 	//This has to be hidden from view or "read only" in inspector by default
 	[SerializeField] private string key;
 	[SerializeField] private string text;
+	[field: SerializeField] public bool applyKeyCodes { get; private set; }
 
 	public Action<string> OnLoad;
 
