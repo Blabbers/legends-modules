@@ -53,4 +53,27 @@ public class TextLocalized : TextMeshProUGUI
 	{
 		LocalizationExtensions.PlayTTS(localization.Key);
 	}
+
+	#region Setters
+	public void SetApplyKeyCodes(bool enable)
+	{
+		applyKeyCodes = enable;
+	}
+
+	public void SetPlayTTSOnEnable(bool enable)
+	{
+		playTTSOnEnable = enable;
+	}
+
+	public void SetIsAnimated(bool enable)
+	{
+		isAnimated = enable;
+	}
+
+	public void SetLocalization(LocalizedString loc)
+	{
+		localization = loc;
+	}
+	#endregion
+
 }
