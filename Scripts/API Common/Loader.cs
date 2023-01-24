@@ -25,7 +25,7 @@ public class Loader : MonoBehaviour, ISingleton
 
 	void Awake()
 	{
-		isMobile = CheckDeviceType();		
+		isMobile = CheckDeviceType();
 
 		//Debug.Log($"Post CheckDeviceType() \nDeviceType: {SystemInfo.deviceType} | operatingSystem: {SystemInfo.operatingSystem.ToString()}" +
 		//$"| isMobile: {isMobile}");
@@ -67,38 +67,7 @@ public class Loader : MonoBehaviour, ISingleton
 		//{
 		//	SharedState.levels[i] = new Level();
 		//}
-
-		var shouldSkipWaiting = false;
-#if UNITY_CLOUD_BUILD
-		shouldSkipWaiting = true;
-		Debug.Log("LOADER.IsCloud, build process:.");
-#endif
-		// Se o file existe, entao tambem should
-		if (HasCloudBuildFile())
-		{
-			shouldSkipWaiting = true;
-			Debug.Log("LOADER.HasFile, build process:.");
-		}
-
-		if (shouldSkipWaiting)
-		{
-			SceneManager.LoadScene(gameData.gameLevelTag + "main-menu", LoadSceneMode.Single);
-		}
 	}
-	public static bool HasCloudBuildFile()
-	{
-		const string filePath = "unity_cloud_build.json";
-		// Load Dev Language File from StreamingAssets
-		string langFilePath = Path.Combine(Application.streamingAssetsPath, filePath);
-		if (File.Exists(langFilePath))
-		{
-			Debug.Log($"HasCloud build process:.");
-			return true;
-		}
-		Debug.Log($"NOHasCloud build process:.");
-		return false;
-	}
-
 
 	// Start the game here
 	void HandleStartGame(string json)
