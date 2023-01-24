@@ -11,37 +11,37 @@ public class LocalizationColorCode : ScriptableObject
 
 	public LocalizedString localization;
 
-    public string key;
-    public string text;
+    //public string key;
+    //public string text;
 
 	//To remove
-    public List<string> extraKeys;
+    //public List<string> extraKeys;
 	public Color color;
-    public bool includePlural = true;
+    //public bool includePlural = true;
 
 
 	public List<string> tags = new List<string>();
 
 	#region SaveLoadFromEditor
-	public bool HasKey => !string.IsNullOrEmpty(key);	
-	[Button()]
-	public void SaveToLanguageJson()
-	{
-		if (!HasKey)
-		{
-			key = this.name;
-		}
-		LocalizationExtensions.EditorSaveToLanguageJson(key, text, this);
-	}
-	[Button()]
-	public void LoadFromLanguageJson()
-	{
-		if (!HasKey)
-		{
-			key = this.name;
-		}
+	//public bool HasKey => !string.IsNullOrEmpty(key);	
+	//[Button()]
+	//public void SaveToLanguageJson()
+	//{
+	//	if (!HasKey)
+	//	{
+	//		key = this.name;
+	//	}
+	//	LocalizationExtensions.EditorSaveToLanguageJson(key, text, this);
+	//}
+	//[Button()]
+	//public void LoadFromLanguageJson()
+	//{
+	//	if (!HasKey)
+	//	{
+	//		key = this.name;
+	//	}
 				
-		this.text = LocalizationExtensions.EditorLoadFromLanguageJson(key, this);
-	}
+	//	this.text = LocalizationExtensions.EditorLoadFromLanguageJson(key, this);
+	//}
 	#endregion
 }

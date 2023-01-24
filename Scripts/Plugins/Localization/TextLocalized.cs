@@ -6,7 +6,7 @@ using UnityEngine.Events;
 [DefaultExecutionOrder(+1000)]
 public class TextLocalized : TextMeshProUGUI
 {
-	[HideLocalizationTextArea]
+	//[HideLocalizationTextArea]
 	[SerializeField]
 	private LocalizedString localization;
 	public LocalizedString Localization => localization;
@@ -43,7 +43,9 @@ public class TextLocalized : TextMeshProUGUI
 
 	public void UpdateText()
 	{
-		text = LocalizationExtensions.LocalizeText(Localization.Key,null,null);
+		//text = LocalizationExtensions.LocalizeText(Localization.Key,null,null);
+		//text = LocalizationExtensions.LocalizeText(Localization.Key, null, null, localization.ApplyKeyCodes);
+		text = LocalizationExtensions.LocalizeText(Localization.Key, null, null, true);
 	}
 
 	public void PlayThisSpeechText()

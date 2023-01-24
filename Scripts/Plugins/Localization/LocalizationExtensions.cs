@@ -5,6 +5,7 @@ using TMPro;
 using System.Collections.Generic;
 using SimpleJSON;
 using System.IO;
+using Fungus;
 
 namespace Blabbers.Game00
 {
@@ -73,35 +74,115 @@ namespace Blabbers.Game00
 			isDevBuild = true;
 #endif
 
+			if (!Application.isPlaying) return mainText;
+
 			foreach (var color in GameData.Instance.textConfigs.colorCodes)
 			{
-				key = color.key;
+				//key = color.key;
+				key = color.localization.Key;
 				term = isDevBuild ? localLanguageJson[key].Value : SharedState.languageDefs[key].Value;
-				plural = term + "S";				
-				mainText = FindAndColorTerm(plural, mainText, color.color, out var success);
-				if (!success) mainText = FindAndColorTerm(term, mainText, color.color, out success);
+				//mainText = FindAndColorTerm(term, mainText, color.color, out var success);
+				mainText = ApplyTagsToTerm(term, color.tags, mainText);
 
-				if (color.extraKeys.Count > 0)
-				{
-					foreach (var extra in color.extraKeys)
-					{
-						key = extra;
-						term = isDevBuild ? localLanguageJson[key].Value : SharedState.languageDefs[key].Value;
-						plural = term + "S";
-						mainText = FindAndColorTerm(plural, mainText, color.color, out success);
-						if (!success) mainText = FindAndColorTerm(term, mainText, color.color, out success);
-					}
-				}
+				//plural = term + "S";				
+				//mainText = FindAndColorTerm(plural, mainText, color.color, out var success);
+				//if (!success) mainText = FindAndColorTerm(term, mainText, color.color, out success);
+
+				//if (color.extraKeys.Count > 0)
+				//{
+				//	foreach (var extra in color.extraKeys)
+				//	{
+				//		key = extra;
+				//		term = isDevBuild ? localLanguageJson[key].Value : SharedState.languageDefs[key].Value;
+				//		plural = term + "S";
+				//		mainText = FindAndColorTerm(plural, mainText, color.color, out success);
+				//		if (!success) mainText = FindAndColorTerm(term, mainText, color.color, out success);
+				//	}
+				//}
 			}
+
+			Debug.Log($"ApplyColorCodes: {mainText}");
 
 			return mainText;
 		}
+
+		private static string ApplyTagsToTerm(string term, List<string> tags, string mainText)
+		{
+			bool found = false;
+			string foundTerm ="";
+			string currentTerm;
+
+			foundTerm = StringUtility.FindTermInString(term, mainText, out found);
+
+			if (!found) return mainText;
+
+			currentTerm = foundTerm;
+
+			foreach (var item in tags)
+			{
+				currentTerm = GenerateTaggedTerm(currentTerm, item);
+			}
+
+			return currentTerm;
+		}
+
+		public static string GenerateTaggedTerm(string term, string tag)
+		{
+			string tagName = "";
+			string openTag, closeTag;
+			string[] split;
+
+			split = tag.Split('=');
+
+			tagName = split[0];
+
+			openTag = $"{{{tagName}={split[1]}}}";
+			closeTag = $"{{/{tagName}}}";
+
+			return $"{openTag}{term}{closeTag}";
+		}
+
+		private static string FindKeyTerm(string term, string mainText, out bool success)
+		{
+			string termFormat = "";
+			success = true;
+
+			//First check
+			termFormat = term;
+			if (mainText.Contains(termFormat)) return termFormat;
+
+
+			//Check all lowercase
+			termFormat = term.ToLower();
+			if (mainText.Contains(term)) return termFormat;
+
+
+			//Check all uppercase
+			termFormat = term.ToUpper();
+			if (mainText.Contains(term)) return termFormat;
+
+			//Check first letter capitalized
+			termFormat = term.ToLower();
+
+			if (termFormat.Length == 1) term = "" + char.ToUpper(term[0]);
+			else termFormat = char.ToUpper(term[0]) + term.Substring(1);
+
+			if (mainText.Contains(term)) return termFormat;
+
+
+			success = false;
+			return termFormat;
+		}
+
 
 		private static string FindAndColorTerm(string term, string mainText, Color color, out bool success)
 		{
 			success = true;
 
 			string hex = Utils.ColorToHex(color);
+
+
+			Debug.Log($"FindAndColorTerm: [{term}] with color [{hex}]");
 
 			//First check
 			if (mainText.Contains(term))

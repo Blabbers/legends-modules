@@ -23,7 +23,9 @@ public class LocalizedString
 	{
 		get {
 			//Debug.Log("LocalizedString.GetText");
-			return LocalizationExtensions.LocalizeText(key); 
+			//return LocalizationExtensions.LocalizeText(key); 
+			//return LocalizationExtensions.LocalizeText(key, applyColorCode: ApplyKeyCodes);
+			return LocalizationExtensions.LocalizeText(key, applyColorCode: true);
 		}
 		set
 		{
