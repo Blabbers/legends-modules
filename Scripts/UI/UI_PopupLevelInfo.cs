@@ -1,9 +1,5 @@
-﻿using DG.Tweening;
-using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
-
 
 namespace Blabbers.Game00
 {

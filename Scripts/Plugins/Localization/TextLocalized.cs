@@ -1,14 +1,12 @@
 using Blabbers.Game00;
-using Fungus;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
-[ExecuteInEditMode]
+[DefaultExecutionOrder(+1000)]
 public class TextLocalized : TextMeshProUGUI
 {
-
-	//[HideLocalizationTextArea]
+	[HideLocalizationTextArea]
 	[SerializeField]
 	private LocalizedString localization;
 	public LocalizedString Localization => localization;
@@ -19,8 +17,9 @@ public class TextLocalized : TextMeshProUGUI
 
 	protected override void OnEnable()
 	{
-
-		Debug.Log("TextLocalized - OnEnable()");
+		// Internally, TMPro runs [ExecuteAlways]. But this script should execute only during runtime. 
+		if (!Application.isPlaying)
+			return;
 
 		var key = "";
 		if(localization != null)

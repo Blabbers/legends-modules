@@ -11,7 +11,7 @@ namespace Blabbers.Game00
     public class ProgressController : MonoBehaviour, ISingleton
     {
         private GameData gameData => GameData.Instance;
-        public static GameProgress GameProgress => Singleton.Get<ProgressController>().gameData.progress;
+        public static GameProgress GameProgress => Singleton.Get<ProgressController>().gameData.Progress;
         public static bool enableAutomaticTTS = true;
 
         private void Awake()
@@ -51,10 +51,10 @@ namespace Blabbers.Game00
         #region SaveLoadFunctions
         public void Save()
         {
-            Debug.Log(" Saving current progress... " + gameData.progress.currentProgress);
+            Debug.Log(" Saving current progress... " + gameData.Progress.currentProgress);
             try
             {
-                LOLSDK.Instance.SaveState(gameData.progress);
+                LOLSDK.Instance.SaveState(gameData.Progress);
             }
             catch (Exception e)
             {
@@ -89,8 +89,8 @@ namespace Blabbers.Game00
             // Overrides serialized state data or continues with editor serialized values.
             if (loadedData != null)
             {
-                gameData.progress = loadedData;
-                gameData.progress.isNewGame = false;
+                gameData.SetProgressData(loadedData);
+                gameData.Progress.isNewGame = false;
             }
             else
             {
@@ -102,9 +102,9 @@ namespace Blabbers.Game00
         {
             // If there is no data to load, we start the game from scratch
             // (this is just because this variable is saved in an SO that is persistent in the editor)
-            gameData.progress = new GameProgress();
-            gameData.progress.Initialize(gameData.totalLevels);
-            gameData.progress.enableAutomaticTTS = enableAutomaticTTS;
+            gameData.SetProgressData(new GameProgress());
+            gameData.Progress.Initialize(gameData.totalLevels);
+            gameData.Progress.enableAutomaticTTS = enableAutomaticTTS;
         }
 
         /// <summary>

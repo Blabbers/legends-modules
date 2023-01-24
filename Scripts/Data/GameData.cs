@@ -1,4 +1,5 @@
-﻿using Blabbers.Game00;
+﻿using BennyKok.RuntimeDebug.Utils;
+using Blabbers.Game00;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -19,7 +20,6 @@ public class GameData : ScriptableObject
     public void OnEnable()
     {
         Application.runInBackground = false;
-
         SharedState.maxProgress = maxProgress;
     }
 
@@ -28,33 +28,18 @@ public class GameData : ScriptableObject
         return !value.Equals("com.blabbers.gameName");
     }
 
-    [HorizontalLine(color: EColor.White)]
     // Progress should be a minimum of 8
-    [BoxGroup("Settings")]
-    public int maxProgress = 8;
-    [BoxGroup("Settings")]
-    public int totalLevels = 3;
-    [BoxGroup("Settings")]
-    [ValidateInput(nameof(HasChangedAppID), "ApplicationID must be have a custom name for the game.")]
+    [Title("Platform Settings", 0)]
+    [Comment("Mandatory settings for LL's build.", order = 1)]
+    public int maxProgress = 8;    
+    public int totalLevels = 3;    
+    [ValidateInput(nameof(HasChangedAppID), "ApplicationID must be a custom name for the game.")]
     public string applicationID = "com.blabbers.gameName";
-    //Added variables to control customization
-    [BoxGroup("Settings")]
-    public bool StartCustomizationFirst = false;
 
-    [BoxGroup("Settings")]
-    public bool AlwaysShowStatsScreen = false;
-
-
-    // I will be hiding this for now. This is only usefull if the LL staff asks us to actually use the namespaces and merge all the projects
-    [BoxGroup("Settings")] [HideInInspector]
-    public string gameLevelTag = ""; //"blabbers00-";
-
-
-    [BoxGroup("Settings")]
+    [Title("Text Codes", 0)]
+    [Comment("Adjust the KeyCodes that are important to be highlighted in this project.", order = 1)]
     public TextConfigs textConfigs;
 
-    [HorizontalLine(color: EColor.White)]
-    [BoxGroup("Scene Loading")]
     [Tooltip("Everytime a level finishes it automatically goes to the level select scene. If you populate this list, you can override this behaviour and go to a simulation screen instead for example.")]
     [ReorderableList]
     public SceneToLoad[] levelSelectOverrideScenes;
@@ -66,10 +51,13 @@ public class GameData : ScriptableObject
         public SceneReference targetScene;
 	}
 
-    [HorizontalLine(color: EColor.White)]
-    [BoxGroup("Saved Progress")]
-    public GameProgress progress;
-    
+    private GameProgress progress;    
+    public GameProgress Progress => this.progress;
+    public void SetProgressData(GameProgress newProgressData)
+	{
+        progress = newProgressData;
+    }
+
     //Fields for debugging only.
     [ShowNativeProperty]
     public bool IsStuckOnThisLevel => SceneLoader.isStuckOnThisLevel;

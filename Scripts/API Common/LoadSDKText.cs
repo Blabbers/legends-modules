@@ -16,9 +16,6 @@ namespace Blabbers.Game00
 		[Tooltip("Requires the Component AnimatedSDKText")]
 		public bool isAnimated = false;
 
-		[Header("Level Options"), Tooltip("Se esse texto tiver separado por algum underscore '_' e tiver um level na frente, marque essa caixa pra ele trocar sozinho o que tiver na frente do simbolo pelo level atual, automaticamente.")]
-		public bool replaceUnderscoreWithCurrentLevel;
-
 		[HideInInspector]
 		public Text myText;
 
@@ -76,13 +73,6 @@ namespace Blabbers.Game00
 		{
 			if (!string.IsNullOrEmpty(key))
 			{
-				if (replaceUnderscoreWithCurrentLevel)
-				{
-					var index = key.IndexOf('_');
-					var text = key.Substring(0, index);
-					key = text + "_" + (ProgressController.GameProgress.currentLevelId + 1);
-				}
-
 				UpdateText();
 				if (playTTSOnEnable)
 				{

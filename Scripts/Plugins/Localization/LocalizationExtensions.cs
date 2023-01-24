@@ -30,7 +30,7 @@ namespace Blabbers.Game00
 		public static string LocalizeText(string localizationKey, string appendLeft = null, string appendRight = null, bool applyColorCode = false)
 		{
 			var mainText = "";
-#if DEVELOPMENT_BUILD || UNITY_EDITOR
+#if DEVELOPMENT_BUILD || UNITY_EDITOR || UNITY_CLOUD_BUILD
 			// If we are on a dev build, we will load the texts without the LoL platform.			
 			// This is just for Editor use and CloudBuilds. Our "LocalizedString" property goes through this path for example.
 			// (no need for color codes and other features)
@@ -68,7 +68,7 @@ namespace Blabbers.Game00
 			string key, term, plural;
 
 			var isDevBuild = false;
-#if DEVELOPMENT_BUILD
+#if DEVELOPMENT_BUILD || UNITY_CLOUD_BUILD
 			// If we are on a dev build, we will load the texts without the LoL platform.
 			isDevBuild = true;
 #endif

@@ -12,11 +12,11 @@ namespace Blabbers
         public static void OnGameStart()
         {
             dataDictionary.Clear();
-            var isNewGame = GameData.Instance.progress.isNewGame;
+            var isNewGame = GameData.Instance.Progress.isNewGame;
             dataDictionary.Add("isNewGame", isNewGame);
             if (!isNewGame)
             {
-                dataDictionary.Add("reachedLevel", GameData.Instance.progress.reachedLevel);
+                dataDictionary.Add("reachedLevel", GameData.Instance.Progress.reachedLevel);
             }
             SendEvent("gameStart", dataDictionary);
         }
@@ -24,9 +24,9 @@ namespace Blabbers
         public static void OnLevelStart()
         {
             dataDictionary.Clear();
-            dataDictionary.Add("level", GameData.Instance.progress.currentLevelId + 1);
+            dataDictionary.Add("level", GameData.Instance.Progress.currentLevelId + 1);
             var situation = "isFirstTime";
-            if (GameData.Instance.progress.reachedLevel > GameData.Instance.progress.currentLevelId)
+            if (GameData.Instance.Progress.reachedLevel > GameData.Instance.Progress.currentLevelId)
             {
                 situation = "isReplaying";
             }
@@ -41,9 +41,9 @@ namespace Blabbers
         public static void OnSubLevelStart(string minigame, int minigameId)
         {
             dataDictionary.Clear();
-            dataDictionary.Add("level", $"{GameData.Instance.progress.currentLevelId + 1}_{minigame}_{minigameId}");            
+            dataDictionary.Add("level", $"{GameData.Instance.Progress.currentLevelId + 1}_{minigame}_{minigameId}");            
             var situation = "isFirstTime";
-            if (GameData.Instance.progress.reachedLevel > GameData.Instance.progress.currentLevelId)
+            if (GameData.Instance.Progress.reachedLevel > GameData.Instance.Progress.currentLevelId)
             {
                 situation = "isReplaying";
             }
@@ -58,9 +58,9 @@ namespace Blabbers
         public static void OnSubLevelVictory(string minigame, int minigameId)
         {
             dataDictionary.Clear();
-            dataDictionary.Add("level", $"{GameData.Instance.progress.currentLevelId + 1}_{minigame}_{minigameId}");
+            dataDictionary.Add("level", $"{GameData.Instance.Progress.currentLevelId + 1}_{minigame}_{minigameId}");
             var situation = "isFirstTime";
-            if (GameData.Instance.progress.reachedLevel > GameData.Instance.progress.currentLevelId)
+            if (GameData.Instance.Progress.reachedLevel > GameData.Instance.Progress.currentLevelId)
             {
                 situation = "isReplaying";
             }
@@ -76,7 +76,7 @@ namespace Blabbers
         public static void OnDefeat(string reason)
         {
             dataDictionary.Clear();
-            dataDictionary.Add("level", GameData.Instance.progress.currentLevelId + 1);
+            dataDictionary.Add("level", GameData.Instance.Progress.currentLevelId + 1);
             dataDictionary.Add("reason", reason);
             SendEvent("defeat", dataDictionary);
         }
@@ -84,7 +84,7 @@ namespace Blabbers
         public static void OnTutorialShown(string tutorialName)
         {
             dataDictionary.Clear();
-            dataDictionary.Add("level", GameData.Instance.progress.currentLevelId + 1);
+            dataDictionary.Add("level", GameData.Instance.Progress.currentLevelId + 1);
             dataDictionary.Add("name", tutorialName);
             SendEvent("tutorial", dataDictionary);
         }
@@ -92,7 +92,7 @@ namespace Blabbers
         public static void OnLevelVictory(int starAmount)
         {
             dataDictionary.Clear();
-            dataDictionary.Add("level", GameData.Instance.progress.currentLevelId + 1);
+            dataDictionary.Add("level", GameData.Instance.Progress.currentLevelId + 1);
             dataDictionary.Add("duration", Time.timeSinceLevelLoad);
             dataDictionary.Add("starAmount", starAmount);
             var hasQuestion = Singleton.Get<GameplayController>().ShowLevelQuestion;
@@ -107,10 +107,10 @@ namespace Blabbers
         public static void OnGameFinished()
         {
             dataDictionary.Clear();
-            dataDictionary.Add("level", GameData.Instance.progress.currentLevelId + 1);
-            dataDictionary.Add("all3Stars", GameData.Instance.progress.AllLevelsWith3Stars());
+            dataDictionary.Add("level", GameData.Instance.Progress.currentLevelId + 1);
+            dataDictionary.Add("all3Stars", GameData.Instance.Progress.AllLevelsWith3Stars());
             dataDictionary.Add("duration", Time.timeSinceLevelLoad);
-            dataDictionary.Add("totalScore", GameData.Instance.progress.score);
+            dataDictionary.Add("totalScore", GameData.Instance.Progress.score);
             SendEvent("gameFinished", dataDictionary);
         }
 
@@ -136,14 +136,14 @@ namespace Blabbers
             dataDictionary.Clear();
             var skinSet = "";
             var first = true;
-            foreach (var customization in GameData.Instance.progress.customizations)
+            foreach (var customization in GameData.Instance.Progress.customizations)
             {
                 skinSet += $"{(first ? "" : ", ")}{customization.name}:{customization.id}";
                 if (first) first = false;
             }
 
             dataDictionary.Add("skinSet", skinSet);
-            dataDictionary.Add("reachedLevel", GameData.Instance.progress.currentLevelId + 1);
+            dataDictionary.Add("reachedLevel", GameData.Instance.Progress.currentLevelId + 1);
             dataDictionary.Add("timeSinceStart", Time.realtimeSinceStartup);
             dataDictionary.Add("enabledTTS", ProgressController.enableAutomaticTTS);
             SendEvent("skinSelected", dataDictionary);
