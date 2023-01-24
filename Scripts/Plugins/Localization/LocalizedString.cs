@@ -15,16 +15,13 @@ public class LocalizedString
 	[SerializeField] private string key;
 	[SerializeField] private string text;
 	//[field: SerializeField] public bool applyKeyCodes { get; private set; }
-	[SerializeField] public bool applyKeyCodes;
+	[SerializeField] public bool applyKeyCodes = false;
 	public bool ApplyKeyCodes => applyKeyCodes;
 	public Action<string> OnLoad;
 
 	public string Text
 	{
 		get {
-			//Debug.Log("LocalizedString.GetText");
-			//return LocalizationExtensions.LocalizeText(key); 
-			//return LocalizationExtensions.LocalizeText(key, applyColorCode: ApplyKeyCodes);
 			return LocalizationExtensions.LocalizeText(key, applyColorCode: true);
 		}
 		set
@@ -64,4 +61,10 @@ public class LocalizedString
 	{
 		return text;
 	}
+
+	public string GetLocalizedText(bool applyKeyCode)
+	{
+		return LocalizationExtensions.LocalizeText(key, applyColorCode: applyKeyCode);
+	}
+
 }

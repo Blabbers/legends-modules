@@ -12,6 +12,7 @@ public class TextLocalizedEditor : TMP_EditorPanelUI
 	//[HideTextField]
 	SerializedProperty localizedStringProp;
 	SerializedProperty playTTSOnEnableProp;
+	SerializedProperty applyKeyCodesProp;
 	SerializedProperty isAnimatedProp;
 	SerializedProperty OnAnimationFinishedProp;
 
@@ -25,6 +26,7 @@ public class TextLocalizedEditor : TMP_EditorPanelUI
 		localizedStringProp = serializedObject.FindProperty("localization");
 		playTTSOnEnableProp = serializedObject.FindProperty("playTTSOnEnable");
 		isAnimatedProp = serializedObject.FindProperty("isAnimated");
+		applyKeyCodesProp = serializedObject.FindProperty("applyKeyCodes");
 		OnAnimationFinishedProp = serializedObject.FindProperty("OnAnimationFinished");
 
 		locString = (LocalizedString)localizedStringProp.GetValue();
@@ -48,9 +50,11 @@ public class TextLocalizedEditor : TMP_EditorPanelUI
 		serializedObject.Update();
 		EditorGUILayout.PropertyField(localizedStringProp);
 		EditorGUILayout.PropertyField(playTTSOnEnableProp);
+		EditorGUILayout.PropertyField(applyKeyCodesProp);
 		EditorGUILayout.PropertyField(isAnimatedProp);
+		
 
-		if(isAnimatedProp.boolValue) EditorGUILayout.PropertyField(OnAnimationFinishedProp);
+		if (isAnimatedProp.boolValue) EditorGUILayout.PropertyField(OnAnimationFinishedProp);
 
 		#region Get string value and pass it to other variable
 		string textValue;

@@ -110,6 +110,7 @@ namespace Blabbers.Game00
 		{
 			bool found = false;
 			string foundTerm ="";
+			string editedText = "";
 			string currentTerm;
 
 			foundTerm = StringUtility.FindTermInString(term, mainText, out found);
@@ -123,7 +124,10 @@ namespace Blabbers.Game00
 				currentTerm = GenerateTaggedTerm(currentTerm, item);
 			}
 
-			return currentTerm;
+
+			editedText = StringUtility.ReplaceTermInString(term, currentTerm, mainText);
+
+			return editedText;
 		}
 
 		public static string GenerateTaggedTerm(string term, string tag)

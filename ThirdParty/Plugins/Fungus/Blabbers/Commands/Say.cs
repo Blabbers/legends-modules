@@ -19,8 +19,10 @@ namespace Fungus
         // Removed this tooltip as users's reported it obscures the text box
         //[TextArea(5,10)]
         [SerializeField] protected LocalizedString storyText;
+		[SerializeField] protected bool applyKeyCodes = true;
 
-        [Tooltip("Notes about this story text for other authors, localization, etc.")]
+
+		[Tooltip("Notes about this story text for other authors, localization, etc.")]
         [SerializeField] protected string description = "";
 
         [Tooltip("Character that is speaking")]
@@ -111,7 +113,7 @@ namespace Fungus
             sayDialog.SetCharacter(character);
             sayDialog.SetCharacterImage(portrait);
 
-            string displayText = storyText;            
+			string displayText = storyText.GetLocalizedText(applyKeyCodes);
 
             var activeCustomTags = CustomTag.activeCustomTags;
             for (int i = 0; i < activeCustomTags.Count; i++)

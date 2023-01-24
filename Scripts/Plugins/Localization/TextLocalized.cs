@@ -13,6 +13,7 @@ public class TextLocalized : TextMeshProUGUI
 
 	[SerializeField] bool playTTSOnEnable = false;
 	[SerializeField] bool isAnimated = false;
+	[SerializeField] bool applyKeyCodes = true;
 	[SerializeField] UnityEvent OnAnimationFinished;
 
 	protected override void OnEnable()
@@ -39,13 +40,13 @@ public class TextLocalized : TextMeshProUGUI
 		{
 			Debug.LogWarning("Key variable is empty at:" + this.gameObject.name, this.gameObject);
 		}
+
+		base.OnEnable();
 	}
 
 	public void UpdateText()
 	{
-		//text = LocalizationExtensions.LocalizeText(Localization.Key,null,null);
-		//text = LocalizationExtensions.LocalizeText(Localization.Key, null, null, localization.ApplyKeyCodes);
-		text = LocalizationExtensions.LocalizeText(Localization.Key, null, null, true);
+		text = LocalizationExtensions.LocalizeText(Localization.Key, null, null, applyKeyCodes);
 	}
 
 	public void PlayThisSpeechText()
