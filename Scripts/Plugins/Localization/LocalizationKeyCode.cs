@@ -6,9 +6,8 @@ using System.IO;
 using UnityEngine;
 
 [CreateAssetMenu]
-public class LocalizationColorCode : ScriptableObject
+public class LocalizationKeyCode : ScriptableObject
 {
-
 	public LocalizedString localization;
 	public List<string> tags = new List<string>();
 }

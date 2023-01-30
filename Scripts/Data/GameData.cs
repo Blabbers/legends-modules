@@ -154,5 +154,5 @@ public class Customization
 [System.Serializable]
 public class TextConfigs
 {
-    public LocalizationColorCode[] colorCodes;
+    public LocalizationKeyCode[] colorCodes;
 }
