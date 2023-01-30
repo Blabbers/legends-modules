@@ -46,12 +46,15 @@ namespace Blabbers.Game00
 				}
 			}
 
-			// Applies color codes to words
-			if (GameData.Instance.textConfigs != null && !string.IsNullOrEmpty(mainText))
+			if (SharedState.languageDefs != null)
 			{
-				if (GameData.Instance.textConfigs.colorCodes != null && GameData.Instance.textConfigs.colorCodes.Length > 0 && applyColorCode)
+				// Applies color codes to words
+				if (GameData.Instance.textConfigs != null && !string.IsNullOrEmpty(mainText))
 				{
-					mainText = ApplyColorCodes(mainText);
+					if (GameData.Instance.textConfigs.colorCodes != null && GameData.Instance.textConfigs.colorCodes.Length > 0 && applyColorCode)
+					{
+						mainText = ApplyColorCodes(mainText);
+					}
 				}
 			}
 
