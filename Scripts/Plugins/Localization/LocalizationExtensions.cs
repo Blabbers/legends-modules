@@ -42,7 +42,7 @@ namespace Blabbers.Game00
 				// If this text was loaded by the LoL platform.
 				if(SharedState.languageDefs != null)
 				{
-					mainText = SharedState.languageDefs[localizationKey].Value;
+					mainText = SharedState.languageDefs[localizationKey]?.Value;
 				}
 			}
 
