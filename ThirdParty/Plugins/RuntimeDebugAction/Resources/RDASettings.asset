@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RDASettings
   m_EditorClassIdentifier: 
   enableMode: 0
-  menuPauseMode: 0
+  menuPauseMode: 1
   themes:
     values:
     - themeName: Default
@@ -41,7 +41,7 @@ MonoBehaviour:
   disableLogger: 0
   loggerMaxLine: 100
   addApplicationOptions: 1
-  addQualityOptions: 1
+  addQualityOptions: 0
   addSceneOptions: 1
-  addThemeOptions: 1
+  addThemeOptions: 0
   addLoggerOptions: 1

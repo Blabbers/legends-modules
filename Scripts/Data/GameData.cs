@@ -43,6 +43,7 @@ public class GameData : ScriptableObject
     [Tooltip("Everytime a level finishes it automatically goes to the level select scene. If you populate this list, you can override this behaviour and go to a simulation screen instead for example.")]
     [ReorderableList]
     public SceneToLoad[] levelSelectOverrideScenes;
+    public string currentSelectedLangCode;
 
     [System.Serializable]
     public struct SceneToLoad

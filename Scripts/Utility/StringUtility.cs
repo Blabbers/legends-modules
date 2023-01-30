@@ -34,7 +34,7 @@ public static class StringUtility
 		}
 		else
 		{
-			Debug.Log($"mainText [{mainText}] doens't Contains -> termFormat: [{termFormat}]");
+			//Debug.Log($"mainText [{mainText}] doens't Contains -> termFormat: [{termFormat}]");
 		}
 
 		success = false;
@@ -47,7 +47,7 @@ public static class StringUtility
 		updated = mainText;
 
 		updated = mainText.Replace(term, newTerm);
-		Debug.Log($"ReplaceTermInString() \noriginal [{mainText}] | new [{updated}]");
+		//Debug.Log($"ReplaceTermInString() \noriginal [{mainText}] | new [{updated}]");
 
 		return updated;
 	}

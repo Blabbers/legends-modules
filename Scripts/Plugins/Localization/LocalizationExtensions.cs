@@ -35,8 +35,9 @@ namespace Blabbers.Game00
 			// If we are on a dev build, we will load the texts without the LoL platform.			
 			// This is just for Editor use and CloudBuilds. Our "LocalizedString" property goes through this path for example.
 			// (no need for color codes and other features)
-			mainText = EditorLoadFromLanguageJson(localizationKey, null, false);
-#endif			
+			mainText = EditorLoadFromLanguageJson(localizationKey, null, false, GameData.Instance.currentSelectedLangCode);
+#endif
+
 			if (string.IsNullOrEmpty(mainText))
 			{
 				// If this text was loaded by the LoL platform.
@@ -81,36 +82,17 @@ namespace Blabbers.Game00
 
 			foreach (var color in GameData.Instance.textConfigs.colorCodes)
 			{
-				//key = color.key;
 				key = color.localization.Key;
 				term = isDevBuild ? localLanguageJson[key].Value : SharedState.languageDefs[key].Value;
-				//mainText = FindAndColorTerm(term, mainText, color.color, out var success);
 				mainText = ApplyTagsToTerm(term, color.tags, mainText);
-
-				//plural = term + "S";				
-				//mainText = FindAndColorTerm(plural, mainText, color.color, out var success);
-				//if (!success) mainText = FindAndColorTerm(term, mainText, color.color, out success);
-
-				//if (color.extraKeys.Count > 0)
-				//{
-				//	foreach (var extra in color.extraKeys)
-				//	{
-				//		key = extra;
-				//		term = isDevBuild ? localLanguageJson[key].Value : SharedState.languageDefs[key].Value;
-				//		plural = term + "S";
-				//		mainText = FindAndColorTerm(plural, mainText, color.color, out success);
-				//		if (!success) mainText = FindAndColorTerm(term, mainText, color.color, out success);
-				//	}
-				//}
 			}
-
-			Debug.Log($"ApplyColorCodes: {mainText}");
 
 			return mainText;
 		}
 
 		private static string ApplyTagsToTerm(string term, List<string> tags, string mainText)
 		{
+
 			bool found = false;
 			string foundTerm ="";
 			string editedText = "";
