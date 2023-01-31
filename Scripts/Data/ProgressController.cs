@@ -12,7 +12,7 @@ namespace Blabbers.Game00
     public class ProgressController : MonoBehaviour, ISingleton
     {
         private GameData gameData => GameData.Instance;
-        public static GameProgress GameProgress => Singleton.Get<ProgressController>().gameData.Progress;
+        public static GameProgress GameProgress => GameData.Instance.Progress;
         public static bool enableAutomaticTTS = true;
 
 

@@ -2,6 +2,7 @@
 using Blabbers.Game00;
 using NaughtyAttributes;
 using UnityEngine;
+using static UnityEngine.AudioSettings;
 
 public class GameData : ScriptableObject
 {
@@ -15,9 +16,11 @@ public class GameData : ScriptableObject
             return _instance;
         }
     }
-    #endregion
+	#endregion
 
-    public void OnEnable()
+
+
+	public void OnEnable()
     {
         Application.runInBackground = false;
         SharedState.maxProgress = maxProgress;

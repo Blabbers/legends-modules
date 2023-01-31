@@ -15,7 +15,7 @@ namespace Blabbers.Game00
 		
 		void Start()
 		{
-			touchInput.SetActive(false);
+			touchInput?.SetActive(false);
 		}
 
 		void ToggleTouchInput()
@@ -25,11 +25,11 @@ namespace Blabbers.Game00
 			{
 				if (Game.IsMobile)
 				{
-					touchInput.SetActive(true);
+					touchInput?.SetActive(true);
 				}
 				else
 				{
-					touchInput.SetActive(false);
+					touchInput?.SetActive(false);
 				}
 			}
 		}
