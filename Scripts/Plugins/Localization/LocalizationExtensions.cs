@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using SimpleJSON;
 using System.IO;
 using Fungus;
+using static UnityEngine.AudioSettings;
 
 namespace Blabbers.Game00
 {
@@ -13,6 +14,16 @@ namespace Blabbers.Game00
 	{
 		public static HashSet<string> AlreadyPlayedTTS = new HashSet<string>();
 		public static bool HasPlayedTTS(string key) => AlreadyPlayedTTS.Contains(key);
+		private static JSONNode localLanguageJson;
+
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		static void Init()
+		{
+			Debug.Log($"LocalizationExtensions.Init");
+
+			AlreadyPlayedTTS = new HashSet<string>();
+			localLanguageJson = null;
+		}
 
 		public static void LocalizeText(this Text textObj, string localizationKey, string appendLeft = null, string appendRight = null)
 		{
@@ -236,7 +247,7 @@ namespace Blabbers.Game00
 			}
 			catch { }
 		}
-		private static JSONNode localLanguageJson;
+		
 		public static void ResetLanguageJson()
 		{
 			localLanguageJson = null;

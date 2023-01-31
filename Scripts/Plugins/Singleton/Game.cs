@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Sigtrap.Relays;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
 namespace Blabbers.Game00
 {
@@ -15,6 +16,18 @@ namespace Blabbers.Game00
 		public static Game instance;
 		public List<MonoBehaviour> instances;
 
+
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		static void Init()
+		{
+			Debug.Log($"Game.Init");
+
+			IsMobile = false;
+			OnIsMobileChanged = null;
+			instance = null;
+		}
+
+
 #if UNITY_EDITOR
 		private void Update()
 		{
@@ -22,8 +35,13 @@ namespace Blabbers.Game00
 		}
 #endif
 
+
+
+
 		void Awake()
 		{
+			Debug.Log($"Game.Awake");
+
 			if (instance)
 			{
 				Destroy(this.gameObject);

@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using LoLSDK;
 using System;
 using Sigtrap.Relays;
+using static UnityEngine.AudioSettings;
 
 namespace Blabbers.Game00
 {
@@ -14,7 +15,17 @@ namespace Blabbers.Game00
         public static GameProgress GameProgress => Singleton.Get<ProgressController>().gameData.Progress;
         public static bool enableAutomaticTTS = true;
 
-        private void Awake()
+
+
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		static void Init()
+        {
+			Debug.Log($"ProgressController.Init");
+            enableAutomaticTTS = false;
+		}
+
+
+		private void Awake()
         {
             SceneManager.sceneLoaded += HandleSceneLoaded;            
         }
