@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Sigtrap.Relays;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
 namespace Blabbers.Game00
 {
@@ -25,7 +24,8 @@ namespace Blabbers.Game00
 			IsMobile = false;
 			OnIsMobileChanged = null;
 			instance = null;
-		}
+
+        }
 
 
 #if UNITY_EDITOR
@@ -34,9 +34,6 @@ namespace Blabbers.Game00
 			instances = new List<MonoBehaviour>(Singleton.Instances.Values);
 		}
 #endif
-
-
-
 
 		void Awake()
 		{
@@ -55,7 +52,12 @@ namespace Blabbers.Game00
             SceneManager.sceneUnloaded += HandleSceneLoaded;
 		}
 
-        private void HandleSceneLoaded(Scene arg0)
+		private void OnDestroy()
+		{
+            SceneManager.sceneUnloaded -= HandleSceneLoaded;
+        }
+
+		private void HandleSceneLoaded(Scene arg0)
         {
             InitializeSingleton();
         }
@@ -122,7 +124,17 @@ namespace Blabbers.Game00
 		private static bool hasInitialized;
         private static GameObject globalInstance;
 		public static Dictionary<Type, MonoBehaviour> Instances { get; private set; } = new Dictionary<Type, MonoBehaviour>();
-        public static readonly Relay<MonoBehaviour> OnAssigned = new Relay<MonoBehaviour>();
+        public static Relay<MonoBehaviour> OnAssigned = new Relay<MonoBehaviour>();
+
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void Init()
+        {
+            Debug.Log($"Our Singleton.Init");
+			hasInitialized = false;
+			globalInstance = null;
+            Instances = new Dictionary<Type, MonoBehaviour>();
+            OnAssigned = new Relay<MonoBehaviour>();
+        }
 
         public static T Get<T>() where T : MonoBehaviour
 		{
@@ -217,7 +229,7 @@ namespace Blabbers.Game00
         // Porque por enquanto ele só roda e cria o primeiro [Global] se alguem chamar um Singleton.Get<> (que por coincidencia acontece ja no menu inicial)
 		public static void InitializeAllSingletonInstances()
 		{
-			if (!hasInitialized)
+            if (!hasInitialized)
 			{
 				hasInitialized = true;
 			}
@@ -254,6 +266,7 @@ namespace Blabbers.Game00
 					}
 				}
 			}
+
 			Action onCreatedCalls = ()=> { };
 			foreach (var mono in Instances)
 			{
@@ -261,10 +274,10 @@ namespace Blabbers.Game00
 				if (mono.Value)
 				{
 					onCreatedCalls += (mono.Value as ISingleton).OnCreated;
-				}
+                }
 			}
 
-			var delegates = onCreatedCalls.GetInvocationList();
+            var delegates = onCreatedCalls.GetInvocationList();
 			for (int i = 0; i < delegates.Length; i++)
 			{
 				var action = delegates[i];

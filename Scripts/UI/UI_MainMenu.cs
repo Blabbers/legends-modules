@@ -1,5 +1,4 @@
-﻿using LoLSDK;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
@@ -17,6 +16,10 @@ namespace Blabbers.Game00
         public void OnCreated()
         {
             Singleton.Get<ProgressController>().OnGameDataLoaded += HandleGameDataLoaded;
+        }
+        public void OnDestroy()
+        {
+            Singleton.Get<ProgressController>().OnGameDataLoaded -= HandleGameDataLoaded;
         }
 
         public void Start()
