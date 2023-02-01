@@ -7,6 +7,7 @@
  * Purpose: Provides creation and pooling for tweens.
 */
 
+using LoLSDK;
 using System;
 using UnityEngine;
 
@@ -24,11 +25,23 @@ namespace BeauRoutine.Internal
         static private int s_Available = 0;
         static private int s_Instantiated = 0;
 
-        /// <summary>
-        /// Returns a Tween from the pool,
-        /// or allocates a new Tween.
-        /// </summary>
-        static public Tween Alloc()
+
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		static void Init()
+		{
+			s_InUse = 0;
+			s_PoolEnabled = false;
+			s_Pool = null;
+			s_Available = 0;
+			s_Instantiated = 0;
+		}
+
+
+		/// <summary>
+		/// Returns a Tween from the pool,
+		/// or allocates a new Tween.
+		/// </summary>
+		static public Tween Alloc()
         {
             ++s_InUse;
 

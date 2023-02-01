@@ -39,7 +39,7 @@ namespace Blabbers.Game00
         /// </summary>
         public void ShowLevelVictoryScreen(VictoryStar[] starList, int score)
         {
-            Debug.Log("UI_PopupVictoryScreen.ShowLevelVictoryScreen\n".Colored());
+            //Debug.Log("UI_PopupVictoryScreen.ShowLevelVictoryScreen\n".Colored());
 
 			if (textScoreValue != null)
 			{

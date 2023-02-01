@@ -8,6 +8,7 @@
  *          when interpolating Euler angles.
 */
 
+using LoLSDK;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,6 +24,14 @@ namespace BeauRoutine.Internal
 
 	internal sealed class EulerStorage
 	{
+
+
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		static void Init()
+		{
+			s_Records = new Dictionary<int, EulerStorage>();
+		}
+
 		/// <summary>
 		/// Gets the euler angles for the given space.
 		/// </summary>

@@ -133,15 +133,15 @@ namespace Blabbers.Game00
 
         public void FinalVictoryRoutine()
         {
-            Debug.Log("<GameplayController> FinalVictoryRoutine()");
+            //Debug.Log("<GameplayController> FinalVictoryRoutine()");
 
             Routine.Start(this, Run());
             //StartCoroutine(Run());
 
-			Debug.Log("<GameplayController> FinalVictoryRoutine() 2");
+			//Debug.Log("<GameplayController> FinalVictoryRoutine() 2");
 			IEnumerator Run()
             {
-				Debug.Log("<GameplayController> FinalVictoryRoutine() _Run()");
+				//Debug.Log("<GameplayController> FinalVictoryRoutine() _Run()");
 
 				var currentLevel = ProgressController.GameProgress.currentLevelId + 1;
                 // Extra score based on gameplay rules
@@ -202,7 +202,7 @@ namespace Blabbers.Game00
 				//Debug.Log($"FinalVictoryRoutine() \nisStuckOnThisLevel: {SceneLoader.isStuckOnThisLevel}");
 				//Debug.Log($"FinalVictoryRoutine()\nstars[0]: {stars[0].earnedStar} | stars[1]: {stars[1].earnedStar} | stars[2]: {stars[2].earnedStar}");
 
-				Debug.Log("<GameplayController> FinalVictoryRoutine() _Run() end");
+				//Debug.Log("<GameplayController> FinalVictoryRoutine() _Run() end");
 
 
 				yield return new WaitForSeconds(1f);

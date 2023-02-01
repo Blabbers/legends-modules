@@ -8,6 +8,7 @@
  *          time scaling.
 */
 
+using LoLSDK;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -37,9 +38,17 @@ namespace BeauRoutine
         [RoutineGroupRef]
         public int Group = 0;
 
-        #region Unity Events
 
-        private void Awake()
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		static void Init()
+        {
+			s_IdentityRegistry = new Dictionary<int, RoutineIdentity>();
+		}
+
+
+		#region Unity Events
+
+		private void Awake()
         {
             RegisterIdentity(this);
         }
