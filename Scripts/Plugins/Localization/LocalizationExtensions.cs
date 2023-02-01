@@ -89,10 +89,17 @@ namespace Blabbers.Game00
 
 			if (!Application.isPlaying) return mainText;
 
+			//Debug.Log($"ApplyColorCodes({mainText})  " +
+			//	$"\nlocalLanguageJson is null? {(localLanguageJson == null)}".Colored("orange"));
+
+
 			foreach (var color in GameData.Instance.textConfigs.colorCodes)
 			{
 				key = color.localization.Key;
 				term = isDevBuild ? localLanguageJson[key].Value : SharedState.languageDefs[key].Value;
+
+				//Debug.Log($"ApplyColorCodes (isDevBuild? {isDevBuild})\nterm {term} | localValue: [{localLanguageJson[key].Value}] |SharedState.value: [{SharedState.languageDefs[key].Value}]");
+
 				mainText = ApplyTagsToTerm(term, color.tags, mainText);
 			}
 
@@ -101,7 +108,6 @@ namespace Blabbers.Game00
 
 		private static string ApplyTagsToTerm(string term, List<string> tags, string mainText)
 		{
-
 			bool found = false;
 			string foundTerm ="";
 			string editedText = "";
@@ -288,7 +294,21 @@ namespace Blabbers.Game00
 		public static string EditorLoadFromLanguageJson(string key, Object unityObject = null, bool displayMessages = true, string langCode = "en")
 		{
 			var json = LocalizationExtensions.GetLanguageJson();
-			var node = json[langCode];
+
+			if (string.IsNullOrEmpty(langCode))
+			{
+				langCode = "en";
+			}
+
+
+			Debug.Log($"EditorLoadFromLanguageJson() key [{key}] " +
+				$"\njson is null? {(json == null)} ".Colored("orange") +
+				$"| langCode: [{langCode}]".Colored(""));
+
+
+
+			var node = json[langCode]; // This is null after opening the project
+
 			if (string.IsNullOrEmpty(key))
 			{
 				if (displayMessages)

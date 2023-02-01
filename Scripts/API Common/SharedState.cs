@@ -10,4 +10,13 @@ public static class SharedState
 
 	// This is defined inside Loader.Awake() through the "GameConfig" ScriptableObject.
 	public static int maxProgress;
+
+	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+	static void Init()
+	{
+		languageDefs = null;
+		startGameData = null;
+		maxProgress = 0;
+	}
+
 }

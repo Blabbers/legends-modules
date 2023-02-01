@@ -1,6 +1,8 @@
 ﻿using BennyKok.RuntimeDebug.Utils;
 using Blabbers.Game00;
 using NaughtyAttributes;
+using SimpleJSON;
+using System.Collections.Generic;
 using UnityEngine;
 using static UnityEngine.AudioSettings;
 
@@ -46,7 +48,7 @@ public class GameData : ScriptableObject
     [Tooltip("Everytime a level finishes it automatically goes to the level select scene. If you populate this list, you can override this behaviour and go to a simulation screen instead for example.")]
     [ReorderableList]
     public SceneToLoad[] levelSelectOverrideScenes;
-    public string currentSelectedLangCode;
+    public string currentSelectedLangCode = "en";
 
     [System.Serializable]
     public struct SceneToLoad

@@ -47,7 +47,6 @@ public static class StringUtility
 		updated = mainText;
 
 		updated = mainText.Replace(term, newTerm);
-		//Debug.Log($"ReplaceTermInString() \noriginal [{mainText}] | new [{updated}]");
 
 		return updated;
 	}
