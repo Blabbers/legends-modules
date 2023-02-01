@@ -19,12 +19,9 @@ namespace Blabbers.Game00
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
 		static void Init()
 		{
-			Debug.Log($"Game.Init");
-
 			IsMobile = false;
 			OnIsMobileChanged = null;
 			instance = null;
-
         }
 
 
@@ -37,8 +34,6 @@ namespace Blabbers.Game00
 
 		void Awake()
 		{
-			Debug.Log($"Game.Awake");
-
 			if (instance)
 			{
 				Destroy(this.gameObject);
@@ -129,7 +124,6 @@ namespace Blabbers.Game00
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void Init()
         {
-            Debug.Log($"Our Singleton.Init");
 			hasInitialized = false;
 			globalInstance = null;
             Instances = new Dictionary<Type, MonoBehaviour>();

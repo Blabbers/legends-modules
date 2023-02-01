@@ -20,7 +20,6 @@ namespace Blabbers.Game00
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
 		static void Init()
         {
-			Debug.Log($"ProgressController.Init");
             enableAutomaticTTS = false;
 		}
 

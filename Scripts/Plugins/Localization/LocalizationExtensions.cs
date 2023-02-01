@@ -19,8 +19,6 @@ namespace Blabbers.Game00
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
 		static void Init()
 		{
-			Debug.Log($"LocalizationExtensions.Init");
-
 			AlreadyPlayedTTS = new HashSet<string>();
 			localLanguageJson = null;
 		}
