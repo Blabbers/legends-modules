@@ -17,10 +17,6 @@ public class IconAlternator : MonoBehaviour
 
     private void Awake()
 	{
-
-        //Debug.Log($"IconAlternator Awake()");
-
-
         if (!mySprite)
         {         
             if(GetComponent<SpriteRenderer>() != null)
@@ -29,8 +25,6 @@ public class IconAlternator : MonoBehaviour
             }
 
         }
-
-        //Debug.Log($"IconAlternator Awake() Got sprite");
 
         if (!myImage)
         {
@@ -42,16 +36,9 @@ public class IconAlternator : MonoBehaviour
 
 		if (!Game.IsMobile)
 		{
-            //Debug.Log($"Device.isMobile: {Singleton.Get<Loader>().isMobile}".Colored("orange"));
             Routine.Start(_IconCoroutine(delay));
         }
 
-
-		
-
-        //Debug.Log($"IconAlternator Awake() Got image");
-
-        //Routine.Start(_IconCoroutine(delay));
     }
 
     IEnumerator _IconCoroutine(float delay)
@@ -60,7 +47,6 @@ public class IconAlternator : MonoBehaviour
 
         while (true)
 		{
-            //Debug.Log("Change sprite");
             yield return new WaitForSecondsRealtime(delay);
 
             id++;
@@ -76,7 +62,6 @@ public class IconAlternator : MonoBehaviour
 
     void UpdateSprite(int id)
 	{
-        //Debug.Log($"UpdateSprite {id}");
 
 		if (myImage) myImage.sprite = spriteList[id];
         if (mySprite) mySprite.sprite = spriteList[id];

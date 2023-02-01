@@ -39,7 +39,6 @@ public class SimulationEnvironment : MonoBehaviour, ISingleton
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || UNITY_CLOUD_BUILD
 		if (Input.GetKeyDown(KeyCode.End))
 		{
-			Debug.Log("Simualation: KeyCode.End");
 			Instance.OnFinish?.Invoke();
 		}
 #endif

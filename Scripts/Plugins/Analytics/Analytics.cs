@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Blabbers.Game00;
+using LoLSDK;
 using UnityEngine;
 using UnityEngine.Analytics;
 
@@ -7,9 +8,17 @@ namespace Blabbers
 {
     public static class Analytics
     {
-        private static readonly Dictionary<string, object> dataDictionary = new Dictionary<string, object>();
+        private static Dictionary<string, object> dataDictionary = new Dictionary<string, object>();
 
-        public static void OnGameStart()
+
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		static void Init()
+        {
+			dataDictionary = new Dictionary<string, object>();
+		}
+
+
+		public static void OnGameStart()
         {
             dataDictionary.Clear();
             var isNewGame = GameData.Instance.Progress.isNewGame;

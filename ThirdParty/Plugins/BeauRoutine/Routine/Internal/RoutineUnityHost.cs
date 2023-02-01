@@ -20,6 +20,7 @@ using UnityEditor;
 using System.Collections;
 using System.Diagnostics;
 using UnityEngine;
+using LoLSDK;
 
 namespace BeauRoutine.Internal
 {
@@ -36,7 +37,15 @@ namespace BeauRoutine.Internal
 
         private bool m_LastKnownVsync;
 
-        public void Initialize(Manager inManager)
+
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		static void Init()
+        {
+			s_CachedWaitForFixedUpdate = Routine.WaitForFixedUpdate();
+			s_CachedWaitForEndOfFrame = Routine.WaitForEndOfFrame();
+		}
+
+		public void Initialize(Manager inManager)
         {
             m_Manager = inManager;
 

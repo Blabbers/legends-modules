@@ -12,6 +12,7 @@
 using UnityEngine;
 using System;
 using System.Reflection;
+using LoLSDK;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -35,7 +36,16 @@ namespace BeauRoutine
         static private Type s_Type;
         static private bool s_Initialized = false;
 
-        static private void Initialize()
+
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		static void Init()
+        {
+			 s_Type = null;
+			 s_Initialized = false;
+		}
+
+
+		static private void Initialize()
         {
             if (s_Initialized)
                 return;

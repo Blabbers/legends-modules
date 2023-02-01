@@ -31,7 +31,7 @@ public class UI_PopupCountdown : UI_PopupWindow, ISingleton
 
     void Awake()
 	{
-        Debug.Log("<UI_PopupCountdown> Awake()".Colored("white"));
+        //Debug.Log("<UI_PopupCountdown> Awake()".Colored("white"));
 
         //Singleton.Get<GameplayController>().OnPause += HandleOnPause;
         //Singleton.Get<UI_PopupLevelInfo>().OnClose.AddListener(ExternalCountDown);
@@ -67,7 +67,7 @@ public class UI_PopupCountdown : UI_PopupWindow, ISingleton
 
     public void ExternalCountDown()
     {
-        Debug.Log("ExternalCountDown()".Colored("orange"));
+        //Debug.Log("ExternalCountDown()".Colored("orange"));
         isActive = true;
 
 
@@ -79,7 +79,7 @@ public class UI_PopupCountdown : UI_PopupWindow, ISingleton
     void StartCountdown_Pause()
     {
 
-		Debug.Log("<UI_PopupCountdown> StartCountdown_Pause()");
+		//Debug.Log("<UI_PopupCountdown> StartCountdown_Pause()");
 
 		Time.timeScale = 0;
 
@@ -108,7 +108,7 @@ public class UI_PopupCountdown : UI_PopupWindow, ISingleton
 
     void StartCountdown()
     {
-		Debug.Log("<UI_PopupCountdown> StartCountdown()");
+		//Debug.Log("<UI_PopupCountdown> StartCountdown()");
 
 		TogglePopup(true);
 
@@ -137,7 +137,7 @@ public class UI_PopupCountdown : UI_PopupWindow, ISingleton
 
     void CountDownFinished()
     {
-        Debug.Log("<UI_PopupCountdown> CountDownFinished()");
+        //Debug.Log("<UI_PopupCountdown> CountDownFinished()");
 
         OnCountdownFinished?.Invoke();
         TogglePopup(false);

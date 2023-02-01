@@ -27,7 +27,7 @@ namespace Blabbers.Game00
 		{
 			if (!HasCutscene)
 			{
-				Debug.Log("Jumping cutscene as requested.".Colored("yellow"), this);
+				//Debug.Log("Jumping cutscene as requested.".Colored("yellow"), this);
 				LoadNextScene();
 				return;
 			}
@@ -84,14 +84,14 @@ namespace Blabbers.Game00
 			}
 			else
 			{
-				Debug.Log("There's no scene to load for this cutscene.".Colored("red"), this);
+				//Debug.Log("There's no scene to load for this cutscene.".Colored("red"), this);
 			}
 		}
 
 		public void ScreenShake(float duration)
 		{
 			Camera.main.DOShakePosition(duration, 1);
-			Debug.Log("Screen Shaked");
+			//Debug.Log("Screen Shaked");
 		}
 
 		public void DebugLog(string text)

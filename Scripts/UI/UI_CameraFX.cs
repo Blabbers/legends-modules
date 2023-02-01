@@ -103,7 +103,7 @@ public class UI_CameraFX : MonoBehaviour, ISingleton
 
 	public void ShowCinematicBlackBars(UnityAction callback)
 	{
-		Debug.Log("UI_CameraFX - ShowCinematicBlackBars -> Callback");
+		//Debug.Log("UI_CameraFX - ShowCinematicBlackBars -> Callback");
 
         cinematicBarTop.OnAnimationFinished.AddListener(callback);
 		cinematicBlackBars.SetActive(true);
@@ -111,7 +111,7 @@ public class UI_CameraFX : MonoBehaviour, ISingleton
 
 	public void HideCinematicBlackBars(UnityAction callback)
 	{
-		Debug.Log("UI_CameraFX - HideCinematicBlackBars -> Callback");
+		//Debug.Log("UI_CameraFX - HideCinematicBlackBars -> Callback");
 
 		cinematicBarTop.OnAnimationFinished.AddListener(callback);
 		cinematicBlackBars.SetActive(false);

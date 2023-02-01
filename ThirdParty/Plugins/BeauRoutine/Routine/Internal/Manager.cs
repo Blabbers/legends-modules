@@ -15,6 +15,7 @@
 #define SUPPORTS_THREADING
 #endif // UNITY_WEBGL
 
+using LoLSDK;
 using System;
 using System.Collections;
 using System.Diagnostics;
@@ -43,10 +44,19 @@ namespace BeauRoutine.Internal
         static private Manager s_Instance = new Manager();
         static private bool s_AppQuitting = false;
 
-        /// <summary>
-        /// Ensures the Manager exists and is initialized.
-        /// </summary>
-        static public void Create()
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		static void Init()
+        {
+			s_Instance = new Manager();
+			s_AppQuitting = false;
+
+		}
+
+
+		/// <summary>
+		/// Ensures the Manager exists and is initialized.
+		/// </summary>
+		static public void Create()
         {
             if (s_Instance == null)
                 s_Instance = new Manager();

@@ -30,7 +30,6 @@ namespace Blabbers.Game00
 		public void HandleGameDataLoaded(GameProgress progress)
         {
 
-            //Debug.Log("isNewGame:" + progress.isNewGame);
             btnPlay.gameObject.SetActive(true);
             btnContinue.gameObject.SetActive(false);
             btnNewGame.gameObject.SetActive(false);

@@ -16,6 +16,7 @@
 #define SUPPORTS_CUSTOMYIELDINSTRUCTION
 #endif
 
+using LoLSDK;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -97,7 +98,14 @@ namespace BeauRoutine.Internal
         private Routine.ExceptionHandler m_OnException;
         private bool m_HandleExceptions = false;
 
-        public Fiber(Manager inManager, uint inIndex)
+
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		static void Init()
+        {
+			s_IteratorNames = new Dictionary<IntPtr, string>();
+		}
+
+		public Fiber(Manager inManager, uint inIndex)
         {
             Manager = inManager;
             Index = inIndex;

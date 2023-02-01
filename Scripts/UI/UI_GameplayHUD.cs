@@ -20,7 +20,7 @@ namespace Blabbers.Game00
 
 		void ToggleTouchInput()
 		{
-			Debug.Log("ToggleTouchInput()");
+			//Debug.Log("ToggleTouchInput()");
 			if (touchInput)
 			{
 				if (Game.IsMobile)

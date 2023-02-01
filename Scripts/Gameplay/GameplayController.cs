@@ -40,7 +40,7 @@ namespace Blabbers.Game00
             {
                 if (initialDialogue != null)
                 {
-                    Debug.Log("<GameplayController>initialDialogue");
+                    //Debug.Log("<GameplayController>initialDialogue");
                     initialDialogue.Execute(0.5f);
                 }
             }
@@ -136,9 +136,14 @@ namespace Blabbers.Game00
             Debug.Log("<GameplayController> FinalVictoryRoutine()");
 
             Routine.Start(this, Run());
-            IEnumerator Run()
+            //StartCoroutine(Run());
+
+			Debug.Log("<GameplayController> FinalVictoryRoutine() 2");
+			IEnumerator Run()
             {
-                var currentLevel = ProgressController.GameProgress.currentLevelId + 1;
+				Debug.Log("<GameplayController> FinalVictoryRoutine() _Run()");
+
+				var currentLevel = ProgressController.GameProgress.currentLevelId + 1;
                 // Extra score based on gameplay rules
                 //var extraScore = 1000 + (currentLevel * 50);
                 //var scorePenalty = Mathf.Clamp(Time.timeSinceLevelLoad, 0, 120);
@@ -194,13 +199,13 @@ namespace Blabbers.Game00
                     stars[2] = new VictoryStar(true, "star_dontRepeatLevel");
                 }
 
-                //Debug.Log($"FinalVictoryRoutine() \nisStuckOnThisLevel: {SceneLoader.isStuckOnThisLevel}");
+				//Debug.Log($"FinalVictoryRoutine() \nisStuckOnThisLevel: {SceneLoader.isStuckOnThisLevel}");
+				//Debug.Log($"FinalVictoryRoutine()\nstars[0]: {stars[0].earnedStar} | stars[1]: {stars[1].earnedStar} | stars[2]: {stars[2].earnedStar}");
 
-                Debug.Log($"FinalVictoryRoutine()\nstars[0]: {stars[0].earnedStar} | stars[1]: {stars[1].earnedStar} | stars[2]: {stars[2].earnedStar}");
+				Debug.Log("<GameplayController> FinalVictoryRoutine() _Run() end");
 
-                
 
-                yield return new WaitForSeconds(1f);
+				yield return new WaitForSeconds(1f);
 
                 // Finally shows the victory popup screen
                 Singleton.Get<UI_PopupVictoryScreen>()
@@ -210,6 +215,8 @@ namespace Blabbers.Game00
 
 
             }
-        }
+
+			Debug.Log("<GameplayController> FinalVictoryRoutine() End");
+		}
 	}
 }

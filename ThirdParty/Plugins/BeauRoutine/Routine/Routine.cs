@@ -9,6 +9,7 @@
 */
 
 using BeauRoutine.Internal;
+using LoLSDK;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -40,12 +41,18 @@ namespace BeauRoutine
 
         static private Routine s_Null = default(Routine);
 
-        #region Status
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		static void Init()
+        {
+			s_Null = default(Routine);
+		}
 
-        /// <summary>
-        /// Returns an IEnumerator that waits for the routine to finish.
-        /// </summary>
-        public IEnumerator Wait()
+		#region Status
+
+		/// <summary>
+		/// Returns an IEnumerator that waits for the routine to finish.
+		/// </summary>
+		public IEnumerator Wait()
         {
             Manager m = Manager.Get();
             if (m != null)

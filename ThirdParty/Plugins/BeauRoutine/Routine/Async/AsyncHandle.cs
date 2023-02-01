@@ -10,6 +10,8 @@
 using System;
 using System.Collections;
 using BeauRoutine.Internal;
+using LoLSDK;
+using UnityEngine;
 
 namespace BeauRoutine
 {
@@ -21,7 +23,16 @@ namespace BeauRoutine
         private AsyncWorkUnit m_Unit;
         private readonly ushort m_Serial;
 
-        internal AsyncHandle(AsyncWorkUnit inWork, ushort inSerial)
+
+
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		static void Init()
+		{
+			s_Default = default(AsyncHandle);
+		}
+
+
+		internal AsyncHandle(AsyncWorkUnit inWork, ushort inSerial)
         {
             m_Unit = inWork;
             m_Serial = inSerial;
