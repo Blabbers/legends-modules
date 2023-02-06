@@ -61,7 +61,7 @@ namespace Blabbers.Game00
 				// Applies color codes to words
 				if (GameData.Instance.textConfigs != null && !string.IsNullOrEmpty(mainText))
 				{
-					if (GameData.Instance.textConfigs.colorCodes != null && GameData.Instance.textConfigs.colorCodes.Length > 0 && applyColorCode)
+					if (GameData.Instance.textConfigs != null && GameData.Instance.textConfigs.Length > 0 && applyColorCode)
 					{
 						mainText = ApplyColorCodes(mainText);
 					}
@@ -89,7 +89,7 @@ namespace Blabbers.Game00
 
 			if (!Application.isPlaying) return mainText;
 
-			foreach (var color in GameData.Instance.textConfigs.colorCodes)
+			foreach (var color in GameData.Instance.textConfigs)
 			{
 				key = color.localization.Key;
 				term = isDevBuild ? localLanguageJson[key].Value : SharedState.languageDefs[key].Value;

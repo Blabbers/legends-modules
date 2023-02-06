@@ -1,12 +1,10 @@
 using UnityEditor;
 using UnityEngine;
-using System;
 using Blabbers.Game00;
-using Animancer;
 using Animancer.Editor;
 using System.Reflection;
 
-[CustomPropertyDrawer(typeof(LocalizedString))]
+[CustomPropertyDrawer(typeof(LocalizedString), true)]
 public class LocalizedStringDrawer : PropertyDrawer
 {
 	//Criar alguma variável para guardar a ultima key, deletar a antiga quando criar uma nova
@@ -16,14 +14,16 @@ public class LocalizedStringDrawer : PropertyDrawer
 	bool languageTriggeredOnce = false;
 
 	bool firstCheck = true;
-	HideLocalizationTextArea hideAttribute;
+	LocalizedStringOptionsAttribute options;
+	bool hasBigTextArea = true;
 	bool shouldShowTextArea = true;
 	string internalText = "";
 
 	public void OnEnable()
-	{	
-		hideAttribute = fieldInfo.GetCustomAttribute<HideLocalizationTextArea>(true);
-		shouldShowTextArea = (hideAttribute == null);
+	{
+		options = fieldInfo.GetCustomAttribute<LocalizedStringOptionsAttribute>(true);
+		shouldShowTextArea = options == null || (options != null && !options.hideArea);
+		hasBigTextArea = options != null && options.hasBigTextArea;
 		LocalizationExtensions.ResetLanguageJson();
 	}
 
@@ -58,7 +58,7 @@ public class LocalizedStringDrawer : PropertyDrawer
 		rightBlock.x = leftBlock.width;
 
 		#region Left block
-		EditorGUILayout.BeginHorizontal();
+		//EditorGUILayout.BeginHorizontal();
 		{
 			Rect currentRect;
 			float remainingSize;
@@ -104,11 +104,11 @@ public class LocalizedStringDrawer : PropertyDrawer
 			EditorGUI.LabelField(currentRect, $"{property.displayName} <color=yellow><i><b>({GetLanguageCode()})</b></i></color>", style);
 
 		}
-		EditorGUILayout.EndHorizontal();
+		//EditorGUILayout.EndHorizontal();
 		#endregion
 
 		#region Right block
-		EditorGUILayout.BeginHorizontal();
+		//EditorGUILayout.BeginHorizontal();
 		{
 			Rect currentRect;
 			float startX, finalX;
@@ -144,6 +144,8 @@ public class LocalizedStringDrawer : PropertyDrawer
 
 				menu.AddItem(new GUIContent("Edit"), false, EnableEdit);
 
+				menu.AddItem(new GUIContent("New random key"), false, GenerateNewKey);
+
 				void SetEnglish()
 				{
 					languageTriggeredOnce = true;
@@ -161,11 +163,17 @@ public class LocalizedStringDrawer : PropertyDrawer
 					editTriggeredOnce = true;
 				}
 
+				void GenerateNewKey()
+				{
+					// TODO: This needs to work properly
+					GenerateLocKey(internalKeyProp, "");					
+				}
+
 				menu.ShowAsContext();
 			}
 
 		}
-		EditorGUILayout.EndHorizontal();
+		//EditorGUILayout.EndHorizontal();
 		#endregion
 
 		Rect horizontalLine2;
@@ -185,21 +193,28 @@ public class LocalizedStringDrawer : PropertyDrawer
 
 		if (shouldShowTextArea)
 		{
-			EditorGUILayout.BeginHorizontal();
+			//EditorGUILayout.BeginHorizontal();
 			{
 				Rect currentRect;
 
 				currentRect = horizontalLine2;
-				currentRect.height = 60f;
+				currentRect.height = hasBigTextArea ? 60f : 20;
 
 
 				EditorStyles.textField.wordWrap = true;
 				controlTextName = "controlTextName";
 				GUI.SetNextControlName(controlTextName);
-				internalTextProp.stringValue = EditorGUI.TextArea(currentRect, internalText);
+				if (hasBigTextArea)
+				{
+					internalTextProp.stringValue = EditorGUI.TextArea(currentRect, internalText);
+				}
+				else
+				{
+					internalTextProp.stringValue = EditorGUI.TextField(currentRect, internalText);
+				}
 				EditorStyles.textField.wordWrap = false;
 			}
-			EditorGUILayout.EndHorizontal();
+			//EditorGUILayout.EndHorizontal();
 		}
 
 
@@ -276,7 +291,7 @@ public class LocalizedStringDrawer : PropertyDrawer
 	//Mas isso é uma outra tool, não seria aqui pelo drawer.
 	public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 	{
-		float extraHeight = 20.0f + 20f + 20f + 10f;
+		float extraHeight = hasBigTextArea ? 20.0f + 20f + 20f + 10f : 27f;
 
 		if (!shouldShowTextArea)
 		{

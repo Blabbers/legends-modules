@@ -21,9 +21,16 @@ public class TimeSpanBoxAttribute : PropertyAttribute
 	public string Format { get; }
 }
 
-
-
 [AttributeUsage(AttributeTargets.Field)]
-public class HideLocalizationTextArea : PropertyAttribute
+public class LocalizedStringOptionsAttribute : PropertyAttribute
 {
+	public LocalizedStringOptionsAttribute(bool hasBigTextArea = false, bool hideArea = false)
+	{
+		this.hideArea = hideArea;
+		this.hasBigTextArea = hasBigTextArea;
+	}
+
+	public bool hideArea;
+	public bool hasBigTextArea;
+
 }

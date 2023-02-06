@@ -6,6 +6,7 @@ using UnityEngine.Events;
 public class Tutorial : MonoBehaviour
 {
 	[SerializeField]
+	[LocalizedStringOptions(hasBigTextArea: true)]
 	private LocalizedString text;
 	[SerializeField]
 	private Writer writer;

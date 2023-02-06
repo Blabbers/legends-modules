@@ -1,10 +1,8 @@
 ﻿using BennyKok.RuntimeDebug.Utils;
 using Blabbers.Game00;
 using NaughtyAttributes;
-using SimpleJSON;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.AudioSettings;
 
 public class GameData : ScriptableObject
 {
@@ -19,8 +17,6 @@ public class GameData : ScriptableObject
         }
     }
 	#endregion
-
-
 
 	public void OnEnable()
     {
@@ -38,17 +34,18 @@ public class GameData : ScriptableObject
     [Comment("Mandatory settings for LL's build.", order = 1)]
     public int maxProgress = 8;    
     public int totalLevels = 3;    
-    [ValidateInput(nameof(HasChangedAppID), "ApplicationID must be a custom name for the game.")]
     public string applicationID = "com.blabbers.gameName";
+    
+    [Title("Text Configs", 0)]
+	public string currentSelectedLangCode = "en";
+	[ReorderableList]
+    [Tooltip("Adjust the KeyCodes that are important to be highlighted in this project.", order = 1)]
+	public LocalizationKeyCode[] textConfigs;
 
-    [Title("Text Codes", 0)]
-    [Comment("Adjust the KeyCodes that are important to be highlighted in this project.", order = 1)]
-    public TextConfigs textConfigs;
-
-    [Tooltip("Everytime a level finishes it automatically goes to the level select scene. If you populate this list, you can override this behaviour and go to a simulation screen instead for example.")]
+	[Tooltip("Everytime a level finishes it automatically goes to the level select scene. If you populate this list, you can override this behaviour and go to a simulation screen instead for example.")]
     [ReorderableList]
     public SceneToLoad[] levelSelectOverrideScenes;
-    public string currentSelectedLangCode = "en";
+    
 
     [System.Serializable]
     public struct SceneToLoad
@@ -155,10 +152,4 @@ public class Customization
     // Info for each specific level instance
     public string name;
     public int id;
-}
-
-[System.Serializable]
-public class TextConfigs
-{
-    public LocalizationKeyCode[] colorCodes;
 }

@@ -16,10 +16,13 @@ namespace Fungus
     [AddComponentMenu("")]
     public class Say : Command, ILocalizable
     {
-        // Removed this tooltip as users's reported it obscures the text box
-        //[TextArea(5,10)]
-        [SerializeField] protected LocalizedString storyText;
-		[SerializeField] protected bool applyKeyCodes = true;
+		// Removed this tooltip as users's reported it obscures the text box
+		//[TextArea(5,10)]
+		[SerializeField]
+		[LocalizedStringOptions(hasBigTextArea: true)]
+		protected LocalizedString storyText;
+		[SerializeField] 
+        protected bool applyKeyCodes = true;
 
 
 		[Tooltip("Notes about this story text for other authors, localization, etc.")]
