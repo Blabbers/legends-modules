@@ -22,7 +22,9 @@ namespace Blabbers.Game00
 
 		public TextMeshProUGUI textLevelNumberActive;
         public TextMeshProUGUI textLevelNumberLocked;
-        
+
+		public bool IsCurrentLevel => ProgressController.GameProgress.reachedLevel == myLevel - 1;
+
 #if UNITY_EDITOR
 		private void OnValidate()
 		{
@@ -52,7 +54,7 @@ namespace Blabbers.Game00
 				}
 			}
 			// level open
-			if (ProgressController.GameProgress.reachedLevel == myLevel - 1)
+			if (IsCurrentLevel)
 			{
 				foreach (var item in showWhenOpen)
 				{
@@ -61,6 +63,7 @@ namespace Blabbers.Game00
 				}
 
 				targetImage.sprite = currentBtnSprite;
+				PlayLevelNumberTTSOnClick();
 			}
 
 			// hide all stars
@@ -90,6 +93,12 @@ namespace Blabbers.Game00
             {
                 textLevelNumberLocked.text = myLevel.ToString();
             }
+		}
+
+		public void PlayLevelNumberTTSOnClick()
+		{
+			var ttsKey = "title_"+myLevel;
+			LocalizationExtensions.PlayTTS(ttsKey);			
 		}
 	}
 }
