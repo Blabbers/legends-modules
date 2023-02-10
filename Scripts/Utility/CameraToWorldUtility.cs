@@ -55,4 +55,20 @@ public static class CameraToWorldUtility
 	#endregion
 
 
+	#region Camera to World
+
+	public static Vector3 CameraPosToWorldPos(Vector3 mousePos, Camera cam, float distance)
+	{
+		Vector3 worldPosition = Vector3.zero;
+		Plane plane = new Plane(Vector3.up, 0);
+
+		Ray ray = cam.ScreenPointToRay(mousePos);
+		if (plane.Raycast(ray, out distance))
+		{
+			worldPosition = ray.GetPoint(distance);
+		}
+
+		return worldPosition;
+	}
+	#endregion
 }
