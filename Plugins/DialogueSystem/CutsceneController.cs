@@ -78,6 +78,7 @@ namespace Blabbers.Game00
 
 		public void LoadNextScene()
 		{
+			ProgressController.AddProgress();
 			if (sceneToLoadAfter != null)
 			{
 				Singleton.Get<SceneLoader>().LoadSceneByName(sceneToLoadAfter);
