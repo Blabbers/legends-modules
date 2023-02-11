@@ -40,11 +40,11 @@ public class GenericLearningTrigger : MonoBehaviour
 
 	}
 
-	protected void GenericAwake()
+	protected void GenericAwake(Transform playerTransform)
     {
 
         OnExitExplanation.AddListener(() => Singleton.Get<GameplayController>().TogglePause(false));
-        playerRef = Singleton.Get<GameplayController>().GetPlayerTransform();
+        playerRef = playerTransform;
 
 		//TutorialCallback.AddListener(() => TutorialEnd);
 	}
