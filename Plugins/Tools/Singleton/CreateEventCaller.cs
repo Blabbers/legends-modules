@@ -23,16 +23,19 @@ namespace Blabbers.Game00
 		{
 			if (instance)
 			{
-				Destroy(this.gameObject);
+				Destroy(this.gameObject);				
 				return;
 			}
-
 			instance = this;
 			DontDestroyOnLoad(this);
             SceneManager.sceneUnloaded += HandleSceneLoaded;
 		}
+		private void OnDestroy()
+		{
+			SceneManager.sceneUnloaded -= HandleSceneLoaded;
+		}
 
-        private void HandleSceneLoaded(Scene arg0)
+		private void HandleSceneLoaded(Scene arg0)
         {
             InitializeSingleton();
         }

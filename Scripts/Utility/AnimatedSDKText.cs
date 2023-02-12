@@ -1,4 +1,5 @@
 ﻿using Blabbers.Game00;
+using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -39,20 +40,35 @@ public class AnimatedSDKText : MonoBehaviour
 		{
 			loadSDK = GetComponent<LoadSDKText>();
 		}
-	} 
+	}
 	#endregion
+
+	[Button]
+	void GetComponents()
+	{
+		if (!myText)
+		{
+			myText = GetComponent<TextMeshProUGUI>();
+		}
+
+		if (!loadSDK)
+		{
+			loadSDK = GetComponent<LoadSDKText>();
+		}
+	}
 
 	private void ReproduceText(TextMeshProUGUI text)
 	{
 		Debug.Log($"ReproduceText: {text.text}".Colored("white"));
-		var narratorText = text.text;
-		text.text = "";
+		//var narratorText = text.text;
 
+		var narratorText = loadSDK.GetTargetText();
+		text.text = "";
 
 
 		hasTriggered = true;
 		Stop();
-		
+
 		started = false;
 		var actualText = "";
 		var index = 0;
@@ -134,11 +150,9 @@ public class AnimatedSDKText : MonoBehaviour
 
 	// Update is called once per frame
 	void Update()
-    {
+	{
 		if (hasTriggered || !isAnimated) return;
 		if (loadSDK.hasLoadedKey) ReproduceText(myText);
-
-
 	}
 }
 
