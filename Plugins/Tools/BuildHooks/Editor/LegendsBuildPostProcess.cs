@@ -8,7 +8,8 @@ public class LegendsBuildPostProcess
     [PostProcessBuild(1)]
     public static void OnPostprocessBuild(BuildTarget target, string pathToBuiltProject)
     {
-        TransferLolSpecFile(pathToBuiltProject);
+        // Not needed anymore, we're using the one that comes with the lolsdk editor demo
+        //TransferLolSpecFile(pathToBuiltProject);
     }
     
     private static void TransferLolSpecFile(string pathToBuiltProject)
