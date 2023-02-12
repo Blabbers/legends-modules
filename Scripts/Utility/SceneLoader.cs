@@ -53,7 +53,7 @@ namespace Blabbers.Game00
 
         public void LoadLevelSelectScene()
         {
-            if(gameData.levelSelectOverrideScenes.Length == 0)
+            if(gameData.levelSelectOverrideScenes == null || gameData.levelSelectOverrideScenes.Length == 0)
 			{
                 if (gameData.progress.FirstTimeLevelSelect && !gameData.StartCustomizationFirst)
                 {
