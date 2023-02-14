@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System;
 using UnityEngine;
-
+using NaughtyAttributes;
 
 namespace Raycast.Utility
 {
@@ -69,6 +69,72 @@ namespace Raycast.Utility
 
 
     }
+
+
+	[Serializable]
+	public class RaycastData3d
+	{
+
+		[Header("Configs")]
+		public string Name;
+		public LayerMask Mask;
+		public Color color = Color.green;
+		public float Range;
+		public float HeightOffset;
+
+		[Header("Input")]
+		public Transform Origin;
+		public Vector3 direction = Vector2.down;
+
+		[Header("Output")]
+		public Vector3 finalOrigin;
+	
+
+
+		public Vector3 GetOrigin()
+		{
+			return finalOrigin;
+		}
+
+		public Vector3 GetBaseorigin()
+		{
+			return new Vector2(Origin.transform.position.x, Origin.transform.position.y);
+		}
+
+
+		public void SetOrigin()
+		{
+			finalOrigin = new Vector3(Origin.transform.position.x, Origin.transform.position.y + HeightOffset, Origin.transform.position.z);
+		}
+
+		public void SetRelativeOrigin()
+		{
+			finalOrigin = new Vector3(Origin.transform.position.x, Origin.transform.position.y) + direction.normalized * HeightOffset;
+		}
+
+		//public void SetForwardedOrigin(Vector2 currentDir)
+		//{
+		//	finalOrigin = new Vector2(Origin.transform.position.x, Origin.transform.position.y) + (currentDir * offsetDir.x);
+		//}
+
+		//public void SetRaisedOrigin(Vector2 currentDir)
+		//{
+		//	finalOrigin = new Vector2(Origin.transform.position.x, Origin.transform.position.y) + (currentDir * offsetDir.y);
+		//}
+
+		//public void SetLocalOffsetOrigin(Vector2 forwardDir, Vector2 upDir)
+		//{
+		//	finalOrigin = new Vector2(Origin.transform.position.x, Origin.transform.position.y) + (upDir * offsetDir.y) + (forwardDir * offsetDir.x);
+		//}
+
+
+		//public void SetOffsetOrigin()
+		//{
+		//	finalOrigin = new Vector3(Origin.transform.position.x, Origin.transform.position.y) + offsetDir * HeightOffset;
+		//}
+
+
+	}
 }
 
 

@@ -1,4 +1,5 @@
 ﻿using Fungus;
+using Raycast.Utility;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -175,9 +176,22 @@ public static class GizmosUtility
 
         Gizmos.DrawLine(edge, new Vector3(origin.x, origin.y + dimensions.y, origin.z));
         Gizmos.DrawLine(edge, new Vector3(origin.x + dimensions.x, origin.y, origin.z));
-    } 
+    }
     #endregion
 
+
+
+    public static void DrawRaycastData3D(RaycastData3d data, bool hasOrigin = false)
+    {
+        if (!hasOrigin)
+        {
+            DrawRay(data.GetOrigin(), data.direction, data.color, data.Range);
+            return;
+        }
+
+
+        DrawRayWithOrigin(data.GetOrigin(), data.direction, data.color, data.Range);
+    }
 
     public enum RaycastRayType
     {

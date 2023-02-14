@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Raycast.Utility;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,6 +30,13 @@ public static class RaycastUtility
 		}
 
 		return false;
+	}
+
+
+	public static bool RaycastCheck3D(RaycastData3d data, out RaycastHit hit)
+	{
+		hit = new RaycastHit();
+		return RaycastCheck3D(data.GetOrigin(), data.direction, data.Range, data.Mask, out hit); ;
 	}
 
 }
