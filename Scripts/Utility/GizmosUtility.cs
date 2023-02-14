@@ -98,9 +98,102 @@ public static class GizmosUtility
 		List<Vector3> upperVertices = GenerateRectangleVertices(scale, upperCenter, right, forward);
 		DrawRectangle(upperVertices);
 
-        DrawCubeEdges(baseVertices, upperVertices);
+		DrawCubeEdges(baseVertices, upperVertices);
+	}
+
+
+	public static void DrawFilledCube(Transform current, BoxCollider collider, Color fillColor, Color wireColor)
+	{
+		Transform parent;
+
+		if (current.parent != null)
+		{
+			parent = current.parent;
+		}
+		else
+		{
+			parent = current;
+		}
+
+		var scaleX = collider.size.x * parent.localScale.x * current.localScale.x;
+		var scaleY = collider.size.y * parent.localScale.y * current.localScale.y;
+		var scaleZ = collider.size.z * parent.localScale.z * current.localScale.z;
+		var scale = new Vector3(scaleX, scaleY, scaleZ);
+
+		var rotation = current.rotation.eulerAngles;
+		var center = current.position + collider.center;
+
+		DrawFilledCube(scale, center, rotation, fillColor, wireColor);
+	}
+
+
+
+	public static void DrawFilledCube(Vector3 scale, Vector3 center, Vector3 rotation, Color fillColor, Color wireColor)
+	{
+		var up = Vector3.up.Rotated(rotation);
+		var right = Vector3.right.Rotated(rotation);
+		var forward = Vector3.forward.Rotated(rotation);
+
+
+		Vector3 baseCenter, upperCenter;
+		baseCenter = center - up * scale.y / 2;
+		upperCenter = center + up * scale.y / 2;
+
+
+		List<Vector3> baseVertices = GenerateRectangleVertices(scale, baseCenter, right, forward);
+		//DrawRectangle(baseVertices);
+
+		List<Vector3> upperVertices = GenerateRectangleVertices(scale, upperCenter, right, forward);
+		//DrawRectangle(upperVertices);
+
+
+        Handles.DrawSolidRectangleWithOutline(baseVertices.ToArray(), fillColor, wireColor);
+		Handles.DrawSolidRectangleWithOutline(upperVertices.ToArray(), fillColor, wireColor);
+
+
+		DrawSideRectangles(baseVertices, upperVertices, fillColor, wireColor);
+		//DrawCubeEdges(baseVertices, upperVertices);
+	}
+	static void DrawSideRectangles(List<Vector3> basePoints, List<Vector3> upperPoints, Color fillColor, Color wireColor)
+	{
+        List<Vector3> rect1, rect2, rect3, rect4;
+
+        rect1 = new List<Vector3>();
+        rect1.Add(basePoints[0]);
+		rect1.Add(basePoints[1]);
+		rect1.Add(upperPoints[1]);
+		rect1.Add(upperPoints[0]);
+
+		Handles.DrawSolidRectangleWithOutline(rect1.ToArray(), fillColor, wireColor);
+
+		rect2 = new List<Vector3>();
+		rect2.Add(basePoints[1]);
+		rect2.Add(basePoints[2]);
+		rect2.Add(upperPoints[2]);
+		rect2.Add(upperPoints[1]);
+
+		Handles.DrawSolidRectangleWithOutline(rect2.ToArray(), fillColor, wireColor);
+
+		rect3 = new List<Vector3>();
+		rect3.Add(basePoints[2]);
+		rect3.Add(basePoints[3]);
+		rect3.Add(upperPoints[3]);
+		rect3.Add(upperPoints[2]);
+
+		Handles.DrawSolidRectangleWithOutline(rect3.ToArray(), fillColor, wireColor);
+
+		rect4 = new List<Vector3>();
+		rect4.Add(basePoints[3]);
+		rect4.Add(basePoints[0]);
+		rect4.Add(upperPoints[0]);
+		rect4.Add(upperPoints[3]);
+
+		Handles.DrawSolidRectangleWithOutline(rect4.ToArray(), fillColor, wireColor);
+
 
 	}
+
+
 
 	static void DrawRectangle(List<Vector3> points)
 	{
@@ -142,6 +235,8 @@ public static class GizmosUtility
         }
     }
 
+
+
 	#endregion
 
 	#region 2d Shapes
@@ -181,16 +276,16 @@ public static class GizmosUtility
 
 
 
-    public static void DrawRaycastData3D(RaycastData3d data, bool hasOrigin = false)
+    public static void DrawRaycastData3D(RaycastData3d data, float pointRadius = 0.2f ,bool hasOrigin = false)
     {
         if (!hasOrigin)
         {
-            DrawRay(data.GetOrigin(), data.direction, data.color, data.Range);
+            DrawRay(data.GetOrigin(), data.direction, data.color, data.Range, pointRadius);
             return;
         }
 
 
-        DrawRayWithOrigin(data.GetOrigin(), data.direction, data.color, data.Range);
+        DrawRayWithOrigin(data.GetOrigin(), data.direction, data.color, data.Range, pointRadius);
     }
 
     public enum RaycastRayType
