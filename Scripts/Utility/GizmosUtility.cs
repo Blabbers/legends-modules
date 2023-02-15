@@ -144,14 +144,14 @@ public static class GizmosUtility
 		//DrawRectangle(baseVertices);
 
 		List<Vector3> upperVertices = GenerateRectangleVertices(scale, upperCenter, right, forward);
-		//DrawRectangle(upperVertices);
+        //DrawRectangle(upperVertices);
 
-
+#if UNITY_EDITOR
         Handles.DrawSolidRectangleWithOutline(baseVertices.ToArray(), fillColor, wireColor);
 		Handles.DrawSolidRectangleWithOutline(upperVertices.ToArray(), fillColor, wireColor);
+#endif
 
-
-		DrawSideRectangles(baseVertices, upperVertices, fillColor, wireColor);
+        DrawSideRectangles(baseVertices, upperVertices, fillColor, wireColor);
 		//DrawCubeEdges(baseVertices, upperVertices);
 	}
 	static void DrawSideRectangles(List<Vector3> basePoints, List<Vector3> upperPoints, Color fillColor, Color wireColor)
@@ -164,7 +164,7 @@ public static class GizmosUtility
 		rect1.Add(upperPoints[1]);
 		rect1.Add(upperPoints[0]);
 
-		Handles.DrawSolidRectangleWithOutline(rect1.ToArray(), fillColor, wireColor);
+
 
 		rect2 = new List<Vector3>();
 		rect2.Add(basePoints[1]);
@@ -172,7 +172,7 @@ public static class GizmosUtility
 		rect2.Add(upperPoints[2]);
 		rect2.Add(upperPoints[1]);
 
-		Handles.DrawSolidRectangleWithOutline(rect2.ToArray(), fillColor, wireColor);
+
 
 		rect3 = new List<Vector3>();
 		rect3.Add(basePoints[2]);
@@ -180,7 +180,7 @@ public static class GizmosUtility
 		rect3.Add(upperPoints[3]);
 		rect3.Add(upperPoints[2]);
 
-		Handles.DrawSolidRectangleWithOutline(rect3.ToArray(), fillColor, wireColor);
+
 
 		rect4 = new List<Vector3>();
 		rect4.Add(basePoints[3]);
@@ -188,7 +188,13 @@ public static class GizmosUtility
 		rect4.Add(upperPoints[0]);
 		rect4.Add(upperPoints[3]);
 
+
+#if UNITY_EDITOR
+		Handles.DrawSolidRectangleWithOutline(rect1.ToArray(), fillColor, wireColor);
+		Handles.DrawSolidRectangleWithOutline(rect2.ToArray(), fillColor, wireColor);
+		Handles.DrawSolidRectangleWithOutline(rect3.ToArray(), fillColor, wireColor);
 		Handles.DrawSolidRectangleWithOutline(rect4.ToArray(), fillColor, wireColor);
+#endif
 
 
 	}
