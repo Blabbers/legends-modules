@@ -143,8 +143,14 @@ namespace Blabbers.Game00
 		}
 
 
-		public string GetTargetText()
+		public string GetTargetTextForAnimatedSDKText()
 		{
+			if (string.IsNullOrEmpty(targetText))
+			{
+				isAnimated = true;
+				UpdateText();
+			}
+
 			return targetText;
 		}
 

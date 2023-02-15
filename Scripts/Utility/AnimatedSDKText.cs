@@ -62,7 +62,7 @@ public class AnimatedSDKText : MonoBehaviour
 		Debug.Log($"ReproduceText: {text.text}".Colored("white"));
 		//var narratorText = text.text;
 
-		var narratorText = loadSDK.GetTargetText();
+		var narratorText = loadSDK.GetTargetTextForAnimatedSDKText();
 		text.text = "";
 
 
