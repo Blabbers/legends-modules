@@ -37,6 +37,7 @@ namespace Blabbers.Game00
 		public bool HasKey => !string.IsNullOrEmpty(key);
 		public bool hasLoadedKey =false;
 
+		public string appendLeft, appendRight;
 
 		private void Awake()
 		{
@@ -115,7 +116,7 @@ namespace Blabbers.Game00
 		{
 			if(isAnimated)
 			{
-				targetText = LocalizationExtensions.LocalizeText(key, null, null, applyColorCodes);
+				targetText = LocalizationExtensions.LocalizeText(key, appendLeft, appendRight, applyColorCodes);
 				hasLoadedKey = true;
 				return;
 			}
@@ -124,19 +125,19 @@ namespace Blabbers.Game00
 			if (myTextM)
 			{
 				//myTextM.text = LocalizationExtensions.LocalizeText(key);
-				myTextM.text = LocalizationExtensions.LocalizeText(key,null,null, applyColorCodes);
+				myTextM.text = LocalizationExtensions.LocalizeText(key, appendLeft, appendRight, applyColorCodes);
 				hasLoadedKey = true;
 			}
 			if (myText)
 			{
 				//myText.text = LocalizationExtensions.LocalizeText(key);
-				myText.text = LocalizationExtensions.LocalizeText(key, null, null, applyColorCodes);
+				myText.text = LocalizationExtensions.LocalizeText(key, appendLeft, appendRight, applyColorCodes);
 				hasLoadedKey = true;
 			}
 			if (myTextP)
 			{
 				//myTextP.text = LocalizationExtensions.LocalizeText(key);
-				myTextP.text = LocalizationExtensions.LocalizeText(key, null, null, applyColorCodes);
+				myTextP.text = LocalizationExtensions.LocalizeText(key, appendLeft, appendRight, applyColorCodes);
 				hasLoadedKey = true;
 			}
 		}
@@ -224,19 +225,19 @@ namespace Blabbers.Game00
 				if (myText)
 				{
 					UnityEditor.Undo.RecordObject(myTextM, "LoadSDK Load Text");
-					myText.text = text;
+					myText.text = appendLeft + text + appendRight;
 					UnityEditor.EditorUtility.SetDirty(myTextM);
 				}
 				if (myTextM)
 				{
 					UnityEditor.Undo.RecordObject(myTextM, "LoadSDK Load Text");
-					myTextM.text = text;
+					myTextM.text = appendLeft + text + appendRight;
 					UnityEditor.EditorUtility.SetDirty(myTextM);
 				}
 				if (myTextP)
 				{
 					UnityEditor.Undo.RecordObject(myTextM, "LoadSDK Load Text");
-					myTextP.text = text;
+					myTextP.text = appendLeft + text + appendRight;
 					UnityEditor.EditorUtility.SetDirty(myTextM);
 				}
 			}
