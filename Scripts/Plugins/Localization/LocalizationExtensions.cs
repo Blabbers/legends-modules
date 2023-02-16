@@ -171,66 +171,6 @@ namespace Blabbers.Game00
 			return termFormat;
 		}
 
-
-		//private static string FindAndColorTerm(string term, string mainText, Color color, out bool success)
-		//{
-		//	success = true;
-
-		//	string hex = Utils.ColorToHex(color);
-
-
-		//	Debug.Log($"FindAndColorTerm: [{term}] with color [{hex}]");
-
-		//	//First check
-		//	if (mainText.Contains(term))
-		//	{
-		//		mainText = mainText.Replace(term, $"<color=#{hex}>{term}</color>");
-		//		//Debug.Log($"Replacing: {term} -> <color=#{hex}>{term}</color> \n{mainText}");
-		//		return mainText;
-		//	}
-
-		//	//Check all lowercase
-		//	term = term.ToLower();
-
-		//	if (mainText.Contains(term))
-		//	{
-		//		mainText = mainText.Replace(term, $"<color=#{hex}>{term}</color>");
-		//		//Debug.Log($"(To lower) Replacing: {term} -> <color=#{hex}>{term}</color> \n{mainText}");
-		//		return mainText;
-		//	}
-
-
-		//	//Check all uppercase
-		//	term = term.ToUpper();
-
-		//	if (mainText.Contains(term))
-		//	{
-		//		mainText = mainText.Replace(term, $"<color=#{hex}>{term}</color>");
-		//		//Debug.Log($"(To upper) Replacing: {term} -> <color=#{hex}>{term}</color> \n{mainText}");
-		//		return mainText;
-		//	}
-
-
-		//	//Check first letter capitalized
-
-		//	term = term.ToLower();
-
-		//	if (term.Length == 1) term = "" + char.ToUpper(term[0]);
-		//	else term = char.ToUpper(term[0]) + term.Substring(1);
-
-
-		//	if (mainText.Contains(term))
-		//	{
-		//		mainText = mainText.Replace(term, $"<color=#{hex}>{term}</color>");
-		//		//Debug.Log($"(first letter cap) Replacing: {term} -> <color=#{hex}>{term}</color> \n{mainText}");
-		//		return mainText;
-		//	}
-
-
-		//	success = false;
-		//	return mainText;
-		//}
-
 		public static void PlayTTS(string key)
 		{
 			try
@@ -294,11 +234,25 @@ namespace Blabbers.Game00
 			}
 
 
-			//Debug.Log($"EditorLoadFromLanguageJson() key [{key}] " +
-			//	$"\njson is null? {(json == null)} ".Colored("orange") +
-			//	$"| langCode: [{langCode}]".Colored(""));
+			Debug.Log($"EditorLoadFromLanguageJson() key [{key}] " +
+				$"\njson is null? {(json == null)} ".Colored("orange") +
+				$"| langCode: [{langCode}]".Colored(""));
 
 			var node = json[langCode]; // This is null after opening the project
+
+
+			Debug.Log($"EditorLoadFromLanguageJson() key [{key}] " +
+				$"\nnode is null? {(node == null)} ".Colored("orange"));
+
+			if(node == null)
+			{
+				if (displayMessages)
+				{
+					Debug.Log($"<color=red>File language.json was NOT loaded bacause it is NULL.</color>", unityObject);
+				}
+				return "";
+
+			}
 
 			if (string.IsNullOrEmpty(key))
 			{

@@ -84,7 +84,8 @@ namespace Raycast.Utility
 
 		[Header("Input")]
 		public Transform Origin;
-		public Vector3 direction = Vector2.down;
+		public Vector3 offsetDir = Vector3.zero;
+		public Vector3 direction = Vector3.down;
 
 		[Header("Output")]
 		public Vector3 finalOrigin;
@@ -122,10 +123,12 @@ namespace Raycast.Utility
 		//	finalOrigin = new Vector2(Origin.transform.position.x, Origin.transform.position.y) + (currentDir * offsetDir.y);
 		//}
 
-		//public void SetLocalOffsetOrigin(Vector2 forwardDir, Vector2 upDir)
-		//{
-		//	finalOrigin = new Vector2(Origin.transform.position.x, Origin.transform.position.y) + (upDir * offsetDir.y) + (forwardDir * offsetDir.x);
-		//}
+		public void SetLocalOffsetOrigin(Vector3 forwardDir, Vector3 upDir)
+		{
+			//finalOrigin = new Vector3(Origin.transform.position.x, Origin.transform.position.y) + (upDir * offsetDir.y) + (forwardDir * offsetDir.x);
+			finalOrigin = new Vector3(Origin.transform.position.x, Origin.transform.position.y, Origin.transform.position.z) 
+				+ (upDir * offsetDir.y) + (forwardDir * offsetDir.z);
+		}
 
 
 		//public void SetOffsetOrigin()
