@@ -5,8 +5,10 @@ using TMPro;
 using System.Collections.Generic;
 using SimpleJSON;
 using System.IO;
-using Fungus;
-using static UnityEngine.AudioSettings;
+using System.Collections;
+using UnityEngine.Networking;
+using System;
+using Object = UnityEngine.Object;
 
 namespace Blabbers.Game00
 {
@@ -14,7 +16,7 @@ namespace Blabbers.Game00
 	{
 		public static HashSet<string> AlreadyPlayedTTS = new HashSet<string>();
 		public static bool HasPlayedTTS(string key) => AlreadyPlayedTTS.Contains(key);
-		private static JSONNode localLanguageJson;
+		private static JSONNode localLanguageJson = null;
 
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
 		static void Init()
@@ -192,8 +194,14 @@ namespace Blabbers.Game00
 		}
 		public static JSONNode GetLanguageJson()
 		{
-			//Debug.Log("Force? "+ forceLoadJsonFile + " / Null? " + (localLanguageJson == null));
-			if (localLanguageJson != null) return localLanguageJson;
+			//Debug.Log("Force? "+ forceLoadJsonFile + " / Null? " + (localLanguageJson == null));						
+			if (localLanguageJson != null)
+			{
+				Debug.Log("LanguageJson [0] = " + localLanguageJson.Count + "...");
+				return localLanguageJson;
+			}
+
+			Debug.Log("LanguageJson [1]");
 
 			const string languageJSONFilePath = "language.json";
 			// Load Dev Language File from StreamingAssets
@@ -203,10 +211,24 @@ namespace Blabbers.Game00
 				string langDataAsJson = File.ReadAllText(langFilePath);
 				JSONNode langDefs = JSON.Parse(langDataAsJson);
 				localLanguageJson = langDefs;
+				Debug.Log("LanguageJson [2]");
 				return (langDefs);
 			}
+			Debug.Log("LanguageJson [3]");
 			return "";
 
+		}
+
+		public static IEnumerator LoadLanguageFileForDevBuild(Action onFinish)
+		{
+			const string languageJSONFilePath = "language.json";
+			// Load Dev Language File from StreamingAssets
+			var langFilePath = Path.Combine(Application.streamingAssetsPath, languageJSONFilePath);
+			var uwr = UnityWebRequest.Get(langFilePath);
+			yield return uwr.SendWebRequest();
+			var langDataAsJson = uwr.downloadHandler.text;
+			localLanguageJson = JSON.Parse(langDataAsJson);
+			onFinish?.Invoke();
 		}
 
 		public static void EditorSaveToLanguageJson(string key, string value, Object unityObject = null, string langCode = "en")
