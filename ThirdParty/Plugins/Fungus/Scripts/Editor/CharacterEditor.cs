@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Fungus.EditorUtils
 {
-    [CustomEditor (typeof(Character))]
+    /*//[CustomEditor (typeof(Character))]
     public class CharacterEditor : Editor
     {
         protected SerializedProperty nameTextProp;
@@ -14,8 +14,7 @@ namespace Fungus.EditorUtils
         protected SerializedProperty soundEffectProp;
         protected SerializedProperty portraitsProp;
         protected SerializedProperty portraitsFaceProp;
-        protected SerializedProperty descriptionProp;
-        protected SerializedProperty setSayDialogProp;
+        protected SerializedProperty descriptionProp;        
 
         protected virtual void OnEnable()
         {
@@ -24,8 +23,7 @@ namespace Fungus.EditorUtils
             soundEffectProp = serializedObject.FindProperty ("soundEffect");
             portraitsProp = serializedObject.FindProperty ("portraits");
             portraitsFaceProp = serializedObject.FindProperty ("portraitsFace");
-            descriptionProp = serializedObject.FindProperty ("description");
-            setSayDialogProp = serializedObject.FindProperty("setSayDialog");
+            descriptionProp = serializedObject.FindProperty ("description");            
         }
 
         public override void OnInspectorGUI() 
@@ -37,8 +35,7 @@ namespace Fungus.EditorUtils
 
             EditorGUILayout.PropertyField(nameTextProp, new GUIContent("Name Text", "Name of the character display in the dialog"));
             EditorGUILayout.PropertyField(nameColorProp, new GUIContent("Name Color", "Color of name text display in the dialog"));
-            EditorGUILayout.PropertyField(soundEffectProp, new GUIContent("Sound Effect", "Sound to play when the character is talking. Overrides the setting in the Dialog."));
-            EditorGUILayout.PropertyField(setSayDialogProp);
+            EditorGUILayout.PropertyField(soundEffectProp, new GUIContent("Sound Effect", "Sound to play when the character is talking. Overrides the setting in the Dialog."));            
             EditorGUILayout.PropertyField(descriptionProp, new GUIContent("Description", "Notes about this story character (personality, attibutes, etc.)"));
 
             if (t.Portraits != null &&
@@ -82,5 +79,5 @@ namespace Fungus.EditorUtils
             serializedObject.ApplyModifiedProperties();
         }
 
-    }
+    }*/
 }

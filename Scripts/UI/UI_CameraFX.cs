@@ -114,6 +114,8 @@ public class UI_CameraFX : MonoBehaviour, ISingleton
 		//Debug.Log("UI_CameraFX - HideCinematicBlackBars -> Callback");
 
 		cinematicBarTop.OnAnimationFinished.AddListener(callback);
+		//Temporarily, we just call the callback right away because there is no animation
+		callback?.Invoke();// Remove this call later
 		cinematicBlackBars.SetActive(false);
 	}
 

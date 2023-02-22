@@ -54,7 +54,11 @@ namespace Blabbers.Game00
 				// If this text was loaded by the LoL platform.
 				if(SharedState.languageDefs != null)
 				{
-					mainText = SharedState.languageDefs[localizationKey]?.Value;
+					var node = SharedState.languageDefs[localizationKey];
+					if (node != null)
+					{
+						mainText = node.Value;
+					}					
 				}
 			}
 
@@ -177,7 +181,7 @@ namespace Blabbers.Game00
 		{
 			try
 			{
-				Debug.Log("PlayTTS → EnableAutomaticTTS: " + ProgressController.GameProgress.enableAutomaticTTS);
+				Debug.Log($"PlayTTS → [{key}] / Enabled [{ProgressController.GameProgress.enableAutomaticTTS}]");
 				if (ProgressController.GameProgress.enableAutomaticTTS)
 				{
 					LOLSDK.Instance?.SpeakText(key);
@@ -194,15 +198,10 @@ namespace Blabbers.Game00
 		}
 		public static JSONNode GetLanguageJson()
 		{
-			//Debug.Log("Force? "+ forceLoadJsonFile + " / Null? " + (localLanguageJson == null));						
 			if (localLanguageJson != null)
 			{
-				Debug.Log("LanguageJson [0] = " + localLanguageJson.Count + "...");
 				return localLanguageJson;
 			}
-
-			Debug.Log("LanguageJson [1]");
-
 			const string languageJSONFilePath = "language.json";
 			// Load Dev Language File from StreamingAssets
 			string langFilePath = Path.Combine(Application.streamingAssetsPath, languageJSONFilePath);
@@ -211,12 +210,9 @@ namespace Blabbers.Game00
 				string langDataAsJson = File.ReadAllText(langFilePath);
 				JSONNode langDefs = JSON.Parse(langDataAsJson);
 				localLanguageJson = langDefs;
-				Debug.Log("LanguageJson [2]");
 				return (langDefs);
 			}
-			Debug.Log("LanguageJson [3]");
 			return "";
-
 		}
 
 		public static IEnumerator LoadLanguageFileForDevBuild(Action onFinish)
@@ -255,16 +251,7 @@ namespace Blabbers.Game00
 				langCode = "en";
 			}
 
-
-			Debug.Log($"EditorLoadFromLanguageJson() key [{key}] " +
-				$"\njson is null? {(json == null)} ".Colored("orange") +
-				$"| langCode: [{langCode}]".Colored(""));
-
 			var node = json[langCode]; // This is null after opening the project
-
-
-			Debug.Log($"EditorLoadFromLanguageJson() key [{key}] " +
-				$"\nnode is null? {(node == null)} ".Colored("orange"));
 
 			if(node == null)
 			{
@@ -273,7 +260,6 @@ namespace Blabbers.Game00
 					Debug.Log($"<color=red>File language.json was NOT loaded bacause it is NULL.</color>", unityObject);
 				}
 				return "";
-
 			}
 
 			if (string.IsNullOrEmpty(key))

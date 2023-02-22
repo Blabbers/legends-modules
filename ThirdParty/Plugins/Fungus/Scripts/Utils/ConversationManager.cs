@@ -100,14 +100,7 @@ namespace Fungus
 
         protected virtual SayDialog GetSayDialog(Character character)
         {
-            SayDialog sayDialog = null;
-            if (character != null)
-            {
-                if (character.SetSayDialog != null)
-                {
-                    sayDialog = character.SetSayDialog;
-                }
-            }
+            SayDialog sayDialog = null;            
 
             if (sayDialog == null)
             {

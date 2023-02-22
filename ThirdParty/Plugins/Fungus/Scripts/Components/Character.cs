@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 using System.Collections.Generic;
 using System.Globalization;
+using NaughtyAttributes;
 
 namespace Fungus
 {
@@ -12,9 +13,16 @@ namespace Fungus
     /// A Character that can be used in dialogue via the Say, Conversation and Portrait commands.
     /// </summary>
     [ExecuteInEditMode]
-    public class Character : MonoBehaviour, ILocalizable, IComparer<Character>
+    [CreateAssetMenu]
+    public class Character : ScriptableObject, IComparer<Character>
     {
-        [Tooltip("Character name as displayed in Say Dialog.")]
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		static void Init()
+		{
+			activeCharacters = new List<Character>();
+		}
+
+		[Tooltip("Character name as displayed in Say Dialog.")]
         [SerializeField] protected string nameText; // We need a separate name as the object name is used for character variations (e.g. "Smurf Happy", "Smurf Sad")
 
         [Tooltip("Color to display the character name in Say Dialog.")]
@@ -22,15 +30,13 @@ namespace Fungus
 
         [Tooltip("Sound effect to play when this character is speaking.")]
         [SerializeField] protected AudioClip soundEffect;
-
-        [Tooltip("List of portrait images that can be displayed for this character.")]
+        [ShowAssetPreview]
+		[ReorderableList]
+		[Tooltip("List of portrait images that can be displayed for this character.")]
         [SerializeField] protected List<Sprite> portraits;
 
         [Tooltip("Direction that portrait sprites face.")]
         [SerializeField] protected FacingDirection portraitsFace;
-
-        [Tooltip("Sets the active Say dialog with a reference to a Say Dialog object in the scene. This Say Dialog will be used whenever the character speaks.")]
-        [SerializeField] protected SayDialog setSayDialog;
 
         [FormerlySerializedAs("notes")]
         [TextArea(5,10)]
@@ -100,14 +106,9 @@ namespace Fungus
         public virtual PortraitState State { get { return portaitState; } }
 
         /// <summary>
-        /// Sets the active Say dialog with a reference to a Say Dialog object in the scene. This Say Dialog will be used whenever the character speaks.
-        /// </summary>
-        public virtual SayDialog SetSayDialog { get { return setSayDialog; } }
-
-        /// <summary>
         /// Returns the name of the game object.
         /// </summary>
-        public string GetObjectName() { return gameObject.name; }
+        public string GetObjectName() { return name; }
 
         /// <summary>
         /// Returns true if the character name starts with the specified string. Case insensitive.
@@ -167,37 +168,12 @@ namespace Fungus
 
         #endregion
 
-        #region ILocalizable implementation
-
-        public virtual string GetStandardText()
-        {
-            return nameText;
-        }
-
-        public virtual void SetStandardText(string standardText)
-        {
-            nameText = standardText;
-        }
-
-        public virtual string GetDescription()
-        {
-            return description;
-        }
-
-        public virtual string GetStringId()
-        {
-            // String id for character names is CHARACTER.<Character Name>
-            return "CHARACTER." + nameText;
-        }
-
-        #endregion
-
-        protected virtual void OnValidate()
-        {
-            if (portraits != null && portraits.Count > 1)
-            {
-                portraits.Sort(PortraitUtil.PortraitCompareTo);
-            }
-        }
+        //protected virtual void OnValidate()
+        //{
+        //    if (portraits != null && portraits.Count > 1)
+        //    {
+        //        portraits.Sort(PortraitUtil.PortraitCompareTo);
+        //    }
+        //}
     }
 }

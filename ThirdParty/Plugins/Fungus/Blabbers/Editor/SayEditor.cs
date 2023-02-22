@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace Fungus.EditorUtils
 {
     //[CustomEditor (typeof(Say))]
-    public class SayEditor : CommandEditor
+    /*public class SayEditor : CommandEditor
     {
         public static bool showTagHelp;
         public Texture2D blackTex;
@@ -79,8 +79,7 @@ namespace Fungus.EditorUtils
         protected SerializedProperty extendPreviousProp;
         protected SerializedProperty fadeWhenDoneProp;
         protected SerializedProperty waitForClickProp;
-        protected SerializedProperty stopVoiceoverProp;
-        protected SerializedProperty setSayDialogProp;
+        protected SerializedProperty stopVoiceoverProp;        
         protected SerializedProperty waitForVOProp;
 
         public override void OnEnable()
@@ -98,7 +97,6 @@ namespace Fungus.EditorUtils
             fadeWhenDoneProp = serializedObject.FindProperty("fadeWhenDone");
             waitForClickProp = serializedObject.FindProperty("waitForClick");
             stopVoiceoverProp = serializedObject.FindProperty("stopVoiceover");
-            setSayDialogProp = serializedObject.FindProperty("setSayDialog");
             waitForVOProp = serializedObject.FindProperty("waitForVO");
 
             if (blackTex == null)
@@ -117,13 +115,13 @@ namespace Fungus.EditorUtils
             serializedObject.Update();
 
             bool showPortraits = false;
-            CommandEditor.ObjectField<Character>(characterProp,
-                                                new GUIContent("Character", "Character that is speaking"),
-                                                new GUIContent("<None>"),
-                                                Character.ActiveCharacters);
+            //CommandEditor.ObjectField<Character>(characterProp,
+            //                                    new GUIContent("Character", "Character that is speaking"),
+            //                                    new GUIContent("<None>"),
+            //                                    Character.ActiveCharacters);
 
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.PrefixLabel(" ");
+            EditorGUILayout.PrefixLabel("Character");
             characterProp.objectReferenceValue = (Character) EditorGUILayout.ObjectField(characterProp.objectReferenceValue, typeof(Character), true);
             EditorGUILayout.EndHorizontal();
 
@@ -134,7 +132,7 @@ namespace Fungus.EditorUtils
                 t._Character.Portraits != null &&    // Character has a portraits field
                 t._Character.Portraits.Count > 0 )   // Selected Character has at least 1 portrait
             {
-                showPortraits = true;    
+                showPortraits = true;
             }
 
             if (showPortraits) 
@@ -197,7 +195,6 @@ namespace Fungus.EditorUtils
             EditorGUILayout.PropertyField(fadeWhenDoneProp);
             EditorGUILayout.PropertyField(waitForClickProp);
             EditorGUILayout.PropertyField(stopVoiceoverProp);
-            EditorGUILayout.PropertyField(setSayDialogProp);
             EditorGUILayout.PropertyField(waitForVOProp);
             
             if (showPortraits && t.Portrait != null)
@@ -213,5 +210,5 @@ namespace Fungus.EditorUtils
             
             serializedObject.ApplyModifiedProperties();
         }
-    }    
+    }    */
 }

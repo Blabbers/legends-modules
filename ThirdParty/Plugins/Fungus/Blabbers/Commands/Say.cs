@@ -1,8 +1,10 @@
 // This code is part of the Fungus library (https://github.com/snozbot/fungus)
 // It is released for free under the MIT open source license (https://github.com/snozbot/fungus/blob/master/LICENSE)
 
+using Animancer;
 using Blabbers.Game00;
 using NaughtyAttributes;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Fungus
@@ -14,7 +16,7 @@ namespace Fungus
                  "Say",
                  "Writes text in a dialog box.")]
     [AddComponentMenu("")]
-    public class Say : Command, ILocalizable
+    public class Say : Command
     {
 		// Removed this tooltip as users's reported it obscures the text box
 		//[TextArea(5,10)]
@@ -23,46 +25,49 @@ namespace Fungus
 		protected LocalizedString storyText;
 		[SerializeField] 
         protected bool applyKeyCodes = true;
-
-
-		[Tooltip("Notes about this story text for other authors, localization, etc.")]
-        [SerializeField] protected string description = "";
+                
+		[Tooltip("Plays Text-to-Speech when this command starts")]
+		[SerializeField] protected bool playTTS = true;
 
         [Tooltip("Character that is speaking")]
         [SerializeField] protected Character character;
 
-        [Tooltip("Portrait that represents speaking character")]
-        [SerializeField] protected Sprite portrait;
+		[Tooltip("Portrait that represents speaking character")]
+        //[ShowAssetPreview]
+        [HideIf(nameof(HasNoCharacter))]
+        [Dropdown(nameof(GetPortraits))]		
+		[SerializeField] protected Sprite portrait;
+        private List<Sprite> GetPortraits() => character != null ? character.Portraits : null;
+        private bool HasNoCharacter() => character == null;
+		
 
-        [Tooltip("Voiceover audio to play when writing the text")]
-        [SerializeField] protected AudioClip voiceOverClip;
+		//[Tooltip("Voiceover audio to play when writing the text")]
+        //protected AudioClip voiceOverClip;
 
         [Tooltip("Always show this Say text when the command is executed multiple times")]
         [SerializeField] protected bool showAlways = true;
-
+        
         [Tooltip("Number of times to show this Say text when the command is executed multiple times")]
-        [SerializeField] protected int showCount = 1;
+        [HideIf(nameof(showAlways))]
+		[SerializeField] protected int showCount = 1;
 
-        [Tooltip("Type this text in the previous dialog box.")]
-        [SerializeField] protected bool extendPrevious = false;
 
-        [Tooltip("Fade out the dialog box when writing has finished and not waiting for input.")]
-        [SerializeField] protected bool fadeWhenDone = true;
+		//[Tooltip("Type this text in the previous dialog box.")]
+		//[SerializeField] protected bool extendPrevious = false;
 
-        [Tooltip("Wait for player to click before continuing.")]
-        [SerializeField] protected bool waitForClick = true;
+		//[Tooltip("Fade out the dialog box when writing has finished and not waiting for input.")]
+		//[SerializeField] protected bool fadeWhenDone = true;
 
-        [Tooltip("Stop playing voiceover when text finishes writing.")]
-        [SerializeField] protected bool stopVoiceover = true;
-        
-        [Tooltip("Wait for the Voice Over to complete before continuing")]
-        [SerializeField] protected bool waitForVO = false;        
-        
-        //add wait for vo that overrides stopvo
-        [Tooltip("Sets the active Say dialog with a reference to a Say Dialog object in the scene. All story text will now display using this Say Dialog.")]
-        [SerializeField] protected SayDialog setSayDialog;
+		//[Tooltip("Wait for player to click before continuing.")]
+		//[SerializeField] protected bool waitForClick = true;
 
-        protected int executionCount;
+		//[Tooltip("Stop playing voiceover when text finishes writing.")]
+		//[SerializeField] protected bool stopVoiceover = true;
+
+		//[Tooltip("Wait for the Voice Over to complete before continuing")]
+		//[SerializeField] protected bool waitForVO = false;        
+
+		protected int executionCount;
 
         #region Public members
 
@@ -76,11 +81,6 @@ namespace Fungus
         /// </summary>
         public virtual Sprite Portrait { get { return portrait; } set { portrait = value; } }
 
-        /// <summary>
-        /// Type this text in the previous dialog box.
-        /// </summary>
-        public virtual bool ExtendPrevious { get { return extendPrevious; } }
-
 		public override void OnEnter()
         {
             if (!showAlways && executionCount >= showCount)
@@ -90,17 +90,6 @@ namespace Fungus
             }
 
             executionCount++;
-
-            // Override the active say dialog if needed
-            if (character != null && character.SetSayDialog != null)
-            {
-                SayDialog.ActiveSayDialog = character.SetSayDialog;
-            }
-
-            if (setSayDialog != null)
-            {
-                SayDialog.ActiveSayDialog = setSayDialog;
-            }
 
             var sayDialog = SayDialog.GetSayDialog();
             if (sayDialog == null)
@@ -131,7 +120,9 @@ namespace Fungus
 
             string subbedText = flowchart.SubstituteVariables(displayText);
 
-            sayDialog.Say(subbedText, !extendPrevious, waitForClick, fadeWhenDone, stopVoiceover, waitForVO, voiceOverClip, delegate {
+			LocalizationExtensions.PlayTTS(storyText.Key);
+
+			sayDialog.Say(subbedText, true, true, true, true, false, null, delegate {
                 Continue();
             });
         }
@@ -143,15 +134,15 @@ namespace Fungus
             {
                 namePrefix = character.NameText + ": ";
             }
-            if (extendPrevious)
-            {
-                namePrefix = "EXTEND" + ": ";
-            }
+            //if (extendPrevious)
+            //{
+            //    namePrefix = "EXTEND" + ": ";
+            //}
 			if (storyText.HasUnsavedChanges())
 			{
                 namePrefix = "<color=red><b>* UNSAVED CHANGES *</b></color> " + namePrefix;
             }
-            return namePrefix + "\"" + storyText + "\"";
+            return namePrefix + "\"" + storyText.GetRawText() + "\"";
         }
 
         public override Color GetButtonColor()
@@ -173,37 +164,6 @@ namespace Fungus
             }
 
             sayDialog.Stop();
-        }
-
-        #endregion
-
-        #region ILocalizable implementation
-
-        public virtual string GetStandardText()
-        {
-            return storyText;
-        }
-
-        public virtual void SetStandardText(string standardText)
-        {
-            storyText.Text = standardText;
-        }
-
-        public virtual string GetDescription()
-        {
-            return description;
-        }
-        
-        public virtual string GetStringId()
-        {
-            // String id for Say commands is SAY.<Localization Id>.<Command id>.[Character Name]
-            string stringId = "SAY." + GetFlowchartLocalizationId() + "." + itemId + ".";
-            if (character != null)
-            {
-                stringId += character.NameText;
-            }
-
-            return stringId;
         }
 
         #endregion

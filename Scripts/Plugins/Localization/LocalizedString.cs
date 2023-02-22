@@ -43,7 +43,8 @@ public class LocalizedString
 
 	public bool HasUnsavedChanges()
 	{
-		return text != Text;
+		var textInFile = LocalizationExtensions.EditorLoadFromLanguageJson(key, null, false, GameData.Instance.currentSelectedLangCode);
+		return text != textInFile;
 	}
 
 	public void OverrideLocKey(string key)

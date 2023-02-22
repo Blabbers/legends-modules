@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEditorInternal;
+using NaughtyAttributes.Editor;
 
 namespace Fungus.EditorUtils
 {
@@ -180,7 +181,8 @@ namespace Fungus.EditorUtils
                             },
                             drawElementCallback = (Rect rect, int index, bool isActive, bool isFocused) =>
                             {
-                                EditorGUI.PropertyField(rect, locSerProp.GetArrayElementAtIndex(index));
+                                NaughtyEditorGUI.PropertyField(rect, locSerProp.GetArrayElementAtIndex(index), true);
+								//EditorGUI.PropertyField(rect, locSerProp.GetArrayElementAtIndex(index));
                             },
                             elementHeightCallback = (int index) =>
                             {
@@ -195,7 +197,8 @@ namespace Fungus.EditorUtils
                 }
                 else
                 {
-                    EditorGUILayout.PropertyField(iterator, true, new GUILayoutOption[0]);
+					NaughtyEditorGUI.PropertyField_Layout(iterator, true);
+					//EditorGUILayout.PropertyField(iterator, true, new GUILayoutOption[0]);
                 }
             }
 

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 namespace Fungus
 {
@@ -14,7 +15,15 @@ namespace Fungus
     /// </summary>
     public class SayDialog : MonoBehaviour
     {
-        [Tooltip("Duration to fade dialogue in/out")]
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		static void Init()
+		{
+			speakingCharacter = null;
+            activeSayDialogs = new List<SayDialog>();
+            ActiveSayDialog = null;
+		}
+
+		[Tooltip("Duration to fade dialogue in/out")]
         [SerializeField] protected float fadeDuration = 0.25f;
 
         [Tooltip("The continue button UI object")]
@@ -24,9 +33,7 @@ namespace Fungus
         [SerializeField] protected Canvas dialogCanvas;
 
         [Tooltip("The name text UI object")]
-        [SerializeField] protected Text nameText;
-        [Tooltip("TextAdapter will search for appropriate output on this GameObject if nameText is null")]
-        [SerializeField] protected GameObject nameTextGO;
+        [SerializeField] protected TextMeshProUGUI nameText;        
         protected TextAdapter nameTextAdapter = new TextAdapter();
         public virtual string NameText
         {
@@ -41,9 +48,7 @@ namespace Fungus
         }
 
         [Tooltip("The story text UI object")]
-        [SerializeField] protected Text storyText;
-        [Tooltip("TextAdapter will search for appropriate output on this GameObject if storyText is null")]
-        [SerializeField] protected GameObject storyTextGO;
+        [SerializeField] protected TextMeshProUGUI storyText;
         protected TextAdapter storyTextAdapter = new TextAdapter();
         public virtual string StoryText
         {
@@ -60,7 +65,7 @@ namespace Fungus
         {
             get
             {
-                return storyText != null ? storyText.rectTransform : storyTextGO.GetComponent<RectTransform>();
+                return storyText.rectTransform;
             }
         }
 
@@ -102,8 +107,8 @@ namespace Fungus
 				activeSayDialogs.Add(this);
 			}
 
-            nameTextAdapter.InitFromGameObject(nameText != null ? nameText.gameObject : nameTextGO);
-            storyTextAdapter.InitFromGameObject(storyText != null ? storyText.gameObject : storyTextGO);
+            nameTextAdapter.InitFromGameObject(nameText.gameObject);
+            storyTextAdapter.InitFromGameObject(storyText.gameObject);
         }
 
 		protected virtual void OnDestroy()
@@ -251,11 +256,10 @@ namespace Fungus
         /// Returns a SayDialog by searching for one in the scene or creating one if none exists.
         /// </summary>
         public static SayDialog GetSayDialog()
-        {
-            if (ActiveSayDialog == null)
+        {			
+			if (ActiveSayDialog == null)
             {
 				SayDialog sd = null;
-
 				// Use first active Say Dialog in the scene (if any)
 				if (activeSayDialogs.Count > 0)
 				{
@@ -264,13 +268,13 @@ namespace Fungus
 
                 if (sd != null)
                 {
-                    ActiveSayDialog = sd;
+					ActiveSayDialog = sd;
                 }
 
                 if (ActiveSayDialog == null)
                 {
                     // Auto spawn a say dialog object from the prefab
-                    GameObject prefab = Resources.Load<GameObject>("UI/--Popup--SayDialog");
+                    GameObject prefab = Resources.Load<GameObject>("UI/--Popup--SayDialogue");
                     if (prefab != null)
                     {
                         GameObject go = Instantiate(prefab) as GameObject;
@@ -281,7 +285,7 @@ namespace Fungus
                 }
             }
 
-            return ActiveSayDialog;
+			return ActiveSayDialog;
         }
 
         /// <summary>
@@ -421,19 +425,19 @@ namespace Fungus
                     startStoryTextInset = StoryTextRectTrans.offsetMin.x; 
                 }
 
-                // Clamp story text to left or right depending on relative position of the character image
-                if (StoryTextRectTrans.position.x < characterImage.rectTransform.position.x)
-                {
-                    StoryTextRectTrans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 
-                        startStoryTextInset, 
-                        startStoryTextWidth - characterImage.rectTransform.rect.width);
-                }
-                else
-                {
-                    StoryTextRectTrans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 
-                        startStoryTextInset, 
-                        startStoryTextWidth - characterImage.rectTransform.rect.width);
-                }
+                //// Clamp story text to left or right depending on relative position of the character image
+                //if (StoryTextRectTrans.position.x < characterImage.rectTransform.position.x)
+                //{
+                //    StoryTextRectTrans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 
+                //        startStoryTextInset, 
+                //        startStoryTextWidth - characterImage.rectTransform.rect.width);
+                //}
+                //else
+                //{
+                //    StoryTextRectTrans.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, 
+                //        startStoryTextInset, 
+                //        startStoryTextWidth - characterImage.rectTransform.rect.width);
+                //}
             }
         }
 
