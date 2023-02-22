@@ -11,10 +11,8 @@ public class TextLocalized : TextMeshProUGUI
 	private LocalizedString localization;
 	public LocalizedString Localization => localization;
 
-	[SerializeField] bool playTTSOnEnable = false;
-	[SerializeField] bool isAnimated = false;
+	[SerializeField] bool playTTSOnEnable = false;	
 	[SerializeField] bool applyKeyCodes = true;
-	[SerializeField] UnityEvent OnAnimationFinished;
 
 	protected override void OnEnable()
 	{
@@ -63,11 +61,6 @@ public class TextLocalized : TextMeshProUGUI
 	public void SetPlayTTSOnEnable(bool enable)
 	{
 		playTTSOnEnable = enable;
-	}
-
-	public void SetIsAnimated(bool enable)
-	{
-		isAnimated = enable;
 	}
 
 	public void SetLocalization(LocalizedString loc)

@@ -38,9 +38,9 @@ namespace Fungus
         [Tooltip("Direction that portrait sprites face.")]
         [SerializeField] protected FacingDirection portraitsFace;
 
-        [FormerlySerializedAs("notes")]
-        [TextArea(5,10)]
-        [SerializeField] protected string description;
+        //[FormerlySerializedAs("notes")]
+        //[TextArea(5,10)]
+        //[SerializeField] protected string description;
 
         protected PortraitState portaitState = new PortraitState();
 
