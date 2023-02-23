@@ -23,7 +23,7 @@ namespace Blabbers.Game00
 
         public Question finalLevelQuestion;
 
-        public bool ShowLevelQuestion => finalLevelQuestion != null && finalLevelQuestion.answersKeys != null && finalLevelQuestion.answersKeys.Length > 0;
+        public bool ShowLevelQuestion => finalLevelQuestion != null && finalLevelQuestion.answers != null && finalLevelQuestion.answers.Count > 0;
 
         void ISingleton.OnCreated()
         {

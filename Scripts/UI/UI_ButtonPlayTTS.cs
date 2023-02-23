@@ -9,7 +9,7 @@ public class UI_ButtonPlayTTS : MonoBehaviour
     [InfoBox("This script plays the TTS from a parent text with a LoadSDKText component attached. Unless there is a manual OverrideTTSkey added on the field.")]
     [SerializeField]
     private Button button;
-    private LoadSDKText sdkText;
+    private TextLocalized localizedText;
     private bool loaded;
     public string overrideTTSkey;
     void OnEnable()
@@ -24,18 +24,18 @@ public class UI_ButtonPlayTTS : MonoBehaviour
         if (loaded)
             return;
 
-        if (!sdkText)
+        if (!localizedText)
         {
-            sdkText = GetComponentInParent<LoadSDKText>();
+            localizedText = GetComponentInParent<TextLocalized>();
         }
 
-        if (sdkText)
+        if (localizedText)
         {
             loaded = true;
 
             //Changed this line to override the normal Speech to text that is dependent of the bool
             //button.onClick.AddListener(sdkText.PlayThisSpeechText);    
-            button.onClick.AddListener(() => ForceSpeakText(sdkText.key));
+            button.onClick.AddListener(() => ForceSpeakText(localizedText.Localization.Key));
         }
 
     }

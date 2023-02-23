@@ -2,22 +2,29 @@
 using Blabbers.Game00;
 using System.Collections.Generic;
 using BeauRoutine;
-using Blabbers;
 using UnityEngine;
-using UnityEngine.Events;
 using DG.Tweening;
 using NaughtyAttributes;
 using TMPro;
 using UnityEngine.UI;
-using UnityEngine.Scripting.APIUpdating;
-
+using UnityEngine.Events;
 
 [System.Serializable]
 public class Question
 {
-    public string questionDescriptionKey;
-    public CorrectOption correctAnswer;
-    public string[] answersKeys;
+    public LocalizedString questionDescription;
+    //public CorrectOption correctAnswer;
+    [Header("The FIRST answer in the list should be the CORRECT one.")]
+    //[NonReorderable]
+    public List<string> answers;
+
+	// TODO: Criar um BUTTON (no naughty mesmo) para dar SAVE na localization da Question...
+	// Vai ser separado mesmo, num tem como.
+	// O que vou fazer é deixar a QuestionDescription como LocalizedString e as answers vao ser tipo:
+	// keyDaQuestion_answer0
+	// keyDaQuestion_answer1
+	// keyDaQuestion_answer2
+    // ...etc ai adiciono isso dinamicamente mesmo e show
 }
 
 public class UI_PopupQuestion : UI_PopupWindow, ISingleton
@@ -34,7 +41,9 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
     public MotionTween motionStarCorrect, motionStarWrong;
     public AudioSFX sfxExtraStar;
 
-    [ReadOnly]
+	private UnityAction<bool> OnAnswered;
+
+	[ReadOnly]
     public bool answeredCorrectly = false;
     
     public bool ChoseCorrectly { get; private set; }
@@ -66,25 +75,26 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
         }
     }
 
-    public void ShowQuestion(Question question)
+	public void ShowQuestion(Question question, UnityAction<bool> onAnsweredCallback = null)
     {
         base.ShowPopup();
         AudioController.Instance.FadeGameplayVolume(0.1f);
         AudioController.Instance.FadeMusicVolume(0.02f);
         // Loads the question
-        this.QuestionDescriptionText.LocalizeText(question.questionDescriptionKey);
-        this.CorrectOption = question.correctAnswer;
+        this.QuestionDescriptionText.text = question.questionDescription;
+        this.CorrectOption = CorrectOption.OptionA;// question.correctAnswer;
 
+        OnAnswered = onAnsweredCallback;
 
-        // Disable all
-        foreach (var answerTexts in AnswerTests)
+		// Disable all
+		foreach (var answerTexts in AnswerTests)
         {
             answerTexts.transform.parent.gameObject.SetActive(false);
         }
         // Enables the needed ones and loads them up
-        for (int i = 0; i < question.answersKeys.Length; i++)
+        for (int i = 0; i < question.answers.Count; i++)
         {
-            var answerKey = question.answersKeys[i];
+            var answerKey = question.answers[i];
             var textMesh = AnswerTests[i];
 			//textMesh.LocalizeText(answerKey);
 			textMesh.LocalizeText(answerKey,false);
@@ -104,7 +114,7 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
         }
         ShuffleAnswers();
          
-        if(enableQuestionTTS) LocalizationExtensions.PlayTTS(question.questionDescriptionKey);
+        if(enableQuestionTTS) LocalizationExtensions.PlayTTS(question.questionDescription);
 	}
 
     public void ShuffleAnswers()
@@ -125,8 +135,8 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 
     public void CorrectOptionMethod()
     {
-        ChoseCorrectly = true;
-        ClosePopup();
+        ChoseCorrectly = true;        
+		ClosePopup();
     }
 
     public void WrongOptionMethod()
@@ -144,14 +154,14 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
         IEnumerator Run()
         {
             yield return Routine.WaitSeconds(1.0f);
-            base.HidePopup();
+			OnAnswered?.Invoke(ChoseCorrectly);
+			base.HidePopup();
         }
 
         //PopupParent.DOScale(0.0f, 0.5f).OnComplete(() =>
         //{
         //    HidePopup();
         //});
-
     }
 }
 

@@ -6,21 +6,36 @@ using UnityEngine;
 using UnityEngine.UI;
 using NaughtyAttributes;
 using UnityEngine.Events;
+using System;
 
 namespace Blabbers.Game00
 {
 	public class MotionTweenPlayer : MonoBehaviour
 	{
+		[BoxGroup("Default Tween")]
 		public MotionTween tween;
+		[BoxGroup("Default Tween")]
 		public bool isLoop;
+		[BoxGroup("Default Tween")]
 		[ShowIf(nameof(isLoop))]
 		public LoopType loopType;
+		[BoxGroup("Default Tween")]
 		public bool playOnEnabled = true;
-		public bool playOnlyOnce = false;
+		[BoxGroup("Default Tween")]
+		public bool playOnlyOnce = false;		
 		private bool hasPlayed;
+		[BoxGroup("Default Tween")]
 		[ShowIf(nameof(playOnEnabled))]
 		public float delayOnEnable;
+		[BoxGroup("Default Tween")]
 		public UnityEvent OnAnimationStart, OnAnimationFinished;
+
+		[BoxGroup("Exit Tween")]
+		public bool hasExitTween;
+		[BoxGroup("Exit Tween")]
+		[ShowIf(nameof(hasExitTween))]
+		[Tooltip("Call from 'DisableWithExitTween()' method. Tween to play before disabling the object. This will NOT trigger the OnAnimationStart/Finshed events above.")]
+		public MotionTween exitTween;
 
 		public Vector3 StartAnchoredPosition { get; private set; }
 		public Vector3 StartPosition { get; private set; }
@@ -58,6 +73,21 @@ namespace Blabbers.Game00
 				PlayTween(delayOnEnable);
 			}
 		}
+
+		public void DisableWithExitTween(Action onFinished)
+		{
+			if (hasExitTween)
+			{
+				exitTween.PlaySequence(this, playEvents: true, isLoop: false, null, HandleExitTweenFinished);
+
+				void HandleExitTweenFinished()
+				{
+					onFinished?.Invoke();
+					gameObject.SetActive(false);
+				}
+			}
+		}
+
 		private void OnDisable()
 		{
 			//ResetTween();
@@ -80,17 +110,16 @@ namespace Blabbers.Game00
 
             if (delay > 0f)
             {
-				//StartCoroutine(Run());
 				Routine.Start(Run());
 				IEnumerator Run()
 				{
 					yield return Routine.WaitSeconds(delay);
-					this.tween.PlaySequence(this);
+					this.tween.PlaySequence(this, playEvents: true, isLoop, OnAnimationStart.Invoke, OnAnimationFinished.Invoke);
 				}
 			}
             else
             {
-                this.tween.PlaySequence(this);
+                this.tween.PlaySequence(this, playEvents: true, isLoop, OnAnimationStart.Invoke, OnAnimationFinished.Invoke);
             }
 			hasPlayed = true;
 		}

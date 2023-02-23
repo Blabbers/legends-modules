@@ -1,38 +1,34 @@
 using Blabbers.Game00;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace Fungus
 {
 	[CommandInfo("Blabbers",
-				 "Toggle Cinematic BlackBars",
+				 "Cinematic Bars",
 				 "Toggles Cinematic Black Bars")]
 	[AddComponentMenu("")]
 	public class ToggleCinematicBlackBars : Command
 	{
-
 		public bool show = true;
+		[ShowIf(nameof(show))]
+		public bool displayHintText = false;
+		[ShowIf(nameof(displayHintText))]
+		public LocalizedString hintText;
 		#region Public members
 
 		public override void OnEnter()
 		{
-			//TODO: Implement PAUSE call.
-
 			if (show)
-			{
-				//Singleton.Get<UI_CameraFX>().ShowCinematicBlackBars();
+			{		
 
-				//UI_CameraFX.Instance.ShowCinematicBlackBars();
-				UI_CameraFX.Instance.ShowCinematicBlackBars(AnimationFinished);
+				UI_CameraFX.Instance.ShowCinematicBlackBars(AnimationFinished, displayHintText ? hintText : "");
 			}
 			else
 			{
 				UI_CameraFX.Instance.HideCinematicBlackBars(AnimationFinished);
 			}
-			
-
-			
 		}
-
 
 		public override Color GetButtonColor()
 		{
@@ -44,8 +40,17 @@ namespace Fungus
 			Continue();
 		}
 
-
-
+		public override string GetSummary()
+		{
+			string namePrefix = "";
+			if (hintText.HasUnsavedChanges())
+			{
+				namePrefix = "<color=red><b>* UNSAVED CHANGES *</b></color> ";
+			}
+			return (show ? 
+				"<color=green>(ON)</color> " + (displayHintText ? namePrefix + hintText.GetRawText() : "")
+				: "<color=red>(OFF)</color>");
+		}
 		#endregion
 	}
 }

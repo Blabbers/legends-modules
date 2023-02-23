@@ -12,7 +12,7 @@ namespace Fungus
     /// <summary>
     /// Writes text in a dialog box.
     /// </summary>
-    [CommandInfo("Narrative",
+    [CommandInfo("Blabbers",
                  "Say",
                  "Writes text in a dialog box.")]
     [AddComponentMenu("")]

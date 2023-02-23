@@ -27,11 +27,11 @@ namespace Blabbers.Game00
 		{
 			PlaySequence(tweenPlayer, true);
 		}
-		public void PlaySequence(MotionTweenPlayer tweenPlayer, bool playEvents)
+		public void PlaySequence(MotionTweenPlayer tweenPlayer, bool playEvents, bool isLoop = false, Action onAnimationStart = null, Action onAnimationFinished = null)
 		{
 			if(playEvents)
 			{
-				tweenPlayer.OnAnimationStart?.Invoke();
+				onAnimationStart?.Invoke();
 			}
 
 			if (tweenPlayer.isActiveAndEnabled)
@@ -55,10 +55,10 @@ namespace Blabbers.Game00
 				yield return Routine.WaitForRealtimeUpdate();
 				if(playEvents)
 				{
-					tweenPlayer.OnAnimationFinished?.Invoke();
+					onAnimationFinished?.Invoke();
 				}
 
-				if (tweenPlayer.isLoop)
+				if (isLoop)
 				{
 					tweenPlayer.PlayTween();
 				}
