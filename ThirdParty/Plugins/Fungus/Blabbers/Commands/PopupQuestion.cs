@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace Fungus
@@ -26,7 +27,7 @@ namespace Fungus
 		//public bool playTTS = true;
 		public Question question;
 		#region Public members
-
+		
 		public override void OnEnter()
 		{
 			PopupInstance.ShowQuestion(question, HandleOnClosedPopup);

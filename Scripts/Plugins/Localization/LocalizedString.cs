@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Blabbers.Game00;
-using NaughtyAttributes;
 using System;
 
 [System.Serializable]
@@ -18,6 +15,7 @@ public class LocalizedString
 	[SerializeField] public bool applyKeyCodes = false;
 	public bool ApplyKeyCodes => applyKeyCodes;
 	public Action<string> OnLoad;
+	public Action OnSave;
 
 	public string Text
 	{

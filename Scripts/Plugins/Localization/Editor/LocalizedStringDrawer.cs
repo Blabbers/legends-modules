@@ -3,6 +3,7 @@ using UnityEngine;
 using Blabbers.Game00;
 using Animancer.Editor;
 using System.Reflection;
+using Fungus;
 
 [CustomPropertyDrawer(typeof(LocalizedString), true)]
 public class LocalizedStringDrawer : PropertyDrawer
@@ -92,7 +93,7 @@ public class LocalizedStringDrawer : PropertyDrawer
 			if (GUI.Button(currentRect, buttonContent))
 			{
 				//if(overrideKey) internalKey = 
-				SaveBtn(internalKey, internalText);
+				SaveBtn(property, internalKey, internalText);
 			}
 
 			remainingSize = leftBlock.width - ((buttonSize * 2) + 10);
@@ -267,15 +268,17 @@ public class LocalizedStringDrawer : PropertyDrawer
 		EditorGUI.DrawPreviewTexture(current, icon);
 	}
 
-	void SaveBtn(string key, string value)
+	void SaveBtn(SerializedProperty property, string key, string value)
 	{
 		LocalizationExtensions.EditorSaveToLanguageJson(key, value, langCode: GetLanguageCode());
+
+		LocalizedString locString;
+		locString = (LocalizedString)property.GetValue();
+		locString.OnSave?.Invoke();
 	}
 
 	private string LoadText(SerializedProperty property, SerializedProperty internalTextProp, string internalKey)
 	{
-		Debug.Log("LocalizedStringDrawer - LoadText");
-
 		string internalText;
 		internalTextProp.stringValue = LocalizationExtensions.EditorLoadFromLanguageJson(internalKey, langCode: GetLanguageCode());
 		internalText = internalTextProp.stringValue;
