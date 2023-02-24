@@ -15,7 +15,10 @@ namespace Blabbers.Game00
 		
 		void Start()
 		{
-			touchInput?.SetActive(false);
+			if (touchInput)
+			{
+				touchInput.SetActive(false);
+			}
 		}
 
 		void ToggleTouchInput()

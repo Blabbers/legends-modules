@@ -8,6 +8,7 @@ using NaughtyAttributes;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -86,12 +87,26 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 
 	private UnityAction<bool> OnAnswered;
 
-	[ReadOnly]
-	public bool answeredCorrectly = false;
-
+	public bool QuestionWasAnsweredThisLevel { get; private set; }  = false;
 	public bool ChoseCorrectly { get; private set; }
 
-	public void OnCreated() { }
+	public void OnCreated() {}
+
+	private void Awake()
+	{
+		SceneManager.sceneUnloaded += HandleSceneLoaded;
+	}
+
+	private void OnDestroy()
+	{
+		SceneManager.sceneUnloaded -= HandleSceneLoaded;
+	}
+
+	private void HandleSceneLoaded(Scene arg0)
+	{
+		QuestionWasAnsweredThisLevel = false;
+		ChoseCorrectly = false;
+	}
 
 	public void ClickOption(int id)
 	{
@@ -101,7 +116,7 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 		starMotionPlayer.transform.position = clickedBtnTransform.position;
 		var clickedBtn = clickedBtnTransform.GetComponent<Button>();
 
-		answeredCorrectly = id == 0;
+		var answeredCorrectly = id == 0;
 		if (answeredCorrectly)
 		{
 			motionStarCorrect.PlaySequence(starMotionPlayer);
@@ -177,12 +192,14 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 
 	public void CorrectOptionMethod()
 	{
+		QuestionWasAnsweredThisLevel = true;
 		ChoseCorrectly = true;
 		ClosePopup();
 	}
 
 	public void WrongOptionMethod()
 	{
+		QuestionWasAnsweredThisLevel = true;
 		ChoseCorrectly = false;
 		ClosePopup();
 	}

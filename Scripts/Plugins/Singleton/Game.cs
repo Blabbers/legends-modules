@@ -202,18 +202,31 @@ namespace Blabbers.Game00
 		/// </summary>
 		public static T FindObjectOfTypeAll<T>() where T : MonoBehaviour
 		{
+			// Try to find the object on the possible loaded scenes
 			for (int i = 0; i < SceneManager.sceneCount; i++)
 			{
-				var s = SceneManager.GetSceneAt(i);
-				var allGameObjects = s.GetRootGameObjects();
-				for (int j = 0; j < allGameObjects.Length; j++)
+				var scene = SceneManager.GetSceneAt(i);
+				var objectFound = FindObjectOnScene<T>(scene);
+				if(objectFound != default)
 				{
-					var go = allGameObjects[j];
-					var obj = go.GetComponentInChildren<T>(true);
-					if (obj != null && obj is T)
-					{
-						return (T)obj;
-					}
+					return objectFound;
+				}
+			}
+			// If it was not found, try to find it on the DontDestroyOnLoad scene
+			var ddolScene = Game.instance.gameObject.scene;				
+			return FindObjectOnScene<T>(ddolScene);
+		}
+
+		private static T FindObjectOnScene<T>(Scene scene)
+		{
+			var allGameObjects = scene.GetRootGameObjects();
+			for (int j = 0; j < allGameObjects.Length; j++)
+			{
+				var go = allGameObjects[j];
+				var obj = go.GetComponentInChildren<T>(true);				
+				if (obj != null && obj is T)
+				{
+					return (T)obj;
 				}
 			}
 			return default;
