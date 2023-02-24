@@ -22,16 +22,20 @@ namespace Fungus
 				return _popupInstance;
 			}
 		}
-		
-		[LocalizedStringOptions(hasBigTextArea = true)]		
-		//public bool playTTS = true;
+
+		[Tooltip("Variable to store the value in.")]
+		//[LocalizedStringOptions(hasBigTextArea = true)]		
+		//public bool playTTS = true;		
 		public Question question;
+
+		[VariableProperty(typeof(BooleanVariable))]
+		[SerializeField] private Variable setAnswerBoolTo;
+
 		#region Public members
-		
+
 		public override void OnEnter()
 		{
-			PopupInstance.ShowQuestion(question, HandleOnClosedPopup);
-			//PopupInstance.Setup(informationText, image, HandleOnClosedPopup);
+			PopupInstance.ShowQuestion(question, HandleOnClosedPopup);			
 			PopupInstance.ShowPopup();
 			//if (playTTS)
 			//{
@@ -41,7 +45,7 @@ namespace Fungus
 
 		void HandleOnClosedPopup(bool answeredCorrectly)
 		{
-			// TODO: A gente pode colocar algo aqui no sistema caso ele acerte, talvez trazer a pontuacao do GameplayManager pra cá? Ou sei la
+			setAnswerBoolTo.Apply(SetOperator.Assign, answeredCorrectly);
 			Continue();
 		}
 

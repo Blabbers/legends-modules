@@ -11,7 +11,6 @@ using UnityEngine.EventSystems;
 
 public class SimulationEnvironment : MonoBehaviour, ISingleton
 {
-
 	public static SimulationEnvironment Instance => Singleton.Get<SimulationEnvironment>();
 	public UnityEvent OnStart;
 	public UnityEvent OnFinish;
@@ -39,7 +38,7 @@ public class SimulationEnvironment : MonoBehaviour, ISingleton
 #if UNITY_EDITOR || DEVELOPMENT_BUILD || UNITY_CLOUD_BUILD
 		if (Input.GetKeyDown(KeyCode.End))
 		{
-			Instance.OnFinish?.Invoke();
+			FinishSimulation();
 		}
 #endif
 
@@ -47,14 +46,13 @@ public class SimulationEnvironment : MonoBehaviour, ISingleton
 		if (isPaused) return;
 	}
 
-
+	public void FinishSimulation()
+	{
+		Instance.OnFinish?.Invoke();
+	}
 
 	public void TogglePauseSimulation(bool active)
 	{
 		Instance.isPaused = active;
 	}
-
-
-
-	
 }
