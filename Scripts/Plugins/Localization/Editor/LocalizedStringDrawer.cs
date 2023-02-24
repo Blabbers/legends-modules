@@ -4,6 +4,7 @@ using Blabbers.Game00;
 using Animancer.Editor;
 using System.Reflection;
 using Fungus;
+using System;
 
 [CustomPropertyDrawer(typeof(LocalizedString), true)]
 public class LocalizedStringDrawer : PropertyDrawer
@@ -80,7 +81,7 @@ public class LocalizedStringDrawer : PropertyDrawer
 
 			if (GUI.Button(currentRect, buttonContent))
 			{
-				internalText = LoadText(property,internalTextProp, internalKey);
+				internalText = LoadText(property, internalTextProp, internalKey);
 				GUI.FocusControl(null);
 			}
 
@@ -98,7 +99,7 @@ public class LocalizedStringDrawer : PropertyDrawer
 
 			remainingSize = leftBlock.width - ((buttonSize * 2) + 10);
 			currentRect.x = 10;
-			currentRect.width = remainingSize -10;
+			currentRect.width = remainingSize - 10;
 
 			GUIStyle style = new GUIStyle(GUI.skin.label);
 			style.richText = true;
@@ -124,7 +125,7 @@ public class LocalizedStringDrawer : PropertyDrawer
 			var icon = EditorGUIUtility.IconContent(@"_Menu@2x").image;
 			GUIContent buttonContent = new GUIContent(null, icon, null);
 
-			Rect temp =currentRect;
+			Rect temp = currentRect;
 
 
 			EditorGUI.BeginDisabledGroup(!editingKey);
@@ -167,7 +168,7 @@ public class LocalizedStringDrawer : PropertyDrawer
 				void GenerateNewKey()
 				{
 					// TODO: This needs to work properly
-					GenerateLocKey(internalKeyProp, "");					
+					GenerateLocKey(internalKeyProp, "");
 				}
 
 				menu.ShowAsContext();
@@ -188,7 +189,7 @@ public class LocalizedStringDrawer : PropertyDrawer
 		if (languageTriggeredOnce)
 		{
 			languageTriggeredOnce = false;
-			internalText = LoadText(property,internalTextProp, internalKey);
+			internalText = LoadText(property, internalTextProp, internalKey);
 			GUI.FocusControl(null);
 		}
 
@@ -221,7 +222,7 @@ public class LocalizedStringDrawer : PropertyDrawer
 
 
 
-		if(Event.current.type == EventType.Repaint)
+		if (Event.current.type == EventType.Repaint)
 		{
 			if (editTriggeredOnce)
 			{
@@ -300,7 +301,7 @@ public class LocalizedStringDrawer : PropertyDrawer
 		{
 			extraHeight = 10.0f;
 		}
-	
+
 		return base.GetPropertyHeight(property, label) + extraHeight;
 	}
 
@@ -325,7 +326,16 @@ public class LocalizedStringDrawer : PropertyDrawer
 	{
 		if (string.IsNullOrEmpty(key))
 		{
-			property.stringValue = System.Guid.NewGuid().ToString();
+			property.stringValue = GetNewSmallGUID();
+		}
+
+		string GetNewSmallGUID()
+		{
+			var guid = System.Guid.NewGuid().ToString();
+			var smallGuid = guid.Substring(0, Math.Min(8, guid.Length));
+			// Tries to load it from the json, if this key already existis, we generate another one
+			var hasKey = !string.IsNullOrEmpty(LocalizationExtensions.EditorLoadFromLanguageJson(smallGuid, displayMessages: false));
+			return hasKey ? GetNewSmallGUID() : smallGuid;
 		}
 	}
 }
