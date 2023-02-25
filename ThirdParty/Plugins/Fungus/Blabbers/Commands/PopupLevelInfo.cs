@@ -61,6 +61,14 @@ namespace Fungus
 			}
 			return namePrefix + informationText.GetRawText();
 		}
+
+		public override void OnCommandAdded(Block parentBlock)
+		{
+			if (informationText != null)
+			{
+				informationText.OverrideLocKey(LocalizedString.GenerateLocKey());
+			}
+		}
 		#endregion
 	}
 }

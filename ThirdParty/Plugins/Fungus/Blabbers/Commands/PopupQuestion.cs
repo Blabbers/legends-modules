@@ -1,4 +1,3 @@
-using NaughtyAttributes;
 using UnityEngine;
 
 namespace Fungus
@@ -62,6 +61,14 @@ namespace Fungus
 				namePrefix = "<color=red><b>* UNSAVED CHANGES *</b></color> ";
 			}
 			return namePrefix + question.questionDescription.GetRawText();
+		}
+
+		public override void OnCommandAdded(Block parentBlock)
+		{
+			if (question != null)
+			{
+				question.questionDescription.OverrideLocKey(LocalizedString.GenerateLocKey());
+			}
 		}
 		#endregion
 	}

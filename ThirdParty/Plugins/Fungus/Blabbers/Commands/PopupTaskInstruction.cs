@@ -65,6 +65,14 @@ namespace Fungus
 			}
 			return (show ? "<color=green>(ON)</color> " + namePrefix + instructionText.GetRawText() : "<color=red>(OFF)</color>");
 		}
+
+		public override void OnCommandAdded(Block parentBlock)
+		{
+			if (instructionText != null)
+			{
+				instructionText.OverrideLocKey(LocalizedString.GenerateLocKey());
+			}
+		}
 		#endregion
 	}
 }

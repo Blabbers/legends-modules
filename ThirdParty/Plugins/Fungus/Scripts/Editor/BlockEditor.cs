@@ -369,7 +369,7 @@ namespace Fungus.EditorUtils
             if (GUILayout.Button(duplicateIcon))
             {
                 Copy();
-                Paste();
+                Paste();                
             }
 
             // Delete Button
@@ -744,13 +744,16 @@ namespace Fungus.EditorUtils
 
                     // This stops the user pasting the command manually into another game object.
                     ComponentUtility.CopyComponent(flowchart.transform);
-                }
+
+					// Let command know it has just been added to the block
+					command.OnCommandAdded(block);
+				}
             }
 
             // Because this is an async call, we need to force prefab instances to record changes
             PrefabUtility.RecordPrefabInstancePropertyModifications(block);
 
-            Repaint();
+			Repaint();
         }
 
         protected void Delete()

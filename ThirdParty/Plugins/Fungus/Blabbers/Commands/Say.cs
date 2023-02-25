@@ -166,6 +166,13 @@ namespace Fungus
             sayDialog.Stop();
         }
 
-        #endregion
-    }
+		public override void OnCommandAdded(Block parentBlock)
+		{
+            if(storyText != null)
+            {
+                storyText.OverrideLocKey(LocalizedString.GenerateLocKey());
+            }
+		}
+		#endregion
+	}
 }

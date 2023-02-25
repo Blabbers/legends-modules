@@ -11,7 +11,6 @@ public class LocalizedString
 	//This has to be hidden from view or "read only" in inspector by default
 	[SerializeField] private string key;
 	[SerializeField] private string text;
-	//[field: SerializeField] public bool applyKeyCodes { get; private set; }
 	[SerializeField] public bool applyKeyCodes = false;
 	public bool ApplyKeyCodes => applyKeyCodes;
 	public Action<string> OnLoad;
@@ -55,7 +54,6 @@ public class LocalizedString
 		return Text;
 	}
 
-
 	public string GetRawText()
 	{
 		return text;
@@ -66,5 +64,17 @@ public class LocalizedString
 		return LocalizationExtensions.LocalizeText(key, applyColorCode: applyKeyCode);
 	}
 
-}
+	public static string GenerateLocKey()
+	{
+		return GetNewSmallGUID();	
 
+		string GetNewSmallGUID()
+		{
+			var guid = System.Guid.NewGuid().ToString();
+			var smallGuid = guid.Substring(0, Math.Min(8, guid.Length));
+			// Tries to load it from the json, if this key already existis, we generate another one
+			var hasKey = !string.IsNullOrEmpty(LocalizationExtensions.EditorLoadFromLanguageJson(smallGuid, displayMessages: false));
+			return hasKey ? GetNewSmallGUID() : smallGuid;
+		}
+	}
+}
