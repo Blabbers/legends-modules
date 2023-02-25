@@ -29,9 +29,17 @@ namespace Fungus
 		[Tooltip("Plays Text-to-Speech when this command starts")]
 		[SerializeField] protected bool playTTS = true;
 
-        [Tooltip("Character that is speaking")]
-        [SerializeField] protected Character character;
+		[Tooltip("Always show this Say text when the command is executed multiple times")]
+		[SerializeField] protected bool showAlways = true;
 
+		[Tooltip("Number of times to show this Say text when the command is executed multiple times")]
+		[HideIf(nameof(showAlways))]
+		[SerializeField] protected int showCount = 1;
+
+		[Tooltip("Character that is speaking")]
+        [OnValueChanged("AddPortraitIfNone")]
+        [SerializeField] protected Character character;
+        
 		[Tooltip("Portrait that represents speaking character")]
         //[ShowAssetPreview]
         [HideIf(nameof(HasNoCharacter))]
@@ -40,17 +48,8 @@ namespace Fungus
         private List<Sprite> GetPortraits() => character != null ? character.Portraits : null;
         private bool HasNoCharacter() => character == null;
 		
-
 		//[Tooltip("Voiceover audio to play when writing the text")]
         //protected AudioClip voiceOverClip;
-
-        [Tooltip("Always show this Say text when the command is executed multiple times")]
-        [SerializeField] protected bool showAlways = true;
-        
-        [Tooltip("Number of times to show this Say text when the command is executed multiple times")]
-        [HideIf(nameof(showAlways))]
-		[SerializeField] protected int showCount = 1;
-
 
 		//[Tooltip("Type this text in the previous dialog box.")]
 		//[SerializeField] protected bool extendPrevious = false;
@@ -172,6 +171,16 @@ namespace Fungus
             {
                 storyText.OverrideLocKey(LocalizedString.GenerateLocKey());
             }
+
+			AddPortraitIfNone();
+		}
+
+        private void AddPortraitIfNone()
+        {
+			if (portrait == null && character != null && character.Portraits.Count > 0)
+			{
+				portrait = character.Portraits[0];
+			}
 		}
 		#endregion
 	}
