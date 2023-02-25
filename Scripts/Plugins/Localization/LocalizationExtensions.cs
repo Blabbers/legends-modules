@@ -181,7 +181,7 @@ namespace Blabbers.Game00
 		{
 			try
 			{
-				Debug.Log($"PlayTTS → [{key}] / Enabled [{ProgressController.GameProgress.enableAutomaticTTS}]");
+				//Debug.Log($"PlayTTS → [{key}] / Enabled [{ProgressController.GameProgress.enableAutomaticTTS}]");
 				if (ProgressController.GameProgress.enableAutomaticTTS)
 				{
 					LOLSDK.Instance?.SpeakText(key);

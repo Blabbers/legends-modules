@@ -44,7 +44,7 @@ namespace Fungus
 
 		void HandleOnClosedPopup(bool answeredCorrectly)
 		{
-			setAnswerBoolTo.Apply(SetOperator.Assign, answeredCorrectly);
+			setAnswerBoolTo?.Apply(SetOperator.Assign, answeredCorrectly);
 			Continue();
 		}
 
