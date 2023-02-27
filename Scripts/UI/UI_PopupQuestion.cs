@@ -197,11 +197,14 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 			indexes.Add(i);
 			items.Add(ButtonsParent.GetChild(i));
 		}
+		var titleLabel = items[0];
 
 		foreach (var item in items)
 		{
 			item.SetSiblingIndex(indexes[Random.Range(0, indexes.Count)]);
 		}
+		// Since the first item is a label, we move it back to the top.
+		titleLabel.SetSiblingIndex(0);
 	}
 
 	public void CorrectOptionMethod()
