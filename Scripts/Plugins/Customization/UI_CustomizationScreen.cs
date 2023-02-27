@@ -9,6 +9,7 @@ using TMPro;
 using DG.Tweening;
 using NaughtyAttributes;
 using UnityEngine.Events;
+using System.Linq;
 
 public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 {
@@ -38,11 +39,44 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 	[Foldout("Components")] public GameObject popupSkinColor;
 	[Foldout("Components")] public GameObject popupHairColor;
 	[Foldout("Components")][SerializeField] Transform playerTransform;
+	[Foldout("Components")]
+	[SerializeField] List<CustomizationSelector> selectors;
+
 	#endregion
 
 	[Foldout("Events")] public UnityEvent OnFirstCustomization;
 	[Foldout("Events")] public UnityEvent OnCustomizationStart;
 	[Foldout("Events")] public UnityEvent OnCustomizationEnd;
+
+
+	#region Editor
+
+	[Button]
+	void SetupSelectors_Editor()
+	{
+
+		var allTargets = UnityEngine.Object.FindObjectsOfType<CustomizationSelector>();
+		selectors.Clear();
+		selectors= new List<CustomizationSelector>(allTargets);
+
+
+		for (int i = 0; i < selectors.Count; i++)
+		{
+			selectors[i].OnOptionChanged = null;
+
+			var lastId = PossibleCustomizations.Instance.GetSlotSize(selectors[i].GroupId) - 1;
+			var name = PossibleCustomizations.Instance.GetName(selectors[i].GroupId);
+
+			selectors[i].SetupSelector(lastId, name);
+			//selectors[i].OnOptionChanged += HandleSelectionUpdate;
+		}
+
+		//SetSelectorEvents();
+	}
+
+	#endregion
+
+
 
 	#region Awake
 	void Awake()
@@ -58,10 +92,11 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 
 		hairActive = skinActive = false;
 		customization.UpdateVisual(slotData);
+		SetSelectorEvents();
 		//characterVisual.UpdateVisual();
 
 		isNewGame = ProgressController.GameProgress.isNewGame;
-
+		
 		Delay(0.25f);
 	}
 
@@ -233,6 +268,21 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 		UpdateGameData();
 	}
 
+	void SetSelectorEvents()
+	{
+		for (int i = 0; i < selectors.Count; i++)
+		{
+			selectors[i].OnOptionChanged = null;
+
+			var lastId = PossibleCustomizations.Instance.GetSlotSize(selectors[i].GroupId) -1;
+			var name = PossibleCustomizations.Instance.GetName(selectors[i].GroupId);
+
+			selectors[i].SetupSelector(lastId, name);
+			selectors[i].OnOptionChanged +=  HandleSelectionUpdate;
+		}
+	}
+
+
 
 	void Delay(float time)
 	{
@@ -248,6 +298,22 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 	#endregion
 
 	#region Buttons
+
+
+	void HandleSelectionUpdate(int groupId, int selectedId)
+	{
+		Debug.Log($"HandleSelectionUpdate()\ngroupId: {groupId} |selectedId: {selectedId}");
+
+
+		//slotData[groupId].UpdateCurrent(selectedId);
+
+		//ArrowButtonsGeneric(id);
+		//slotData[id].Previous();
+
+
+		UpdateVisualGeneric();
+	}
+
 
 	#region Rotation
 	public void RotateForward()

@@ -1,7 +1,9 @@
 ﻿using NaughtyAttributes;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Animancer.Validate;
 
 
 [CreateAssetMenu]
@@ -28,8 +30,8 @@ public class PossibleCustomizations : ScriptableObject
 
 	public int NumberOfSlots = 7;
 
-    [Expandable]
-    public GenericSOList test;
+    //[Expandable]
+    //public GenericSOList test;
 
 	public List<GenericSOList> possibleCustomizations;
 
@@ -80,6 +82,57 @@ public class PossibleCustomizations : ScriptableObject
 
 	}
 
+	public int GetSlotSize(int groupId)
+	{
+		GenericSOList list = possibleCustomizations[groupId];
+
+
+		//
+		//if(list is GameObjectList)
+		//{
+
+		//}
+
+		if(list.GetType() == typeof(GameObjectList))
+		{
+			var objList = (GameObjectList)list;
+			return objList.gameObjects.Count;
+		}
+		else if (list.GetType() == typeof(MaterialList))
+		{
+			var objList = (MaterialList)list;
+			return objList.materials.Count;
+		}
+		else
+		{
+			var objList = (TextureList)list;
+			return objList.textures.Count;
+		}
+
+		//if (type == SlotType.GameObject)
+		//{
+		//	var objList = (GameObjectList)list;
+		//	return objList.gameObjects.Count;
+		//}
+		//else if (type == SlotType.Material)
+		//{
+		//	var objList = (MaterialList)list;
+		//	return objList.materials.Count;
+		//}
+		//else
+		//{
+		//	var objList = (TextureList)list;
+		//	return objList.textures.Count;
+		//}
+	}
+
+	public string GetName(int groupId)
+	{
+		GenericSOList list = possibleCustomizations[groupId];
+		return list.name;
+
+	}
+
 	//Would need to find a way to make this generic, and change CustomizationSlot for an int
 	public SlotData GetSlotData(CustomizationSlot slot)
     {
@@ -122,11 +175,19 @@ public class PossibleCustomizations : ScriptableObject
 	//Would need to find a way to make this generic, and change CustomizationSlot for an int
 	public GameObject GetSlotObject(CustomizationSlot slot, int id)
 	{
-		//Debug.Log($"GetSlotObject| CustomizationSlot: {slot.ToString()} - {(int)id}");
+        //Debug.Log($"GetSlotObject| CustomizationSlot: {slot.ToString()} - {(int)id}");
+
+        //GenericSOList list = possibleCustomizations[0];
+        //GameObjectList objList = (GameObjectList)list;
+
+
+        //return objList.gameObjects[id];
+
 
 		if (slot == CustomizationSlot.Hair)
 		{
 			return HairStyles[id];
+             //return possibleCustomizations[3];
 		}
 		else if (slot == CustomizationSlot.Face)
 		{
@@ -142,6 +203,35 @@ public class PossibleCustomizations : ScriptableObject
 		}
 
 		return null;
+	}
+
+	public T GetSlotObject<T>(SlotType type, int groupId ,int id)
+	{
+		GenericSOList list = possibleCustomizations[groupId];
+
+
+
+        if(type == SlotType.GameObject)
+        {
+			var objList = (GameObjectList)list;
+			var value = objList.gameObjects[id];
+
+			return (T)Convert.ChangeType(value, typeof(T));
+		}
+		else if (type == SlotType.Material)
+		{
+			var objList = (MaterialList)list;
+			var value = objList.materials[id];
+
+			return (T)Convert.ChangeType(value, typeof(T));
+		}
+		else
+		{
+			var objList = (TextureList)list;
+			var value = objList.textures[id];
+
+			return (T)Convert.ChangeType(value, typeof(T));
+		}
 	}
 
 
@@ -172,5 +262,10 @@ public enum CustomizationSlot
 {
     Hair, Face, Torso, Legs, Shoes, HairColor, SkinColor
 }
+
+public enum SlotType { 
+    GameObject, Material, Texture
+}
+
 
 
