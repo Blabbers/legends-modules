@@ -34,13 +34,17 @@ namespace Fungus
 		[VariableProperty(typeof(BooleanVariable))]
 		[SerializeField] private Variable setAnswerBoolTo;
 		[SerializeField] private UI_PopupQuestion overrideQuestionPopup;
+		[SerializeField] private bool showAnswerFeedback = true;
 
 		#region Public members
 
 		public override void OnEnter()
 		{
-			SetPopupInstance(overrideQuestionPopup);
-			PopupInstance.ShowQuestion(question, HandleOnClosedPopup);			
+			if (overrideQuestionPopup)
+			{
+				SetPopupInstance(overrideQuestionPopup);
+			}
+			PopupInstance.ShowQuestion(question, showAnswerFeedback, HandleOnClosedPopup);
 			PopupInstance.ShowPopup();
 			//if (playTTS)
 			//{

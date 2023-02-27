@@ -85,6 +85,8 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 	public MotionTween motionStarCorrect, motionStarWrong;
 	public AudioSFX sfxExtraStar;
 
+	public bool shouldShowAnswerAnimationFeedback;
+
 	private UnityAction<bool> OnAnswered;
 
 	public bool QuestionWasAnsweredThisLevel { get; private set; }  = false;
@@ -111,31 +113,43 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 	public void ClickOption(int id)
 	{
 		var clickedBtnTransform = AnswerTests[id].transform.parent;
-		// Position star at the correct place
-		starMotionPlayer.gameObject.SetActive(true);
-		starMotionPlayer.transform.position = clickedBtnTransform.position;
+
+		if (shouldShowAnswerAnimationFeedback)
+		{
+			// Position star at the correct place
+			starMotionPlayer.gameObject.SetActive(true);
+			starMotionPlayer.transform.position = clickedBtnTransform.position;
+		}
 		var clickedBtn = clickedBtnTransform.GetComponent<Button>();
 
 		var answeredCorrectly = id == 0;
 		if (answeredCorrectly)
 		{
-			motionStarCorrect.PlaySequence(starMotionPlayer);
-			sfxExtraStar.PlaySelectedIndex(1);
-			clickedBtn.image.DOColor(Color.green, 0.5f);
+			if (shouldShowAnswerAnimationFeedback)
+			{
+				motionStarCorrect.PlaySequence(starMotionPlayer);
+				sfxExtraStar.PlaySelectedIndex(1);
+				clickedBtn.image.DOColor(Color.green, 0.5f);
+			}
 			CorrectOptionMethod();
 		}
 		else
 		{
-			motionStarWrong.PlaySequence(starMotionPlayer);
-			sfxExtraStar.PlaySelectedIndex(0);
-			clickedBtn.image.DOColor(Color.red, 0.5f);
+			if (shouldShowAnswerAnimationFeedback)
+			{
+				motionStarWrong.PlaySequence(starMotionPlayer);
+				sfxExtraStar.PlaySelectedIndex(0);
+				clickedBtn.image.DOColor(Color.red, 0.5f);
+			}
 			WrongOptionMethod();
 		}
 	}
 
-	public void ShowQuestion(Question question, UnityAction<bool> onAnsweredCallback = null)
+	public void ShowQuestion(Question question, bool showAnswerAnimationFeedback, UnityAction<bool> onAnsweredCallback = null)
 	{
 		base.ShowPopup();
+		shouldShowAnswerAnimationFeedback = showAnswerAnimationFeedback;
+
 		AudioController.Instance.FadeGameplayVolume(0.1f);
 		AudioController.Instance.FadeMusicVolume(0.02f);
 		// Loads the question

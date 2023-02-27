@@ -124,7 +124,7 @@ namespace Fungus
 			sayDialog.Say(subbedText, true, true, true, true, false, null, delegate {
                 Continue();
             });
-        }
+		}
 
         public void Update()
         {
@@ -132,8 +132,11 @@ namespace Fungus
 			// Cheats
 			if (Input.GetKeyDown(KeyCode.PageDown))
 			{
-                // Skip this dialogue                
-				//Continue();
+				var sayDialog = SayDialog.GetSayDialog();
+                sayDialog.Clear();
+				sayDialog.Stop();
+				// Skip this dialogue                
+				Continue();
 			}
 #endif			
 		}
