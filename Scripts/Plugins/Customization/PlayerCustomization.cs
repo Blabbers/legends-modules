@@ -37,7 +37,8 @@ public class PlayerCustomization : MonoBehaviour
 
 			savedOptions[i] = new Customization();
 
-			savedOptions[i].id = Random.Range(0, PossibleCustomizations.Instance.GetMaxOptions((CustomizationSlot)i));
+			//savedOptions[i].id = Random.Range(0, PossibleCustomizations.Instance.GetMaxOptions((CustomizationSlot)i));
+			savedOptions[i].id = Random.Range(0, PossibleCustomizations.Instance.GetSlotSize(i));
 			savedOptions[i].name = $"{savedOptions[i].id} - {(CustomizationSlot)i}";
 		}
 
@@ -309,115 +310,120 @@ public class CustomizationVisuals
 		Texture2D texture;
 
 		int slotId;
-
-		//slotId = (int)slot - 1;
 		slotId = (int)slot;
 
-		if (slot == CustomizationSlot.Hair || slot == CustomizationSlot.Face || slot == CustomizationSlot.Torso || slot == CustomizationSlot.Legs)
-		{
-			//Debug.Log($"ReplaceCurrent|  new id:{id}\nslotId: {slotId} | CustomizationSlot: {slot.ToString()} - {(int)slot}");
-
-			target = PossibleCustomizations.Instance.GetSlotObject(slot, id);
-			//Slots[slotId].DestroyAllChildren();
-
-			if (slot == CustomizationSlot.Face)
-			{
-				Slots[slotId].DestroyCurrent(1);
-				temp = MonoBehaviour.Instantiate(target, Slots[slotId].Parent);
-				temp.transform.SetAsLastSibling();
-			}
-			else if (slot == CustomizationSlot.Hair)
-			{
-				Slots[slotId].DestroyCurrent(0);
-				temp = MonoBehaviour.Instantiate(target, Slots[slotId].Parent);
-				temp.transform.SetAsFirstSibling();
-			}
-			else
-			{
-				Slots[slotId].DestroyCurrent();
-				temp = MonoBehaviour.Instantiate(target, Slots[slotId].Parent);
-
-			}
+		int groupId = 0;
+		SlotType type = SlotType.GameObject;
 
 
 
-			//Debug.Log($"Target: {target.name} \nparent: {Slots[slotId].Parent}");
-			temp.transform.localPosition = Vector3.zero;
-			temp.transform.localRotation = Quaternion.Euler(Vector3.zero);
+		//if (slot == CustomizationSlot.Hair || slot == CustomizationSlot.Face || slot == CustomizationSlot.Torso || slot == CustomizationSlot.Legs)
+		//{
+		//	//Debug.Log($"ReplaceCurrent|  new id:{id}\nslotId: {slotId} | CustomizationSlot: {slot.ToString()} - {(int)slot}");
 
-			//HeadRenderer = currentHead.GetComponent<Renderer>();
+		//	//target = PossibleCustomizations.Instance.GetSlotObject(slot, id);
 
-			if (slot == CustomizationSlot.Face)
-			{
-				currentHead = temp;
-				currentHeadChild = currentHead.transform.GetChild(0).gameObject;
-				HeadRenderer = currentHeadChild.GetComponent<Renderer>();
-			}
+		//	target = (GameObject)PossibleCustomizations.Instance.GetSlotObject<GameObject>(type, groupId, id);
 
 
-			if (slot == CustomizationSlot.Hair)
-			{
-				currentHair = temp;
-				hairRenderer = currentHair.GetComponent<Renderer>();
-			}
+		//	if (slot == CustomizationSlot.Face)
+		//	{
+		//		Slots[slotId].DestroyCurrent(1);
+		//		temp = MonoBehaviour.Instantiate(target, Slots[slotId].Parent);
+		//		temp.transform.SetAsLastSibling();
+		//	}
+		//	else if (slot == CustomizationSlot.Hair)
+		//	{
+		//		Slots[slotId].DestroyCurrent(0);
+		//		temp = MonoBehaviour.Instantiate(target, Slots[slotId].Parent);
+		//		temp.transform.SetAsFirstSibling();
+		//	}
+		//	else
+		//	{
+		//		Slots[slotId].DestroyCurrent();
+		//		temp = MonoBehaviour.Instantiate(target, Slots[slotId].Parent);
+
+		//	}
 
 
-		}
-		else
-		{
 
-			if (slot == CustomizationSlot.Shoes)
-			{
-				targets = PossibleCustomizations.Instance.GetShoesData(id);
+		//	//Debug.Log($"Target: {target.name} \nparent: {Slots[slotId].Parent}");
+		//	temp.transform.localPosition = Vector3.zero;
+		//	temp.transform.localRotation = Quaternion.Euler(Vector3.zero);
 
+		//	//HeadRenderer = currentHead.GetComponent<Renderer>();
 
-				//Delete left
-				Slots[slotId].DestroyAllChildren();
-				temp = MonoBehaviour.Instantiate(targets[0], Slots[slotId].Parent);
-
-				//Delete right
-				Slots[slotId + 1].DestroyAllChildren();
-				temp = MonoBehaviour.Instantiate(targets[1], Slots[slotId + 1].Parent);
-
-			}
-			else if (slot == CustomizationSlot.SkinColor)
-
-			{
-				currentTex = PossibleCustomizations.Instance.GetSkinColor(id);
-
-				if (Application.isPlaying)
-				{
-					hands[0].material.mainTexture = currentTex;
-					hands[1].material.mainTexture = currentTex;
-				}
-				else
-				{
-					hands[0].GetComponent<MeshRenderer>().sharedMaterial.mainTexture = currentTex;
-					hands[1].GetComponent<MeshRenderer>().sharedMaterial.mainTexture = currentTex;
-
-				}
+		//	if (slot == CustomizationSlot.Face)
+		//	{
+		//		currentHead = temp;
+		//		currentHeadChild = currentHead.transform.GetChild(0).gameObject;
+		//		HeadRenderer = currentHeadChild.GetComponent<Renderer>();
+		//	}
 
 
-			}
-			else if (slot == CustomizationSlot.HairColor)
-			{
-				currentMat = PossibleCustomizations.Instance.GetHairColor(id);
-			}
+		//	if (slot == CustomizationSlot.Hair)
+		//	{
+		//		currentHair = temp;
+		//		hairRenderer = currentHair.GetComponent<Renderer>();
+		//	}
 
-		}
 
-		if (HeadRenderer != null)
-		{
-			if(Application.isPlaying) HeadRenderer.material.mainTexture = currentTex;
-			else HeadRenderer.GetComponent<MeshRenderer>().sharedMaterial.mainTexture = currentTex;
+		//}
+		//else
+		//{
 
-		}
+		//	if (slot == CustomizationSlot.Shoes)
+		//	{
+		//		targets = PossibleCustomizations.Instance.GetShoesData(id);
 
-		if (hairRenderer != null)
-		{
-			if (Application.isPlaying) hairRenderer.material = currentMat;
-			else hairRenderer.material = currentMat;
-		}
+
+		//		//Delete left
+		//		Slots[slotId].DestroyAllChildren();
+		//		temp = MonoBehaviour.Instantiate(targets[0], Slots[slotId].Parent);
+
+		//		//Delete right
+		//		Slots[slotId + 1].DestroyAllChildren();
+		//		temp = MonoBehaviour.Instantiate(targets[1], Slots[slotId + 1].Parent);
+
+		//	}
+		//	else if (slot == CustomizationSlot.SkinColor)
+
+		//	{
+		//		currentTex = PossibleCustomizations.Instance.GetSkinColor(id);
+
+		//		if (Application.isPlaying)
+		//		{
+		//			hands[0].material.mainTexture = currentTex;
+		//			hands[1].material.mainTexture = currentTex;
+		//		}
+		//		else
+		//		{
+		//			hands[0].GetComponent<MeshRenderer>().sharedMaterial.mainTexture = currentTex;
+		//			hands[1].GetComponent<MeshRenderer>().sharedMaterial.mainTexture = currentTex;
+
+		//		}
+
+
+		//	}
+		//	else if (slot == CustomizationSlot.HairColor)
+		//	{
+		//		currentMat = PossibleCustomizations.Instance.GetHairColor(id);
+		//	}
+
+		//}
+
+		//if (HeadRenderer != null)
+		//{
+		//	if(Application.isPlaying) HeadRenderer.material.mainTexture = currentTex;
+		//	else HeadRenderer.GetComponent<MeshRenderer>().sharedMaterial.mainTexture = currentTex;
+
+		//}
+
+		//if (hairRenderer != null)
+		//{
+		//	if (Application.isPlaying) hairRenderer.material = currentMat;
+		//	else hairRenderer.material = currentMat;
+		//}
 
 		//HeadRenderer.material.mainTexture = currentTex;
 	}

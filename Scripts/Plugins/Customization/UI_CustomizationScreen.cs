@@ -77,6 +77,27 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 	#endregion
 
 
+	void SetSelectorEvents()
+	{
+		for (int i = 0; i < selectors.Count; i++)
+		{
+			selectors[i].OnOptionChanged = null;
+
+			var lastId = PossibleCustomizations.Instance.GetSlotSize(selectors[i].GroupId) - 1;
+			var name = PossibleCustomizations.Instance.GetName(selectors[i].GroupId);
+
+			selectors[i].SetupSelector(lastId, name);
+			selectors[i].OnOptionChanged += HandleSelectionUpdate;
+
+			if (selectors[i].HasTitle)
+			{
+				selectors[i].DisplayTitle = LocalizationExtensions.LocalizeText(selectors[i].LanguageKey);
+			}
+
+		}
+	}
+
+
 
 	#region Awake
 	void Awake()
@@ -133,10 +154,10 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 		parent = buttonParent.transform;
 
 
-		for (int i = 0; i < displayTexts.Count; i++)
-		{
-			if (slotData[i].display == null) slotData[i].display = displayTexts[i];
-		}
+		//for (int i = 0; i < displayTexts.Count; i++)
+		//{
+		//	if (slotData[i].display == null) slotData[i].display = displayTexts[i];
+		//}
 
 	}
 
@@ -147,11 +168,25 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 
 		//Debug.Log($"RefreshSDKTexts(): {slotData.Count}".Colored());
 
-		for (int i = 0; i < size; i++)
+		//for (int i = 0; i < size; i++)
+		//{
+		//	//slotData[i].UpdateName();
+		//	slotData[i].SetTitle(LocalizationExtensions.LocalizeText(sdkKeys[i]));
+		//}
+
+		for (int i = 0; i < selectors.Count; i++)
 		{
-			//slotData[i].UpdateName();
-			slotData[i].SetTitle(LocalizationExtensions.LocalizeText(sdkKeys[i]));
+			if (selectors[i].HasTitle)
+			{
+				//string value = LocalizationExtensions.LocalizeText(selectors[i].LanguageKey);
+				//Debug.Log($"RefreshSDKTexts()\n{i} | key:{selectors[i].LanguageKey} | value: {value}");
+				selectors[i].DisplayTitle = LocalizationExtensions.LocalizeText(selectors[i].LanguageKey);
+			}
+
 		}
+
+
+
 
 	}
 
@@ -228,59 +263,46 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 		size = PossibleCustomizations.Instance.NumberOfSlots;
 
 
-		if (GameData.Instance.Progress.customizations != null)
-		{
+		//if (GameData.Instance.Progress.customizations != null)
+		//{
 
-			Debug.Log($"UI_CustomizationScreen.GetDataFromSave() " +
-				$"\nNumberOfSlots: {size} | GameData customizations: {GameData.Instance.Progress.customizations.Length}".Colored("orange"));
-		}
+		//	Debug.Log($"UI_CustomizationScreen.GetDataFromSave() " +
+		//		$"\nNumberOfSlots: {size} | GameData customizations: {GameData.Instance.Progress.customizations.Length}".Colored("orange"));
+		//}
 
-		if (GameData.Instance.Progress.customizations.Length == size)
-		{
+		//if (GameData.Instance.Progress.customizations.Length == size)
+		//{
 
-			for (int i = 0; i < size; i++)
-			{
-				//Debug.Log($"GetDataFromSave() i = {i}");
+		//	for (int i = 0; i < size; i++)
+		//	{
+		//		//Debug.Log($"GetDataFromSave() i = {i}");
 
-				current = (CustomizationSlot)i;
-				slotData.Add(PossibleCustomizations.Instance.GetSlotData(current));
-				slotData[i].UpdateCurrent(GameData.Instance.Progress.customizations[i].id);
-			}
+		//		current = (CustomizationSlot)i;
+		//		slotData.Add(PossibleCustomizations.Instance.GetSlotData(current));
+		//		slotData[i].UpdateCurrent(GameData.Instance.Progress.customizations[i].id);
+		//	}
 
-		}
-		else
-		{
-
-
-
-			for (int i = 0; i < size; i++)
-			{
-				//Debug.Log($"GetDataFromSave() i = {i}");
-
-				current = (CustomizationSlot)i;
-				slotData.Add(PossibleCustomizations.Instance.GetSlotData(current));
-				slotData[i].UpdateCurrent(0);
-			}
-		}
+		//}
+		//else
+		//{
 
 
 
-		UpdateGameData();
+		//	for (int i = 0; i < size; i++)
+		//	{
+		//		//Debug.Log($"GetDataFromSave() i = {i}");
+
+		//		current = (CustomizationSlot)i;
+		//		slotData.Add(PossibleCustomizations.Instance.GetSlotData(current));
+		//		slotData[i].UpdateCurrent(0);
+		//	}
+		//}
+
+
+
+		//UpdateGameData();
 	}
 
-	void SetSelectorEvents()
-	{
-		for (int i = 0; i < selectors.Count; i++)
-		{
-			selectors[i].OnOptionChanged = null;
-
-			var lastId = PossibleCustomizations.Instance.GetSlotSize(selectors[i].GroupId) -1;
-			var name = PossibleCustomizations.Instance.GetName(selectors[i].GroupId);
-
-			selectors[i].SetupSelector(lastId, name);
-			selectors[i].OnOptionChanged +=  HandleSelectionUpdate;
-		}
-	}
 
 
 
@@ -309,7 +331,6 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 
 		//ArrowButtonsGeneric(id);
 		//slotData[id].Previous();
-
 
 		UpdateVisualGeneric();
 	}
@@ -514,19 +535,19 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 	{
 		//GameData.Instance.progress.customizations = new Customization[PossibleCustomizations.Instance.NumberOfSlots];
 
-		int size = PossibleCustomizations.Instance.NumberOfSlots;
-		string[] titles = new string[] { "Hair", "Face", "Torso", "Legs", "Shoes", "Hair Color", "Skin Color" };
+		//int size = PossibleCustomizations.Instance.NumberOfSlots;
+		//string[] titles = new string[] { "Hair", "Face", "Torso", "Legs", "Shoes", "Hair Color", "Skin Color" };
 
-		GameData.Instance.Progress.customizations = new Customization[size];
+		//GameData.Instance.Progress.customizations = new Customization[size];
 
-		for (int i = 0; i < size; i++)
-		{
-			GameData.Instance.Progress.customizations[i] = new Customization
-			{
-				name = titles[i] + " - " + slotData[i].Id,
-				id = slotData[i].Id
-			};
-		}
+		//for (int i = 0; i < size; i++)
+		//{
+		//	GameData.Instance.Progress.customizations[i] = new Customization
+		//	{
+		//		name = titles[i] + " - " + slotData[i].Id,
+		//		id = slotData[i].Id
+		//	};
+		//}
 
 		//Debug.Log($"Creating {size} new customization".Colored());
 		// Debug.Log($"Customizations new size: {  GameData.Instance.progress.customizations.Length}".Colored());

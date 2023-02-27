@@ -8,16 +8,18 @@ using UnityEngine.Events;
 public class CustomizationSelector : MonoBehaviour
 {
 
-	public Action<int, int> OnOptionChanged;
-
 	[SerializeField] string groupName;
 	[SerializeField] int groupId;
 
+	[SerializeField] bool hasTitle = true;
+	[SerializeField] string languageKey;
 
-	[Space(10)]
-	[SerializeField] int selectedId;
-	[SerializeField] int lastId;
-	[SerializeField] TextLocalized title;
+	public Action<int, int> OnOptionChanged;
+	[Foldout("Runtime")][SerializeField] int selectedId;
+	[Foldout("Runtime")][SerializeField] int lastId;
+	[Foldout("Runtime")][SerializeField] string displayTitle;
+
+	[Foldout("Components")][SerializeField] TextLocalized title;
 
 
 	#region Get/Set
@@ -43,6 +45,23 @@ public class CustomizationSelector : MonoBehaviour
 		get { return groupName; }
 	}
 
+	public string DisplayTitle { 
+		get { return displayTitle; }
+		set { displayTitle = value; }
+	}
+
+	public string LanguageKey {
+		get { return languageKey; }
+	}
+
+	public bool HasTitle
+	{
+		get { return hasTitle;}
+	}
+
+
+
+
 
 	#endregion
 
@@ -67,6 +86,10 @@ public class CustomizationSelector : MonoBehaviour
 	{
 		this.lastId = lastId;
 		groupName = name;
+
+		if (string.IsNullOrEmpty(languageKey)){
+			hasTitle = false;
+		}
 	}
 
 	public void Next()
@@ -77,6 +100,8 @@ public class CustomizationSelector : MonoBehaviour
 		{
 			selectedId = 0;
 		}
+
+		UpdateDisplay();
 
 		Debug.Log($"{groupName} ".Colored() +
 			$"\nNext() groupId: {groupId} |selectedId: {selectedId}");
@@ -92,9 +117,18 @@ public class CustomizationSelector : MonoBehaviour
 			selectedId = lastId;
 		}
 
+		UpdateDisplay();
+
 		Debug.Log($"{groupName} ".Colored("orange") +
 	$"\nPrevious() groupId: {groupId} |selectedId: {selectedId}");
 		OnOptionChanged?.Invoke(groupId, selectedId);
+	}
+
+
+	void UpdateDisplay()
+	{
+
+		title.text = $"{displayTitle} {selectedId + 1}";
 	}
 
 	public void SelectOption(int id)

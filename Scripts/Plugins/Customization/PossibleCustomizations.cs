@@ -35,52 +35,52 @@ public class PossibleCustomizations : ScriptableObject
 
 	public List<GenericSOList> possibleCustomizations;
 
-	[Header("Colors")]
-    public List<Texture2D> SkinColors = new List<Texture2D>();
-    public List<Material> HairColors = new List<Material>();
+	//[Header("Colors")]
+ //   public List<Texture2D> SkinColors = new List<Texture2D>();
+ //   public List<Material> HairColors = new List<Material>();
 
-    [Header("Body Parts")]
-    public List<GameObject> HairStyles = new List<GameObject>();
-    public List<GameObject> Faces = new List<GameObject>();
-    public List<GameObject> Torsos = new List<GameObject>();
-    public List<GameObject> Legs = new List<GameObject>();
-    public List<GameObject> ShoesLeft = new List<GameObject>();
-    public List<GameObject> ShoesRight = new List<GameObject>();
+ //   [Header("Body Parts")]
+ //   public List<GameObject> HairStyles = new List<GameObject>();
+ //   public List<GameObject> Faces = new List<GameObject>();
+ //   public List<GameObject> Torsos = new List<GameObject>();
+ //   public List<GameObject> Legs = new List<GameObject>();
+ //   public List<GameObject> ShoesLeft = new List<GameObject>();
+ //   public List<GameObject> ShoesRight = new List<GameObject>();
 
 
     //This can be removed, it is editor only
-    public int GetMaxOptions(CustomizationSlot slot)
-    {
-		if (slot == CustomizationSlot.Hair)
-		{
-            return HairStyles.Count;
-		}
-		else if (slot == CustomizationSlot.Face)
-		{
-			return Faces.Count;
-		}
-		else if (slot == CustomizationSlot.Torso)
-		{
-			return Torsos.Count;
-		}
-		else if (slot == CustomizationSlot.Legs)
-		{
-			return Legs.Count;
-		}
-		else if (slot == CustomizationSlot.SkinColor)
-		{
-			return SkinColors.Count;
-		}
-		else if (slot == CustomizationSlot.HairColor)
-		{
-			return HairColors.Count;
-		}
-		else
-		{
-			return ShoesLeft.Count;
-		}
+ //   public int GetMaxOptions(CustomizationSlot slot)
+ //   {
+	//	if (slot == CustomizationSlot.Hair)
+	//	{
+ //           return HairStyles.Count;
+	//	}
+	//	else if (slot == CustomizationSlot.Face)
+	//	{
+	//		return Faces.Count;
+	//	}
+	//	else if (slot == CustomizationSlot.Torso)
+	//	{
+	//		return Torsos.Count;
+	//	}
+	//	else if (slot == CustomizationSlot.Legs)
+	//	{
+	//		return Legs.Count;
+	//	}
+	//	else if (slot == CustomizationSlot.SkinColor)
+	//	{
+	//		return SkinColors.Count;
+	//	}
+	//	else if (slot == CustomizationSlot.HairColor)
+	//	{
+	//		return HairColors.Count;
+	//	}
+	//	else
+	//	{
+	//		return ShoesLeft.Count;
+	//	}
 
-	}
+	//}
 
 	public int GetSlotSize(int groupId)
 	{
@@ -134,76 +134,80 @@ public class PossibleCustomizations : ScriptableObject
 	}
 
 	//Would need to find a way to make this generic, and change CustomizationSlot for an int
-	public SlotData GetSlotData(CustomizationSlot slot)
-    {
+	#region MyRegion
+	//public SlotData GetSlotData(CustomizationSlot slot)
+	//   {
 
-       // Debug.Log($"GetSlotData: {slot}");
+	//      // Debug.Log($"GetSlotData: {slot}");
 
-        SlotData data;
+	//       SlotData data;
 
-        if (slot == CustomizationSlot.Hair)
-        {
-            data = new SlotData(HairStyles.Count, CustomizationSlot.Hair);
-        }
-        else if (slot == CustomizationSlot.Face)
-        {
-            data = new SlotData(Faces.Count, CustomizationSlot.Face);
-        }
-        else if (slot == CustomizationSlot.Torso)
-        {
-            data = new SlotData(Torsos.Count, CustomizationSlot.Torso);
-        }
-        else if (slot == CustomizationSlot.Legs)
-        {
-            data = new SlotData(Legs.Count, CustomizationSlot.Legs);
-        }
-        else if (slot == CustomizationSlot.SkinColor)
-        {
-            data = new SlotData(3, CustomizationSlot.SkinColor);
-        }
-        else if (slot == CustomizationSlot.HairColor)
-        {
-            data = new SlotData(4, CustomizationSlot.HairColor);
-        }
-        else
-        {
-            data = new SlotData(ShoesLeft.Count, CustomizationSlot.Shoes);
-        }
-        return data;
-    }
+	//       if (slot == CustomizationSlot.Hair)
+	//       {
+	//           data = new SlotData(HairStyles.Count, CustomizationSlot.Hair);
+	//       }
+	//       else if (slot == CustomizationSlot.Face)
+	//       {
+	//           data = new SlotData(Faces.Count, CustomizationSlot.Face);
+	//       }
+	//       else if (slot == CustomizationSlot.Torso)
+	//       {
+	//           data = new SlotData(Torsos.Count, CustomizationSlot.Torso);
+	//       }
+	//       else if (slot == CustomizationSlot.Legs)
+	//       {
+	//           data = new SlotData(Legs.Count, CustomizationSlot.Legs);
+	//       }
+	//       else if (slot == CustomizationSlot.SkinColor)
+	//       {
+	//           data = new SlotData(3, CustomizationSlot.SkinColor);
+	//       }
+	//       else if (slot == CustomizationSlot.HairColor)
+	//       {
+	//           data = new SlotData(4, CustomizationSlot.HairColor);
+	//       }
+	//       else
+	//       {
+	//           data = new SlotData(ShoesLeft.Count, CustomizationSlot.Shoes);
+	//       }
+	//       return data;
+	//   } 
+	#endregion
 
 	//Would need to find a way to make this generic, and change CustomizationSlot for an int
-	public GameObject GetSlotObject(CustomizationSlot slot, int id)
-	{
-        //Debug.Log($"GetSlotObject| CustomizationSlot: {slot.ToString()} - {(int)id}");
+	#region MyRegion
+	//public GameObject GetSlotObject(CustomizationSlot slot, int id)
+	//{
+	//       //Debug.Log($"GetSlotObject| CustomizationSlot: {slot.ToString()} - {(int)id}");
 
-        //GenericSOList list = possibleCustomizations[0];
-        //GameObjectList objList = (GameObjectList)list;
-
-
-        //return objList.gameObjects[id];
+	//       //GenericSOList list = possibleCustomizations[0];
+	//       //GameObjectList objList = (GameObjectList)list;
 
 
-		if (slot == CustomizationSlot.Hair)
-		{
-			return HairStyles[id];
-             //return possibleCustomizations[3];
-		}
-		else if (slot == CustomizationSlot.Face)
-		{
-			return Faces[id];
-		}
-		else if (slot == CustomizationSlot.Torso)
-		{
-			return Torsos[id];
-		}
-		else if (slot == CustomizationSlot.Legs)
-		{
-			return Legs[id];
-		}
+	//       //return objList.gameObjects[id];
 
-		return null;
-	}
+
+	//	if (slot == CustomizationSlot.Hair)
+	//	{
+	//		return HairStyles[id];
+	//            //return possibleCustomizations[3];
+	//	}
+	//	else if (slot == CustomizationSlot.Face)
+	//	{
+	//		return Faces[id];
+	//	}
+	//	else if (slot == CustomizationSlot.Torso)
+	//	{
+	//		return Torsos[id];
+	//	}
+	//	else if (slot == CustomizationSlot.Legs)
+	//	{
+	//		return Legs[id];
+	//	}
+
+	//	return null;
+	//} 
+	#endregion
 
 	public T GetSlotObject<T>(SlotType type, int groupId ,int id)
 	{
@@ -235,25 +239,25 @@ public class PossibleCustomizations : ScriptableObject
 	}
 
 
-	public Texture2D GetSkinColor(int id)
-    {
-        return SkinColors[id];
-    }
+	//public Texture2D GetSkinColor(int id)
+ //   {
+ //       return SkinColors[id];
+ //   }
 
-    public Material GetHairColor(int id)
-    {
-        return HairColors[id];
-    }
+ //   public Material GetHairColor(int id)
+ //   {
+ //       return HairColors[id];
+ //   }
 
-    public List<GameObject> GetShoesData(int id)
-    {
-        List<GameObject> shoes = new List<GameObject>();
+ //   public List<GameObject> GetShoesData(int id)
+ //   {
+ //       List<GameObject> shoes = new List<GameObject>();
 
-        shoes.Add(ShoesLeft[id]);
-        shoes.Add(ShoesRight[id]);
+ //       shoes.Add(ShoesLeft[id]);
+ //       shoes.Add(ShoesRight[id]);
 
-        return shoes;
-    }
+ //       return shoes;
+ //   }
 
 }
 
