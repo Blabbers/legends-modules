@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ffdb66a6d4bfcfe47b3fd9e1dddd3065
+guid: 0ad8fad341a149b489946524735b6e6e
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,11 +8,10 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Montserrat
+  fontName: Dimbo
   fontNames:
-  - Montserrat
-  fallbackFontReferences:
-  - {fileID: 12800000, guid: 2a337828fa735734496e1480b72ba0e4, type: 3}
+  - Dimbo
+  fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1
