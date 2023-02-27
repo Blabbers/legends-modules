@@ -15,11 +15,15 @@ namespace Fungus
 			{
 				if (!_popupInstance)
 				{
-					_popupInstance = Instantiate(Resources.Load<UI_PopupQuestion>("UI/--Popup--SimpleQuestion"));
-					DontDestroyOnLoad(_popupInstance.gameObject);
-				}				
+					SetPopupInstance(Resources.Load<UI_PopupQuestion>("UI/--Popup--SimpleQuestion"));					
+				}
 				return _popupInstance;
 			}
+		}
+		private static void SetPopupInstance(UI_PopupQuestion prefab)
+		{
+			_popupInstance = Instantiate(prefab);
+			DontDestroyOnLoad(_popupInstance.gameObject);
 		}
 
 		[Tooltip("Variable to store the value in.")]
@@ -29,11 +33,13 @@ namespace Fungus
 
 		[VariableProperty(typeof(BooleanVariable))]
 		[SerializeField] private Variable setAnswerBoolTo;
+		[SerializeField] private UI_PopupQuestion overrideQuestionPopup;
 
 		#region Public members
 
 		public override void OnEnter()
 		{
+			SetPopupInstance(overrideQuestionPopup);
 			PopupInstance.ShowQuestion(question, HandleOnClosedPopup);			
 			PopupInstance.ShowPopup();
 			//if (playTTS)
