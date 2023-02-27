@@ -21,7 +21,8 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 	[Foldout("Runtime")][SerializeField] float targetRotation;
 	bool hairActive, skinActive;
 
-	[Foldout("Runtime")][ReorderableList] public List<SlotData> slotData = new List<SlotData>();
+	//[Foldout("Runtime")][ReorderableList] public List<SlotData> slotData = new List<SlotData>();
+	[Foldout("Runtime")][ReorderableList][SerializeField] Customization[] savedOptions;
 
 	[Range(15, 45)]
 	[Foldout("Configs")] public float rotationAngle = 30;
@@ -30,7 +31,7 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 
 
 
-	[Foldout("Configs")] public List<string> sdkKeys;
+	//[Foldout("Configs")] public List<string> sdkKeys;
 	//bodyCustomize_Hair //bodyCustomize_Face //bodyCustomize_Torso //bodyCustomize_Legs //bodyCustomize_Shoes
 
 	[Foldout("Components")] public CanvasGroup buttonParent;
@@ -58,6 +59,10 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 		var allTargets = UnityEngine.Object.FindObjectsOfType<CustomizationSelector>();
 		selectors.Clear();
 		selectors= new List<CustomizationSelector>(allTargets);
+
+		selectors.Sort((x, y) => x.GroupId.CompareTo(y.GroupId));
+
+		//objListOrder.Sort((x, y) => x.OrderDate.CompareTo(y.OrderDate));
 
 
 		for (int i = 0; i < selectors.Count; i++)
@@ -92,6 +97,7 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 			if (selectors[i].HasTitle)
 			{
 				selectors[i].DisplayTitle = LocalizationExtensions.LocalizeText(selectors[i].LanguageKey);
+				selectors[i].UpdateDisplay();
 			}
 
 		}
@@ -102,7 +108,7 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 	#region Awake
 	void Awake()
 	{
-		slotData.Clear();
+		//slotData.Clear();
 		GetDataFromSave();
 
 		GetSDKTexts();
@@ -112,7 +118,9 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 		SetRotation(targetRotation);
 
 		hairActive = skinActive = false;
-		customization.UpdateVisual(slotData);
+		//customization.UpdateVisual(slotData);
+		customization.UpdateVisual(savedOptions);
+
 		SetSelectorEvents();
 		//characterVisual.UpdateVisual();
 
@@ -163,8 +171,8 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 
 	void RefreshSDKTexts()
 	{
-		int size = 5;
-		size = sdkKeys.Count;
+		//int size = 5;
+		//size = sdkKeys.Count;
 
 		//Debug.Log($"RefreshSDKTexts(): {slotData.Count}".Colored());
 
@@ -176,13 +184,20 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 
 		for (int i = 0; i < selectors.Count; i++)
 		{
+
+
 			if (selectors[i].HasTitle)
 			{
 				//string value = LocalizationExtensions.LocalizeText(selectors[i].LanguageKey);
 				//Debug.Log($"RefreshSDKTexts()\n{i} | key:{selectors[i].LanguageKey} | value: {value}");
 				selectors[i].DisplayTitle = LocalizationExtensions.LocalizeText(selectors[i].LanguageKey);
+				selectors[i].UpdateDisplay();
+
+				//savedOptions[i].name = selectors[i].DisplayTitle;
 			}
 
+
+			//savedOptions[i].name = $"[{savedOptions[i].id}] {selectors[i].GroupName}";
 		}
 
 
@@ -261,6 +276,33 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 		//Debug.Log($"is PossibleCustomizations.Instance null? {PossibleCustomizations.Instance == null}");
 
 		size = PossibleCustomizations.Instance.NumberOfSlots;
+		savedOptions = new Customization[size];
+
+		if (GameData.Instance.Progress.customizations.Length == size)
+		{
+			
+
+			for (int i = 0; i < size; i++)
+			{
+				savedOptions[i] = new Customization();
+				savedOptions[i].name = GameData.Instance.Progress.customizations[i].name;
+				savedOptions[i].id = GameData.Instance.Progress.customizations[i].id;
+
+			}
+
+		}
+		else
+		{
+			for (int i = 0; i < size; i++)
+			{
+				savedOptions[i] = new Customization();
+				savedOptions[i].name = "";
+				savedOptions[i].id = 0;
+			}
+
+				//		slotData.Add(PossibleCustomizations.Instance.GetSlotData(current));
+				//		slotData[i].UpdateCurrent(0);
+		}
 
 
 		//if (GameData.Instance.Progress.customizations != null)
@@ -332,6 +374,8 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 		//ArrowButtonsGeneric(id);
 		//slotData[id].Previous();
 
+		savedOptions[groupId].id = selectedId;
+		//savedOptions[groupId].name = 
 		UpdateVisualGeneric();
 	}
 
@@ -368,35 +412,50 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 
 	#endregion
 
-	public void Next(int id)
-	{
-		//Debug.Log("Next: " + (CustomizationSlot)id);
-		//button.GetComponent<MotionTweenPlayer>().OnAnimationFinished.AddListener(() => { Singleton.Get<SceneLoader>().LoadGameLevel(myLevel); })
+	//public void Next(int id)
+	//{
+	//	//Debug.Log("Next: " + (CustomizationSlot)id);
+	//	//button.GetComponent<MotionTweenPlayer>().OnAnimationFinished.AddListener(() => { Singleton.Get<SceneLoader>().LoadGameLevel(myLevel); })
 
-		ArrowButtonsGeneric(id);
+	//	ArrowButtonsGeneric(id);
 
-		slotData[id].Next();
-		UpdateVisualGeneric();
-	}
+	//	slotData[id].Next();
+	//	UpdateVisualGeneric();
+	//}
 
-	public void Previous(int id)
-	{
-		//Debug.Log("Previous: " + (CustomizationSlot)id);
-		ArrowButtonsGeneric(id);
+	//public void Previous(int id)
+	//{
+	//	//Debug.Log("Previous: " + (CustomizationSlot)id);
+	//	ArrowButtonsGeneric(id);
 
-		slotData[id].Previous();
-		UpdateVisualGeneric();
-	}
+	//	slotData[id].Previous();
+	//	UpdateVisualGeneric();
+	//}
 
 	public void RandomizeVisuals()
 	{
-		foreach (var item in slotData)
+		//foreach (var item in slotData)
+		//{
+		//	item.GenerateRandomOption();
+		//}
+
+		foreach (var item in savedOptions)
 		{
-			item.GenerateRandomOption();
+			//item.GenerateRandomOption();
 		}
 
 		UpdateVisualGeneric();
 	}
+
+	//void GenerateRandomOption()
+	//{
+	//	int newId;
+	//	newId = UnityEngine.Random.Range(0, TotalOptions);
+
+	//	UpdateCurrent(newId);
+
+	//}
+
 
 	void ArrowButtonsGeneric(int id)
 	{
@@ -452,28 +511,28 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 
 
 	//Being used to select hair color, weird
-	public void ToggleHairColorPick(int optionId)
-	{
-		hairActive = !hairActive;
-		//ToggleColorPick_Hair(hairActive);
-		Type = CustomizationSlot.HairColor;
-		slotData[(int)CustomizationSlot.HairColor].UpdateCurrent(optionId);
-		UpdateVisualGeneric();
-	}
+	//public void ToggleHairColorPick(int optionId)
+	//{
+	//	hairActive = !hairActive;
+	//	//ToggleColorPick_Hair(hairActive);
+	//	Type = CustomizationSlot.HairColor;
+	//	slotData[(int)CustomizationSlot.HairColor].UpdateCurrent(optionId);
+	//	UpdateVisualGeneric();
+	//}
 
-	//Being used to select skin color, weird
-	public void ToggleSkinColorPick(int optionId)
-	{
-		skinActive = !skinActive;
-		ToggleColorPick_Face(skinActive);
-		Type = CustomizationSlot.SkinColor;
-		slotData[(int)CustomizationSlot.SkinColor].UpdateCurrent(optionId);
-		UpdateVisualGeneric();
-	}
+	////Being used to select skin color, weird
+	//public void ToggleSkinColorPick(int optionId)
+	//{
+	//	skinActive = !skinActive;
+	//	ToggleColorPick_Face(skinActive);
+	//	Type = CustomizationSlot.SkinColor;
+	//	slotData[(int)CustomizationSlot.SkinColor].UpdateCurrent(optionId);
+	//	UpdateVisualGeneric();
+	//}
 
 	void ToggleColorPick_Hair(bool active)
 	{
-		OptionButton(0);
+		//OptionButton(0);
 		//popupHairColor.SetActive(active);
 		//popupSkinColor.SetActive(false);
 		skinActive = false;
@@ -494,7 +553,8 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 		//Debug.Log("UpdateVisualGeneric()");
 
 		UpdateGameData();
-		customization.UpdateVisual(slotData);
+		//customization.UpdateVisual(slotData);
+		customization.UpdateVisual(savedOptions);
 
 		//characterVisual.UpdateVisual();
 	}
@@ -504,31 +564,31 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 	#endregion
 
 	#region PopupButtons
-	public void OptionButton(int id)
-	{
+	//public void OptionButton(int id)
+	//{
 
-		if (hairActive)
-		{
-			Type = CustomizationSlot.HairColor;
-		}
+	//	if (hairActive)
+	//	{
+	//		Type = CustomizationSlot.HairColor;
+	//	}
 
-		if (skinActive)
-		{
-			Type = CustomizationSlot.SkinColor;
-		}
+	//	if (skinActive)
+	//	{
+	//		Type = CustomizationSlot.SkinColor;
+	//	}
 
-		if (Type == CustomizationSlot.HairColor)
-		{
-			//Debug.Log($"OptionButton {Type.ToString()} new id: {id}".Colored());
-			slotData[(int)CustomizationSlot.HairColor].UpdateCurrent(id);
-		}
-		else if (Type == CustomizationSlot.SkinColor)
-		{
-			slotData[(int)CustomizationSlot.SkinColor].UpdateCurrent(id);
-		}
+	//	//if (Type == CustomizationSlot.HairColor)
+	//	//{
+	//	//	//Debug.Log($"OptionButton {Type.ToString()} new id: {id}".Colored());
+	//	//	slotData[(int)CustomizationSlot.HairColor].UpdateCurrent(id);
+	//	//}
+	//	//else if (Type == CustomizationSlot.SkinColor)
+	//	//{
+	//	//	slotData[(int)CustomizationSlot.SkinColor].UpdateCurrent(id);
+	//	//}
 
-		UpdateVisualGeneric();
-	}
+	//	UpdateVisualGeneric();
+	//}
 	#endregion
 
 	void UpdateGameData()

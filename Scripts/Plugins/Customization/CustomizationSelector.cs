@@ -125,7 +125,7 @@ public class CustomizationSelector : MonoBehaviour
 	}
 
 
-	void UpdateDisplay()
+	public void UpdateDisplay()
 	{
 
 		title.text = $"{displayTitle} {selectedId + 1}";
