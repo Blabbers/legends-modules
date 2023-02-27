@@ -1,6 +1,7 @@
 using NaughtyAttributes;
 using UnityEngine;
 
+[CreateAssetMenu(menuName = "Scriptable Values/StringVar", order = 1)]
 public class StringVar : ScriptableObject
 {
 	[field: SerializeField]
