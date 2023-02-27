@@ -104,11 +104,15 @@ namespace Blabbers
             dataDictionary.Add("level", GameData.Instance.Progress.currentLevelId + 1);
             dataDictionary.Add("duration", Time.timeSinceLevelLoad);
             dataDictionary.Add("starAmount", starAmount);
-            var hasQuestion = Singleton.Get<UI_PopupQuestion>().QuestionWasAnsweredThisLevel;
-            var answeredCorrectly = Singleton.Get<UI_PopupQuestion>().ChoseCorrectly;
-            if (hasQuestion && answeredCorrectly)
+            var popupQuestion = Singleton.Get<UI_PopupQuestion>();
+            if (popupQuestion)
             {
-                dataDictionary.Add("correctAnswer", answeredCorrectly);
+				var hasQuestion = popupQuestion.QuestionWasAnsweredThisLevel;
+                var answeredCorrectly = popupQuestion.ChoseCorrectly;
+                if (hasQuestion && answeredCorrectly)
+                {
+                    dataDictionary.Add("correctAnswer", answeredCorrectly);
+                }
             }
             SendEvent("levelVictory", dataDictionary);
         }

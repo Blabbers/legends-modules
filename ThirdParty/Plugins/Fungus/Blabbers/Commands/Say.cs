@@ -126,6 +126,18 @@ namespace Fungus
             });
         }
 
+        public void Update()
+        {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+			// Cheats
+			if (Input.GetKeyDown(KeyCode.PageDown))
+			{
+                // Skip this dialogue                
+				//Continue();
+			}
+#endif			
+		}
+
         public override string GetSummary()
         {
             string namePrefix = "";
