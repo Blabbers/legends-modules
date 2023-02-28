@@ -5,6 +5,7 @@ using UnityEditor;
 using TMPro.EditorUtilities;
 using Animancer.Editor;
 using Blabbers.Game00;
+using UnityEditor.SceneManagement;
 
 [CustomEditor(typeof(TextLocalized))]
 public class TextLocalizedEditor : TMP_EditorPanelUI
@@ -80,5 +81,36 @@ public class TextLocalizedEditor : TMP_EditorPanelUI
 		}
 	}
 
+	[MenuItem("GameObject/UI/Text - Localized")]
+	public static void CreateMenu()
+	{
+		//Creates
+		var gameObject = ObjectFactory.CreateGameObject("Text", typeof(TextLocalized));
 
+		// Place the object in the proper scene, with a relevant name
+		StageUtility.PlaceGameObjectInCurrentStage(gameObject);
+		GameObjectUtility.EnsureUniqueNameForSibling(gameObject);
+
+		// Sets parent if any
+		if (Selection.activeGameObject)
+		{
+			gameObject.transform.SetParent(Selection.activeGameObject.transform);
+			gameObject.transform.localScale = Vector3.one;
+			gameObject.transform.localPosition = Vector3.zero;
+		}
+
+		var textLoc = gameObject.GetComponent<TextLocalized>();
+		if (textLoc)
+		{
+			// Generates new localization key
+			textLoc.Localization.OverrideLocKey(LocalizedString.GenerateLocKey());
+		}
+
+		// Record undo and select
+		Undo.RegisterCreatedObjectUndo(gameObject, $"Create Object: {gameObject.name}");
+		Selection.activeGameObject = gameObject;
+
+		// Mark the scene as dirty, for saving
+		EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+	}
 }

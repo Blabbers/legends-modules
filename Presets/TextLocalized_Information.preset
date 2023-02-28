@@ -74,7 +74,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_text
-    value: LISTEN TO TEXT
+    value: Default Text...
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_isRightToLeft
@@ -83,7 +83,7 @@ Preset:
   - target: {fileID: 0}
     propertyPath: m_fontAsset
     value: 
-    objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+    objectReference: {fileID: 11400000, guid: c9b9154f241af344fa559c4146a2502f, type: 2}
   - target: {fileID: 0}
     propertyPath: m_sharedMaterial
     value: 
@@ -390,7 +390,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_hasFontAssetChanged
-    value: 0
+    value: 1
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: m_baseMaterial
@@ -418,18 +418,18 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: localization.text
-    value: LISTEN TO TEXT
+    value: Default Text...
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: localization.applyKeyCodes
+    value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: playTTSOnEnable
     value: 0
     objectReference: {fileID: 0}
   - target: {fileID: 0}
-    propertyPath: isAnimated
-    value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: OnAnimationFinished.m_PersistentCalls.m_Calls.Array.size
-    value: 0
+    propertyPath: applyKeyCodes
+    value: 1
     objectReference: {fileID: 0}
   m_ExcludedProperties: []
