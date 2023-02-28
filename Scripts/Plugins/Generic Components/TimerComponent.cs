@@ -54,7 +54,7 @@ public class TimerComponent : MonoBehaviour
 			{
 				var displayTime = displayAsCountdown && !unlimitedTimer ? 
 									Mathf.Max(maxDuration - currentTimePassed, 0f) : 
-									Mathf.Max(currentTimePassed, 0f);
+									Mathf.Min(currentTimePassed, maxDuration);
 
 				var formatted = string.Format("{0:00}:{1:00}", Mathf.FloorToInt(displayTime), Mathf.FloorToInt((displayTime - Mathf.Floor(displayTime)) * 100));
 				textToUpdate.text = formatted;
