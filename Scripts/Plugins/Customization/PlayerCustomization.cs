@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.InteropServices.ComTypes;
 using System.Xml.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -11,67 +12,97 @@ using Random = UnityEngine.Random;
 public class PlayerCustomization : MonoBehaviour
 {
 	public bool isInGame = true;
+	//[ReorderableList][SerializeField] Customization[] savedOptions;
 	[ReorderableList][SerializeField] Customization[] savedOptions;
+	[ReorderableList][SerializeField] CustomizationData[] configuredOptions;
+	[ReorderableList][SerializeField] CustomizationParentData[] parentData;
+
+	//[SerializeField] List<Transform> objParents = new List<Transform>();
+
+	[ReorderableList][SerializeField] SlotData[] slots;
 	public CustomizationVisuals customization;
 
 
-	#region Editor
 	[Button]
-	void SetupVisuals_Editor()
+	void SetupBaseData()
 	{
-		int size = Enum.GetNames(typeof(CustomizationSlot)).Length;
-		//slotData.Clear();
-
+		int size = PossibleCustomizations.Instance.NumberOfSlots;
 		savedOptions = new Customization[size];
-
-		Debug.Log($"SetupVisuals_Editor() \nsize: {size}");
 
 		for (int i = 0; i < size; i++)
 		{
-			//slotData.Add(new SlotData());
-			//slotData[i].Type = (CustomizationSlot)i;
-			//slotData[i].Id = Random.Range(0, PossibleCustomizations.Instance.GetMaxOptions(slotData[i].Type));
-
-			//slotData[i].Name = $"{slotData[i].Id} - {slotData[i].Type.ToString()}";
-
-
 			savedOptions[i] = new Customization();
+			savedOptions[i].name = $"{savedOptions[i].id + 1} - {PossibleCustomizations.Instance.GetName(i)}";
 
-			//savedOptions[i].id = Random.Range(0, PossibleCustomizations.Instance.GetMaxOptions((CustomizationSlot)i));
-			savedOptions[i].id = Random.Range(0, PossibleCustomizations.Instance.GetSlotSize(i));
-			savedOptions[i].name = $"{savedOptions[i].id} - {(CustomizationSlot)i}";
 		}
 
-		customization.SetUpVisuals();
+		GenerateConfigureOptions();
 
-	}
-
-	[Button]
-	void UpdateVisuals_Editor()
-	{
-
-		#region MyRegion
-		//for (int i = 0; i < slotData.Count; i++)
-		//{
-
-		//	slotData[i].Name = $"{slotData[i].Id} - {slotData[i].Type.ToString()}";
-
-		//}
-
-
-		//UpdateVisual(slotData); 
-		#endregion
-
-		for (int i = 0; i < savedOptions.Length; i++)
+		parentData = new CustomizationParentData[size];
+		for (int i = 0; i < size; i++)
 		{
-
-			savedOptions[i].name = $"{savedOptions[i].id} - {(CustomizationSlot)i}";
-
+			parentData[i] = new CustomizationParentData(configuredOptions[i].ListReference);
 		}
 
-		UpdateVisual(savedOptions);
-
 	}
+
+	#region Editor
+	//[Button]
+	//void SetupVisuals_Editor()
+	//{
+	//	int size = Enum.GetNames(typeof(CustomizationSlot)).Length;
+	//	//slotData.Clear();
+
+	//	savedOptions = new Customization[size];
+
+	//	Debug.Log($"SetupVisuals_Editor() \nsize: {size}");
+
+	//	for (int i = 0; i < size; i++)
+	//	{
+	//		//slotData.Add(new SlotData());
+	//		//slotData[i].Type = (CustomizationSlot)i;
+	//		//slotData[i].Id = Random.Range(0, PossibleCustomizations.Instance.GetMaxOptions(slotData[i].Type));
+
+	//		//slotData[i].Name = $"{slotData[i].Id} - {slotData[i].Type.ToString()}";
+
+
+	//		savedOptions[i] = new Customization();
+
+	//		//savedOptions[i].id = Random.Range(0, PossibleCustomizations.Instance.GetMaxOptions((CustomizationSlot)i));
+	//		savedOptions[i].id = Random.Range(0, PossibleCustomizations.Instance.GetSlotSize(i));
+	//		savedOptions[i].name = $"{savedOptions[i].id} - {(CustomizationSlot)i}";
+	//	}
+
+	//	customization.SetUpVisuals();
+
+	//}
+
+	//[Button]
+	//void UpdateVisuals_Editor()
+	//{
+
+	//	#region MyRegion
+	//	//for (int i = 0; i < slotData.Count; i++)
+	//	//{
+
+	//	//	slotData[i].Name = $"{slotData[i].Id} - {slotData[i].Type.ToString()}";
+
+	//	//}
+
+
+	//	//UpdateVisual(slotData); 
+	//	#endregion
+
+	//	for (int i = 0; i < savedOptions.Length; i++)
+	//	{
+
+	//		savedOptions[i].name = $"{savedOptions[i].id} - {(CustomizationSlot)i}";
+
+	//	}
+
+	//	//UpdateVisual(savedOptions);
+
+	//}
 
 	#endregion
 
@@ -80,7 +111,9 @@ public class PlayerCustomization : MonoBehaviour
 		if (isInGame)
 		{
 			LoadFromGameData();
-			UpdateVisual(savedOptions);
+			GenerateConfigureOptions();
+			//UpdateVisual(savedOptions);
+			UpdateVisual(configuredOptions);
 		}
 	}
 
@@ -115,43 +148,104 @@ public class PlayerCustomization : MonoBehaviour
 	}
 
 
-	public void UpdateVisual(List<SlotData> slotData)
+	void GenerateConfigureOptions()
 	{
-		//Debug.Log("PlayerCustomization.UpdateVisual()\n".Colored("orange"));
 
+		int size = savedOptions.Length;
+		configuredOptions = new CustomizationData[size];
 
-		savedOptions = ConvertSlotData(slotData);
-		customization.UpdateVisual(savedOptions);
-
-		//this.slotData = slotData;
-		//customization.UpdateVisual(slotData);
-	}
-
-
-
-
-	public void UpdateVisual(Customization[] savedOptions)
-	{
-		Debug.Log($"PlayerCustomization.UpdateVisual()\nsavedOptions.Length: {savedOptions.Length}".Colored("orange"));
-		customization.UpdateVisual(savedOptions);
-	}
-
-	Customization[] ConvertSlotData(List<SlotData> slotData)
-	{
-		Customization[] savedOptions = new Customization[slotData.Count];
-
-		for (int i = 0; i < slotData.Count; i++)
+		for (int i = 0; i < savedOptions.Length; i++)
 		{
-			savedOptions[i] = new Customization();
-
-			savedOptions[i].id = slotData[i].Id;
-			savedOptions[i].name = $"{savedOptions[i].id} - {(CustomizationSlot)i}";
+			configuredOptions[i] = new CustomizationData(savedOptions[i], PossibleCustomizations.Instance.GetSlotList(i));
 		}
 
-		return savedOptions;
 	}
 
+
+	//public void UpdateVisual(Customization[] savedOptions)
+	//{
+	//	Debug.Log($"PlayerCustomization.UpdateVisual()\nsavedOptions.Length: {savedOptions.Length}".Colored("orange"));
+	//	this.savedOptions = savedOptions;
+	//	customization.UpdateVisual(savedOptions);
+	//}
+
+	public void UpdateVisual(CustomizationData[] configuredOptions)
+	{
+		this.configuredOptions = configuredOptions;
+	}
+
+
+	#region MyRegion
+	//Customization[] ConvertSlotData(List<SlotData> slotData)
+	//{
+	//	Customization[] savedOptions = new Customization[slotData.Count];
+
+	//	for (int i = 0; i < slotData.Count; i++)
+	//	{
+	//		savedOptions[i] = new Customization();
+
+	//		savedOptions[i].id = slotData[i].Id;
+	//		savedOptions[i].name = $"{savedOptions[i].id} - {(CustomizationSlot)i}";
+	//	}
+
+	//	return savedOptions;
+	//} 
+	#endregion
+
+	#region MyRegion
+
+	//public void UpdateVisual(List<SlotData> slotData)
+	//{
+	//	//Debug.Log("PlayerCustomization.UpdateVisual()\n".Colored("orange"));
+
+
+	//	savedOptions = ConvertSlotData(slotData);
+	//	customization.UpdateVisual(savedOptions);
+
+	//	//this.slotData = slotData;
+	//	//customization.UpdateVisual(slotData);
+	//}
+
+	#endregion
+
 }
+
+[Serializable]
+public class CustomizationData
+{
+	[SerializeField] string name;
+	[SerializeField] GenericSOList listReference;
+	[SerializeField] Customization savedData;
+
+
+	public CustomizationData(Customization savedData, GenericSOList listReference)
+	{
+		this.savedData = savedData;
+		this.listReference = listReference;
+
+		name = savedData.name;
+	}
+
+	public GenericSOList ListReference { get { return listReference; } }
+
+}
+
+[Serializable]
+public class CustomizationParentData
+{
+	public string name;
+	public Transform parent;
+	public SlotType type;
+	public GenericSOList listRef;
+
+	public CustomizationParentData(GenericSOList listRef)
+	{
+		this.listRef = listRef;
+		name = listRef.name;
+	}
+}
+
+
 
 [Serializable]
 public class CustomizationVisuals
@@ -249,6 +343,9 @@ public class CustomizationVisuals
 			ReplaceCurrent(currentSlot, currentId);
 		}
 	}
+
+	
+
 
 	#region MyRegion
 
@@ -539,3 +636,125 @@ public class SlotReferences
 	}
 
 }
+
+
+[Serializable]
+public class SlotData
+{
+	public string Name;
+	public Transform Parent;
+	public GameObject Current;
+	public Customization savedData;
+
+}
+
+
+
+
+
+
+
+//[Serializable]
+//public class SlotData
+//{
+//	public string Name;
+//	[SerializeField] string title = "";
+//	public CustomizationSlot Type;
+//	public int Id;
+//	public int TotalOptions;
+//	public TextLocalized display;
+
+//	#region Constructor
+//	public SlotData()
+//	{
+
+//	}
+
+//	public SlotData(int max, CustomizationSlot type, int id = 0)
+//	{
+//		TotalOptions = max;
+//		Id = id;
+//		Type = type;
+
+//		//Debug.LogError($"new SlotData {Type}".Colored("green"));
+//		UpdateName();
+//		//Name = Id + " - " + Type.ToString();
+//	}
+
+
+//	public void UpdateName()
+//	{
+//		//if (loadSDK != null)
+//		//{
+//		//    loadSDK.UpdateText_Concat("" + (Id + 1));
+
+//		//    Debug.LogError($"UpdateName {Type} \nFoundSDK".Colored());
+//		//}
+//		//else
+//		//{
+//		//    Debug.LogError($"UpdateName {Type} \nloadSDK is null".Colored("red"));
+//		//}
+
+//		Name = Id + " - " + Type.ToString();
+//		//Debug.Log(title);
+//		////title = "A";
+
+//		if (display != null)
+//		{
+//			display.text = title + " " + (Id + 1);
+//		}
+//	}
+
+//	public void SetTitle(string title)
+//	{
+//		this.title = title;
+//		//display.text = title + " " + (Id + 1);
+//		UpdateName();
+//	}
+
+//	#endregion
+
+//	public void UpdateCurrent(int id)
+//	{
+//		//Debug.Log($"UpdateCurrent {Type} \nid: {id}".Colored());
+
+//		Id = id;
+//		UpdateName();
+//	}
+
+
+//	public void GenerateRandomOption()
+//	{
+//		int newId;
+//		newId = UnityEngine.Random.Range(0, TotalOptions);
+
+//		UpdateCurrent(newId);
+
+//	}
+
+
+//	public void Next()
+//	{
+//		Id++;
+
+//		if (Id >= TotalOptions)
+//		{
+//			Id = 0;
+//		}
+
+//		UpdateCurrent(Id);
+//	}
+
+//	public void Previous()
+//	{
+//		Id--;
+
+//		if (Id < 0)
+//		{
+//			Id = TotalOptions - 1;
+//		}
+
+//		UpdateCurrent(Id);
+//	}
+
+//}

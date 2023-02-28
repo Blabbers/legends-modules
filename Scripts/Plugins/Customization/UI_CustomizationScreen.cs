@@ -16,13 +16,18 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 
 	#region Variables
 
-	[Foldout("Runtime")] public CustomizationSlot Type;
+	//[Foldout("Runtime")] public CustomizationSlot Type;
 	[Foldout("Runtime")] public bool isNewGame = false;
 	[Foldout("Runtime")][SerializeField] float targetRotation;
 	bool hairActive, skinActive;
 
 	//[Foldout("Runtime")][ReorderableList] public List<SlotData> slotData = new List<SlotData>();
-	[Foldout("Runtime")][ReorderableList][SerializeField] Customization[] savedOptions;
+
+	//Make this a one time input
+	[Foldout("Runtime")] Customization[] savedOptions;
+	[Foldout("Runtime")][ReorderableList][SerializeField] CustomizationData[] configuredOptions;
+
+	//[Foldout("Runtime")][ReorderableList][SerializeField] Customization[] configuredOptions;
 
 	[Range(15, 45)]
 	[Foldout("Configs")] public float rotationAngle = 30;
@@ -90,8 +95,9 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 
 			var lastId = PossibleCustomizations.Instance.GetSlotSize(selectors[i].GroupId) - 1;
 			var name = PossibleCustomizations.Instance.GetName(selectors[i].GroupId);
+			var selected = savedOptions[i].id;
 
-			selectors[i].SetupSelector(lastId, name);
+			selectors[i].SetupSelector(lastId, name, selected);
 			selectors[i].OnOptionChanged += HandleSelectionUpdate;
 
 			if (selectors[i].HasTitle)
@@ -110,6 +116,7 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 	{
 		//slotData.Clear();
 		GetDataFromSave();
+		GenerateConfigureOptions();
 
 		GetSDKTexts();
 		RefreshSDKTexts();
@@ -119,7 +126,8 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 
 		hairActive = skinActive = false;
 		//customization.UpdateVisual(slotData);
-		customization.UpdateVisual(savedOptions);
+		//customization.UpdateVisual(savedOptions);
+		customization.UpdateVisual(configuredOptions);
 
 		SetSelectorEvents();
 		//characterVisual.UpdateVisual();
@@ -269,7 +277,7 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 
 		//Debug.Log($"GetDataFromSave()".Colored("green"));
 		int size = 5;
-		CustomizationSlot current;
+		//CustomizationSlot current;
 
 
 		//size = Enum.GetNames(typeof(CustomizationSlot)).Length;
@@ -285,8 +293,10 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 			for (int i = 0; i < size; i++)
 			{
 				savedOptions[i] = new Customization();
-				savedOptions[i].name = GameData.Instance.Progress.customizations[i].name;
+				//savedOptions[i].name = GameData.Instance.Progress.customizations[i].name;
 				savedOptions[i].id = GameData.Instance.Progress.customizations[i].id;
+
+				savedOptions[i].name = $"{savedOptions[i].id + 1} - {PossibleCustomizations.Instance.GetName(i)}";
 
 			}
 
@@ -296,13 +306,15 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 			for (int i = 0; i < size; i++)
 			{
 				savedOptions[i] = new Customization();
-				savedOptions[i].name = "";
 				savedOptions[i].id = 0;
+
+				savedOptions[i].name = $"{savedOptions[i].id + 1} - {PossibleCustomizations.Instance.GetName(i)}";
 			}
 
-				//		slotData.Add(PossibleCustomizations.Instance.GetSlotData(current));
-				//		slotData[i].UpdateCurrent(0);
 		}
+
+
+
 
 
 		//if (GameData.Instance.Progress.customizations != null)
@@ -345,7 +357,18 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 		//UpdateGameData();
 	}
 
+	void GenerateConfigureOptions()
+	{
 
+		int size = savedOptions.Length;
+		configuredOptions = new CustomizationData[size];
+
+		for (int i = 0; i < savedOptions.Length; i++)
+		{
+			configuredOptions[i] = new CustomizationData(savedOptions[i], PossibleCustomizations.Instance.GetSlotList(i));
+		}
+
+	}
 
 
 	void Delay(float time)
@@ -375,7 +398,8 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 		//slotData[id].Previous();
 
 		savedOptions[groupId].id = selectedId;
-		//savedOptions[groupId].name = 
+		savedOptions[groupId].name = $"{savedOptions[groupId].id + 1} - {PossibleCustomizations.Instance.GetName(groupId)}";
+
 		UpdateVisualGeneric();
 	}
 
@@ -461,7 +485,7 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 	{
 		//Debug.Log("ArrowButtonsGeneric: " + (CustomizationSlot)id);
 
-		Type = (CustomizationSlot)id;
+		//Type = (CustomizationSlot)id;
 	}
 
 	//Methods to swap visuals
@@ -492,22 +516,22 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 	}
 
 	#region Color picks
-	public void ToggleColorPick(int id)
-	{
-		if (id == 0)
-		{
-			hairActive = !hairActive;
-			ToggleColorPick_Hair(hairActive);
-			Type = CustomizationSlot.HairColor;
-		}
-		else
-		{
-			skinActive = !skinActive;
-			ToggleColorPick_Face(skinActive);
-			Type = CustomizationSlot.SkinColor;
-		}
+	//public void ToggleColorPick(int id)
+	//{
+	//	if (id == 0)
+	//	{
+	//		hairActive = !hairActive;
+	//		ToggleColorPick_Hair(hairActive);
+	//		Type = CustomizationSlot.HairColor;
+	//	}
+	//	else
+	//	{
+	//		skinActive = !skinActive;
+	//		ToggleColorPick_Face(skinActive);
+	//		Type = CustomizationSlot.SkinColor;
+	//	}
 
-	}
+	//}
 
 
 	//Being used to select hair color, weird
@@ -554,7 +578,8 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 
 		UpdateGameData();
 		//customization.UpdateVisual(slotData);
-		customization.UpdateVisual(savedOptions);
+		//customization.UpdateVisual(savedOptions);
+		customization.UpdateVisual(configuredOptions);
 
 		//characterVisual.UpdateVisual();
 	}
@@ -620,108 +645,3 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 	}
 }
 
-
-[Serializable]
-public class SlotData
-{
-	public string Name;
-	[SerializeField] string title = "";
-	public CustomizationSlot Type;
-	public int Id;
-	public int TotalOptions;
-	public TextLocalized display;
-
-	#region Constructor
-	public SlotData()
-	{
-
-	}
-
-	public SlotData(int max, CustomizationSlot type, int id = 0)
-	{
-		TotalOptions = max;
-		Id = id;
-		Type = type;
-
-		//Debug.LogError($"new SlotData {Type}".Colored("green"));
-		UpdateName();
-		//Name = Id + " - " + Type.ToString();
-	}
-
-
-	public void UpdateName()
-	{
-		//if (loadSDK != null)
-		//{
-		//    loadSDK.UpdateText_Concat("" + (Id + 1));
-
-		//    Debug.LogError($"UpdateName {Type} \nFoundSDK".Colored());
-		//}
-		//else
-		//{
-		//    Debug.LogError($"UpdateName {Type} \nloadSDK is null".Colored("red"));
-		//}
-
-		Name = Id + " - " + Type.ToString();
-		//Debug.Log(title);
-		////title = "A";
-
-		if (display != null)
-		{
-			display.text = title + " " + (Id + 1);
-		}
-	}
-
-	public void SetTitle(string title)
-	{
-		this.title = title;
-		//display.text = title + " " + (Id + 1);
-		UpdateName();
-	}
-
-	#endregion
-
-	public void UpdateCurrent(int id)
-	{
-		//Debug.Log($"UpdateCurrent {Type} \nid: {id}".Colored());
-
-		Id = id;
-		UpdateName();
-	}
-
-
-	public void GenerateRandomOption()
-	{
-		int newId;
-		newId = UnityEngine.Random.Range(0, TotalOptions);
-
-		UpdateCurrent(newId);
-
-	}
-
-
-	public void Next()
-	{
-		Id++;
-
-		if (Id >= TotalOptions)
-		{
-			Id = 0;
-		}
-
-		UpdateCurrent(Id);
-	}
-
-	public void Previous()
-	{
-		Id--;
-
-		if (Id < 0)
-		{
-			Id = TotalOptions - 1;
-		}
-
-		UpdateCurrent(Id);
-	}
-
-}

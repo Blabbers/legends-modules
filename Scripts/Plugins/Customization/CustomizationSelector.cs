@@ -82,9 +82,10 @@ public class CustomizationSelector : MonoBehaviour
 	#endregion
 
 
-	public void SetupSelector(int lastId, string name)
+	public void SetupSelector(int lastId, string name, int selectedId = 0)
 	{
 		this.lastId = lastId;
+		this.selectedId = selectedId;
 		groupName = name;
 
 		if (string.IsNullOrEmpty(languageKey)){
@@ -124,12 +125,13 @@ public class CustomizationSelector : MonoBehaviour
 		OnOptionChanged?.Invoke(groupId, selectedId);
 	}
 
-
 	public void UpdateDisplay()
 	{
-
+		//Debug.Log($"UpdateDisplay() \n groupId: {groupId} | selected: {selectedId}");
 		title.text = $"{displayTitle} {selectedId + 1}";
 	}
+
+
 
 	public void SelectOption(int id)
 	{

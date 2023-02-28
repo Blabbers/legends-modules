@@ -238,6 +238,10 @@ public class PossibleCustomizations : ScriptableObject
 		}
 	}
 
+	public GenericSOList GetSlotList(int groupId)
+	{
+		return possibleCustomizations[groupId];
+	}
 
 	//public Texture2D GetSkinColor(int id)
  //   {
