@@ -739,14 +739,14 @@ namespace Fungus.EditorUtils
                         {
                             pastedCommand.ItemId = flowchart.NextItemId();
                             flowchart.SelectedBlock.CommandList.Insert(pasteIndex++, pastedCommand);
+
+							// Let command know it has just been added to the block
+							pastedCommand.OnCommandAdded(block);
                         }
                     }
 
                     // This stops the user pasting the command manually into another game object.
                     ComponentUtility.CopyComponent(flowchart.transform);
-
-					// Let command know it has just been added to the block
-					command.OnCommandAdded(block);
 				}
             }
 
