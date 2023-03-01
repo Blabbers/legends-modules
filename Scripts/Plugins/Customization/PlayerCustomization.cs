@@ -1,3 +1,4 @@
+using BeauRoutine;
 using Fungus;
 using NaughtyAttributes;
 using System;
@@ -12,20 +13,24 @@ using Random = UnityEngine.Random;
 
 public class PlayerCustomization : MonoBehaviour
 {
+	#region Variables
 	public bool isInGame = true;
 	//[ReorderableList][SerializeField] 
 	Customization[] savedOptions;
 
-	[ReorderableList][SerializeField] 
+	[ReorderableList]
+	[SerializeField]
 	CustomizationData[] configuredOptions;
 
 	[ReorderableList][SerializeField] CustomizationParentData[] parentData;
 
 
-	[ReorderableList][SerializeField] SlotData[] slots;
+	//[ReorderableList][SerializeField] SlotData[] slots;
 	public CustomizationVisuals customization;
 
+	#endregion
 
+	#region Editor
 	[Button]
 	void SetupBaseData()
 	{
@@ -64,67 +69,10 @@ public class PlayerCustomization : MonoBehaviour
 			if (parents[i] != null) parentData[i].parent = parents[i];
 		}
 
-	}
-
-	#region Editor
-	//[Button]
-	//void SetupVisuals_Editor()
-	//{
-	//	int size = Enum.GetNames(typeof(CustomizationSlot)).Length;
-	//	//slotData.Clear();
-
-	//	savedOptions = new Customization[size];
-
-	//	Debug.Log($"SetupVisuals_Editor() \nsize: {size}");
-
-	//	for (int i = 0; i < size; i++)
-	//	{
-	//		//slotData.Add(new SlotData());
-	//		//slotData[i].Type = (CustomizationSlot)i;
-	//		//slotData[i].Id = Random.Range(0, PossibleCustomizations.Instance.GetMaxOptions(slotData[i].Type));
-
-	//		//slotData[i].Name = $"{slotData[i].Id} - {slotData[i].Type.ToString()}";
-
-
-	//		savedOptions[i] = new Customization();
-
-	//		//savedOptions[i].id = Random.Range(0, PossibleCustomizations.Instance.GetMaxOptions((CustomizationSlot)i));
-	//		savedOptions[i].id = Random.Range(0, PossibleCustomizations.Instance.GetSlotSize(i));
-	//		savedOptions[i].name = $"{savedOptions[i].id} - {(CustomizationSlot)i}";
-	//	}
-
-	//	customization.SetUpVisuals();
-
-	//}
-
-	//[Button]
-	//void UpdateVisuals_Editor()
-	//{
-
-	//	#region MyRegion
-	//	//for (int i = 0; i < slotData.Count; i++)
-	//	//{
-
-	//	//	slotData[i].Name = $"{slotData[i].Id} - {slotData[i].Type.ToString()}";
-
-	//	//}
-
-
-	//	//UpdateVisual(slotData); 
-	//	#endregion
-
-	//	for (int i = 0; i < savedOptions.Length; i++)
-	//	{
-
-	//		savedOptions[i].name = $"{savedOptions[i].id} - {(CustomizationSlot)i}";
-
-	//	}
-
-	//	//UpdateVisual(savedOptions);
-
-	//}
-
+	} 
 	#endregion
+
+
 
 	private void Start()
 	{
@@ -180,23 +128,79 @@ public class PlayerCustomization : MonoBehaviour
 		}
 
 	}
-
-
-	//public void UpdateVisual(Customization[] savedOptions)
-	//{
-	//	Debug.Log($"PlayerCustomization.UpdateVisual()\nsavedOptions.Length: {savedOptions.Length}".Colored("orange"));
-	//	this.savedOptions = savedOptions;
-	//	customization.UpdateVisual(savedOptions);
-	//}
-
 	public void UpdateVisual(CustomizationData[] configuredOptions)
 	{
 		this.configuredOptions = configuredOptions;
 
+
 		for (int i = 0; i < parentData.Length; i++)
 		{
-			var id = configuredOptions[i].Id;
-			parentData[i].Setup(id);
+			//Debug.Log($"\nSetup {i} - {parentData[i].listRef}");
+
+			if (parentData[i].listRef is GameObjectList)
+			{
+				var id = this.configuredOptions[i].Id;
+				parentData[i].Setup(id);
+			}
+
+
+		}
+
+
+		for (int i = 0; i < parentData.Length; i++)
+		{
+			//Debug.Log($"\nSetup {i} - {parentData[i].listRef}");
+
+			if(parentData[i].oldComponent != null)
+			{
+				Destroy(parentData[i].oldComponent);
+			}
+		}
+
+
+
+		//delay
+		//Routine.Start(Routine.Delay(() => PostDelay(), 0.05f));
+
+		//PostDelay();
+
+		for (int i = 0; i < parentData.Length; i++)
+		{
+			//Debug.Log($"\nSetup {i} - {parentData[i].listRef}");
+
+			if (parentData[i].listRef is GameObjectList)
+			{
+
+			}
+			else
+			{
+				var id = this.configuredOptions[i].Id;
+				parentData[i].Setup(id);
+			}
+
+
+		}
+
+
+	}
+
+	void PostDelay()
+	{
+		for (int i = 0; i < parentData.Length; i++)
+		{
+			//Debug.Log($"\nSetup {i} - {parentData[i].listRef}");
+
+			if (parentData[i].listRef is GameObjectList)
+			{
+
+			}
+			else
+			{
+				var id = this.configuredOptions[i].Id;
+				parentData[i].Setup(id);
+			}
+
+
 		}
 	}
 
@@ -255,9 +259,16 @@ public class CustomizationData
 	public GenericSOList ListReference { get { return listReference; } }
 
 
+	public Customization SavedData { get { return savedData; } }
+
 	public int Id
 	{
 		get { return savedData.id; }
+	}
+
+	public void RefreshId(int id)
+	{
+		savedData.id = id;
 	}
 }
 
@@ -266,6 +277,8 @@ public class CustomizationParentData
 {
 	public string name;
 	public Transform parent;
+	public Transform tempRef;
+	public GameObject oldComponent;
 	//public SlotType type;
 	public GenericSOList listRef;
 
@@ -285,16 +298,28 @@ public class CustomizationParentData
 
 		List<Renderer> renderers = new List<Renderer>();
 
+	
 		if (listRef is GameObjectList)
 		{
+	//		Debug.Log($"GameObjectList | selectedId: {selectedId} " +
+	//$"\nlistRef: {listRef.name} | {parent.GetChild(0)}".Colored());
+
 			var obj = ((GameObjectList)listRef).gameObjects[selectedId];
-			DestroyAllChildren(parent);
-			var temp =  GameObject.Instantiate(obj, parent: this.parent);
-			temp.transform.position = Vector3.zero;
+
+			oldComponent = parent.GetChild(0).gameObject;
+			oldComponent.transform.parent = null;
+
+			//DestroyAllChildren(parent);
+			var temp = GameObject.Instantiate(obj, parent: this.parent);
+			temp.transform.localPosition = Vector3.zero;
+			temp.transform.localRotation = Quaternion.Euler(Vector3.zero);
+
+			tempRef = temp.transform;
 		}
 		if (listRef is MaterialList)
 		{
-			Debug.Log($"MaterialList \nlistRef: {listRef.name} |selectedId: {selectedId}");
+			Debug.Log($"MaterialList | selectedId: {selectedId} " +
+				$"\nlistRef: {listRef.name} | {parent.GetChild(0)}".Colored());
 
 			var mat = ((MaterialList)listRef).materials[selectedId];
 			//parent.GetComponent<Renderer>().material = mat;
@@ -304,6 +329,11 @@ public class CustomizationParentData
 			if (parent.GetChild(0).GetComponent<Renderer>() != null)
 			{
 				parent.GetChild(0).GetComponent<Renderer>().material = mat;
+				tempRef = parent.GetChild(0);
+			}
+			else
+			{
+				Debug.Log($"parent.GetChild(0) is null".Colored("orange"));
 			}
 
 			//renderers = GetAllRenderers(parent);
@@ -326,17 +356,20 @@ public class CustomizationParentData
 			if (parent.GetChild(0).GetComponent<Renderer>() != null)
 			{
 				parent.GetChild(0).GetComponent<Renderer>().material.mainTexture = mat;
+
+				tempRef = parent.GetChild(0);
 				return;
 			}
 
 			Debug.Log($"TextureList \nlistRef: {listRef.name} | {parent.GetChild(0).GetChild(0)}");
 			parent.GetChild(0).GetChild(0).GetComponent<Renderer>().material.mainTexture = mat;
 
+			tempRef = parent.GetChild(0).GetChild(0);
+
 
 			//parent.GetChild(0).GetComponent<Renderer>().material.mainTexture = mat;
 		}
 	}
-
 
 	List<Renderer> GetAllRenderers(Transform parent)
 	{
@@ -372,7 +405,7 @@ public class CustomizationParentData
 
 			if (Application.isPlaying)
 			{
-				MonoBehaviour.Destroy(temp);
+				MonoBehaviour.DestroyImmediate(temp);
 			}
 			else
 			{

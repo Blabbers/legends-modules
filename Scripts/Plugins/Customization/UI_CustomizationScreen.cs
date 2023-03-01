@@ -10,6 +10,7 @@ using DG.Tweening;
 using NaughtyAttributes;
 using UnityEngine.Events;
 using System.Linq;
+using System.Xml.Linq;
 
 public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 {
@@ -474,9 +475,26 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 		//	item.GenerateRandomOption();
 		//}
 
-		foreach (var item in savedOptions)
+		//foreach (var item in configuredOptions)
+		//{
+		//	//item.GenerateRandomOption();
+
+		//	item.GenerateRandomOption();
+
+		//}
+
+		foreach(var item in selectors)
 		{
-			//item.GenerateRandomOption();
+			item.GenerateRandomOption();
+		}
+
+		for (int i = 0; i < selectors.Count; i++)
+		{
+			for (int j = 0; j < selectors[i].GroupIds.Count; j++)
+			{
+				var id = selectors[i].GroupIds[j];
+				configuredOptions[id].RefreshId(selectors[i].SelectedId);
+			}
 		}
 
 		UpdateVisualGeneric();
@@ -647,6 +665,24 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 
 		//Debug.Log($"Creating {size} new customization".Colored());
 		// Debug.Log($"Customizations new size: {  GameData.Instance.progress.customizations.Length}".Colored());
+
+
+		int size = configuredOptions.Length;
+		savedOptions = new Customization[size];
+
+		for (int i = 0; i < savedOptions.Length; i++)
+		{
+			savedOptions[i] = configuredOptions[i].SavedData;
+			//configuredOptions[i] = new CustomizationData(savedOptions[i], PossibleCustomizations.Instance.GetSlotList(i));
+		}
+		GameData.Instance.Progress.customizations = new Customization[size];
+		for (int i = 0; i < size; i++)
+		{
+			GameData.Instance.Progress.customizations[i] = savedOptions[i];
+		}
+
+
+
 	}
 
 

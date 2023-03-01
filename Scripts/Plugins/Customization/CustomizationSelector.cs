@@ -86,6 +86,12 @@ public class CustomizationSelector : MonoBehaviour
 	#endregion
 
 
+
+	public void GenerateRandomOption()
+	{
+		selectedId = UnityEngine.Random.Range(0, lastId + 1);
+	}
+
 	public void SetupSelector(int lastId, string name, int selectedId = 0)
 	{
 		this.lastId = lastId;
@@ -142,6 +148,7 @@ public class CustomizationSelector : MonoBehaviour
 		selectedId = id;
 		OnOptionChanged?.Invoke(groupIds, selectedId);
 	}
+
 
 
 }
