@@ -13,8 +13,53 @@ public class TriggerDisplay : MonoBehaviour
 	[Button]
 	void GetTriggerData()
 	{
-		if (!triggerDisplay.transform) triggerDisplay.transform = this.transform;
-		triggerDisplay.GetTriggerData();
+		//if (!triggerDisplay.transform) triggerDisplay.transform = this.transform;
+
+		if (!triggerDisplay.transform)
+		{
+			if (FindValidCollider())
+			{
+				triggerDisplay.GetTriggerData();
+			}
+		}
+		else
+		{
+			if(triggerDisplay.transform.gameObject.GetComponent<Collider2D>() == null)
+			{
+				if (FindValidCollider())
+				{
+					triggerDisplay.GetTriggerData();
+				}
+			}
+		}
+
+		
+	}
+
+	bool FindValidCollider()
+	{
+		bool hasCollider = false;
+
+		if (gameObject.GetComponent<Collider2D>() != null)
+		{
+			hasCollider = true;
+			triggerDisplay.transform = transform;
+		}
+
+
+		for (int i = 0; i < transform.childCount; i++)
+		{
+			if (transform.GetChild(i).GetComponent<Collider2D>() != null)
+			{
+				hasCollider = true;
+				triggerDisplay.transform = transform.GetChild(i);
+
+				break;
+			}
+		}
+
+		return hasCollider;
+
 	}
 
 	private void OnDrawGizmos()
@@ -60,9 +105,15 @@ public class GenericTriggerDisplay
 
 	public void DrawGizmos()
 	{
-		//Gizmos.color = borderColor;
-		GizmosUtility.DrawWireRectangle(transform.position , new Vector2(boxCollider.size.x * parent.localScale.x, boxCollider.size.y *parent.localScale.y), borderColor, collider.offset);
-		GizmosUtility.DrawRectangle(transform.position, new Vector2(boxCollider.size.x * parent.localScale.x, boxCollider.size.y * parent.localScale.y), gizmosColor, collider.offset);
+
+		if (boxCollider != null)
+		{
+
+			GizmosUtility.DrawWireRectangle(transform.position, new Vector2(boxCollider.size.x * parent.localScale.x, boxCollider.size.y * parent.localScale.y), borderColor, collider.offset);
+			GizmosUtility.DrawRectangle(transform.position, new Vector2(boxCollider.size.x * parent.localScale.x, boxCollider.size.y * parent.localScale.y), gizmosColor, collider.offset);
+		}
+
+
 	}
 
 }

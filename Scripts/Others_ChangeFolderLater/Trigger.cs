@@ -27,7 +27,6 @@ namespace Blabbers
 			if (!CheckForValidCollider())
 			{
 				gameObject.AddComponent<BoxCollider2D>();
-				gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
 			}
 		}
 
@@ -39,12 +38,18 @@ namespace Blabbers
 			{
 				hasCollider = false;
 			}
+			else
+			{
+				hasCollider = true;
+				gameObject.GetComponent<Collider2D>().isTrigger = true;
+			}
 
 			for (int i = 0; i < transform.childCount; i++)
 			{
 				if (transform.GetChild(i).GetComponent<Collider2D>() != null)
 				{
 					hasCollider = true;
+					transform.GetChild(i).GetComponent<Collider2D>().isTrigger = true;
 					break;
 				}
 			}

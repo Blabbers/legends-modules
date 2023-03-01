@@ -12,7 +12,7 @@ public class TextLocalized : TextMeshProUGUI
 	public LocalizedString Localization => localization;
 
 	[SerializeField] bool playTTSOnEnable = false;	
-	[SerializeField] bool applyKeyCodes = true;
+	bool applyKeyCodes = false;
 
 	protected override void OnEnable()
 	{
