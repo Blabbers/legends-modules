@@ -9,12 +9,13 @@ public class CustomizationSelector : MonoBehaviour
 {
 
 	[SerializeField] string groupName;
-	[SerializeField] int groupId;
+	//[SerializeField] int groupId;
+	[SerializeField] List<int> groupIds;
 
 	[SerializeField] bool hasTitle = true;
 	[SerializeField] string languageKey;
 
-	public Action<int, int> OnOptionChanged;
+	public Action<List<int>, int> OnOptionChanged;
 	[Foldout("Runtime")][SerializeField] int selectedId;
 	[Foldout("Runtime")][SerializeField] int lastId;
 	[Foldout("Runtime")][SerializeField] string displayTitle;
@@ -36,10 +37,13 @@ public class CustomizationSelector : MonoBehaviour
 	}
 
 
-	public int GroupId
-	{
-		get { return groupId; }
-	}
+	//public int GroupId
+	//{
+	//	get { return groupId; }
+	//}
+
+	public List<int> GroupIds { get { return groupIds; } }
+
 	public string GroupName
 	{
 		get { return groupName; }
@@ -72,8 +76,8 @@ public class CustomizationSelector : MonoBehaviour
 	[Button]
 	void SetupSelectors_Editor()
 	{
-		var lastId = PossibleCustomizations.Instance.GetSlotSize(groupId);
-		var name = PossibleCustomizations.Instance.GetName(groupId);
+		var lastId = PossibleCustomizations.Instance.GetSlotSize(groupIds[0]);
+		var name = PossibleCustomizations.Instance.GetName(groupIds[0]);
 
 
 		SetupSelector(lastId, name);
@@ -105,8 +109,8 @@ public class CustomizationSelector : MonoBehaviour
 		UpdateDisplay();
 
 		Debug.Log($"{groupName} ".Colored() +
-			$"\nNext() groupId: {groupId} |selectedId: {selectedId}");
-		OnOptionChanged?.Invoke(groupId, selectedId);
+			$"\nNext() groupId: {groupIds[0]} |selectedId: {selectedId}");
+		OnOptionChanged?.Invoke(groupIds, selectedId);
 	}
 
 	public void Previous()
@@ -121,8 +125,8 @@ public class CustomizationSelector : MonoBehaviour
 		UpdateDisplay();
 
 		Debug.Log($"{groupName} ".Colored("orange") +
-	$"\nPrevious() groupId: {groupId} |selectedId: {selectedId}");
-		OnOptionChanged?.Invoke(groupId, selectedId);
+	$"\nPrevious() groupId: {groupIds[0]} |selectedId: {selectedId}");
+		OnOptionChanged?.Invoke(groupIds, selectedId);
 	}
 
 	public void UpdateDisplay()
@@ -136,7 +140,7 @@ public class CustomizationSelector : MonoBehaviour
 	public void SelectOption(int id)
 	{
 		selectedId = id;
-		OnOptionChanged?.Invoke(groupId, selectedId);
+		OnOptionChanged?.Invoke(groupIds, selectedId);
 	}
 
 

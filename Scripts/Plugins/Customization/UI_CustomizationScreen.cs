@@ -65,7 +65,7 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 		selectors.Clear();
 		selectors= new List<CustomizationSelector>(allTargets);
 
-		selectors.Sort((x, y) => x.GroupId.CompareTo(y.GroupId));
+		selectors.Sort((x, y) => x.GroupIds[0].CompareTo(y.GroupIds[0]));
 
 		//objListOrder.Sort((x, y) => x.OrderDate.CompareTo(y.OrderDate));
 
@@ -74,8 +74,8 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 		{
 			selectors[i].OnOptionChanged = null;
 
-			var lastId = PossibleCustomizations.Instance.GetSlotSize(selectors[i].GroupId) - 1;
-			var name = PossibleCustomizations.Instance.GetName(selectors[i].GroupId);
+			var lastId = PossibleCustomizations.Instance.GetSlotSize(selectors[i].GroupIds[0]) - 1;
+			var name = PossibleCustomizations.Instance.GetName(selectors[i].GroupIds[0]);
 
 			selectors[i].SetupSelector(lastId, name);
 			//selectors[i].OnOptionChanged += HandleSelectionUpdate;
@@ -93,8 +93,8 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 		{
 			selectors[i].OnOptionChanged = null;
 
-			var lastId = PossibleCustomizations.Instance.GetSlotSize(selectors[i].GroupId) - 1;
-			var name = PossibleCustomizations.Instance.GetName(selectors[i].GroupId);
+			var lastId = PossibleCustomizations.Instance.GetSlotSize(selectors[i].GroupIds[0]) - 1;
+			var name = PossibleCustomizations.Instance.GetName(selectors[i].GroupIds[0]);
 			var selected = savedOptions[i].id;
 
 			selectors[i].SetupSelector(lastId, name, selected);
@@ -387,19 +387,30 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 	#region Buttons
 
 
-	void HandleSelectionUpdate(int groupId, int selectedId)
+	void HandleSelectionUpdate(List<int> groupId, int selectedId)
 	{
-		Debug.Log($"HandleSelectionUpdate()\ngroupId: {groupId} |selectedId: {selectedId}");
+		string display ="";
 
+		for (int i = 0; i < groupId.Count; i++)
+		{
+			display = display + $"{groupId[i]} ";
+		}
 
+		Debug.Log($"HandleSelectionUpdate()\ngroupId: {display} |selectedId: {selectedId}");
+
+		#region MyRegion
 		//slotData[groupId].UpdateCurrent(selectedId);
-
 		//ArrowButtonsGeneric(id);
-		//slotData[id].Previous();
+		//slotData[id].Previous(); 
+		#endregion
 
-		savedOptions[groupId].id = selectedId;
-		savedOptions[groupId].name = $"{savedOptions[groupId].id + 1} - {PossibleCustomizations.Instance.GetName(groupId)}";
+		for (int i = 0; i < groupId.Count; i++)
+		{
+			savedOptions[groupId[i]].id = selectedId;
+			savedOptions[groupId[i]].name = $"{savedOptions[groupId[i]].id + 1} - {PossibleCustomizations.Instance.GetName(groupId[i])}";
+		}
 
+		GenerateConfigureOptions();
 		UpdateVisualGeneric();
 	}
 

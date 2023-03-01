@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Xml.Linq;
 using UnityEngine;
@@ -12,12 +13,14 @@ using Random = UnityEngine.Random;
 public class PlayerCustomization : MonoBehaviour
 {
 	public bool isInGame = true;
-	//[ReorderableList][SerializeField] Customization[] savedOptions;
-	[ReorderableList][SerializeField] Customization[] savedOptions;
-	[ReorderableList][SerializeField] CustomizationData[] configuredOptions;
+	//[ReorderableList][SerializeField] 
+	Customization[] savedOptions;
+
+	[ReorderableList][SerializeField] 
+	CustomizationData[] configuredOptions;
+
 	[ReorderableList][SerializeField] CustomizationParentData[] parentData;
 
-	//[SerializeField] List<Transform> objParents = new List<Transform>();
 
 	[ReorderableList][SerializeField] SlotData[] slots;
 	public CustomizationVisuals customization;
@@ -38,10 +41,27 @@ public class PlayerCustomization : MonoBehaviour
 
 		GenerateConfigureOptions();
 
+		Transform[] parents = new Transform[size];
+
+		for (int i = 0; i < size; i++)
+		{
+			parents[i] = null;
+		}
+
+
+		for (int i = 0; i < parentData.Length; i++)
+		{
+			parents[i] = parentData[i].parent;
+		}
+
+
 		parentData = new CustomizationParentData[size];
+
+
 		for (int i = 0; i < size; i++)
 		{
 			parentData[i] = new CustomizationParentData(configuredOptions[i].ListReference);
+			if (parents[i] != null) parentData[i].parent = parents[i];
 		}
 
 	}
@@ -172,6 +192,12 @@ public class PlayerCustomization : MonoBehaviour
 	public void UpdateVisual(CustomizationData[] configuredOptions)
 	{
 		this.configuredOptions = configuredOptions;
+
+		for (int i = 0; i < parentData.Length; i++)
+		{
+			var id = configuredOptions[i].Id;
+			parentData[i].Setup(id);
+		}
 	}
 
 
@@ -228,6 +254,11 @@ public class CustomizationData
 
 	public GenericSOList ListReference { get { return listReference; } }
 
+
+	public int Id
+	{
+		get { return savedData.id; }
+	}
 }
 
 [Serializable]
@@ -235,7 +266,7 @@ public class CustomizationParentData
 {
 	public string name;
 	public Transform parent;
-	public SlotType type;
+	//public SlotType type;
 	public GenericSOList listRef;
 
 	public CustomizationParentData(GenericSOList listRef)
@@ -243,6 +274,123 @@ public class CustomizationParentData
 		this.listRef = listRef;
 		name = listRef.name;
 	}
+
+	public void Setup(int selectedId)
+	{
+		if(parent == null)
+		{
+			Debug.Log($"Missing parent for Setup: {listRef.name} ");
+			return;
+		}
+
+		List<Renderer> renderers = new List<Renderer>();
+
+		if (listRef is GameObjectList)
+		{
+			var obj = ((GameObjectList)listRef).gameObjects[selectedId];
+			DestroyAllChildren(parent);
+			var temp =  GameObject.Instantiate(obj, parent: this.parent);
+			temp.transform.position = Vector3.zero;
+		}
+		if (listRef is MaterialList)
+		{
+			Debug.Log($"MaterialList \nlistRef: {listRef.name} |selectedId: {selectedId}");
+
+			var mat = ((MaterialList)listRef).materials[selectedId];
+			//parent.GetComponent<Renderer>().material = mat;
+
+
+
+			if (parent.GetChild(0).GetComponent<Renderer>() != null)
+			{
+				parent.GetChild(0).GetComponent<Renderer>().material = mat;
+			}
+
+			//renderers = GetAllRenderers(parent);
+
+			//Debug.Log($"Found renderer {renderers[0].name} | {renderers[0].materials[0].name}");
+
+			//for (int i = 0; i < renderers.Count; i++)
+			//{
+			//	renderers[i].material = mat;
+			//}
+
+		}
+		if (listRef is TextureList)
+		{
+			var mat = ((TextureList)listRef).textures[selectedId];
+
+			if (parent.GetChild(0) == null) return;
+			
+
+			if (parent.GetChild(0).GetComponent<Renderer>() != null)
+			{
+				parent.GetChild(0).GetComponent<Renderer>().material.mainTexture = mat;
+				return;
+			}
+
+			Debug.Log($"TextureList \nlistRef: {listRef.name} | {parent.GetChild(0).GetChild(0)}");
+			parent.GetChild(0).GetChild(0).GetComponent<Renderer>().material.mainTexture = mat;
+
+
+			//parent.GetChild(0).GetComponent<Renderer>().material.mainTexture = mat;
+		}
+	}
+
+
+	List<Renderer> GetAllRenderers(Transform parent)
+	{
+		var renderers = new List<Renderer>();
+
+		if (parent.GetChild(0).GetComponent<Renderer>()!= null)
+		{
+			renderers.Add(parent.GetChild(0).GetComponent<Renderer>());
+		
+			return renderers;
+		}
+
+		renderers.Add(parent.GetChild(0).GetChild(0).GetComponent<Renderer>());
+		return renderers;
+	}
+
+	void DestroyAllChildren(Transform parent)
+	{
+		int limiter = 0;
+		int size;
+		GameObject temp;
+
+		//Debug.Log($"{Name}");
+		if (parent == null) return;
+
+		//size = parent.childCount;
+
+
+		for (int i = 0; i < parent.childCount; i++)
+		{
+			temp = parent.GetChild(i).gameObject;
+			if (temp == null) return;
+
+			if (Application.isPlaying)
+			{
+				MonoBehaviour.Destroy(temp);
+			}
+			else
+			{
+				MonoBehaviour.DestroyImmediate(temp);
+			}
+
+			i--;
+			limiter++;
+
+			if (limiter > 20) return;
+
+			if (i < 0) i = 0;
+			//i = Mathf.Clamp(i, 0, parent.childCount);
+
+		}
+	}
+
+
 }
 
 
