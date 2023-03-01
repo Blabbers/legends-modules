@@ -30,9 +30,7 @@ public class PossibleCustomizations : ScriptableObject
 
 	public int NumberOfSlots = 7;
 
-    //[Expandable]
-    //public GenericSOList test;
-
+	[ReorderableList]
 	public List<GenericSOList> possibleCustomizations;
 
 	//[Header("Colors")]
