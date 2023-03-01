@@ -8,7 +8,7 @@ namespace Blabbers
 	{
 		//[SerializeReference]
 		//public Filter[] Filters;
-		[Foldout("Configs")] public TagFilter[] Filters;
+		[Foldout("Configs")] [ReorderableList]public TagFilter[] Filters;
 
 		[Foldout("Events")] public Collider2DEvent TriggerEnter;
 		[Foldout("Events")] public Collider2DEvent TriggerStay;
@@ -22,6 +22,35 @@ namespace Blabbers
 
 			Filters[0] = new TagFilter();
 			Filters[0].AllowedTags = new string[1] { "Player" };
+
+
+			if (!CheckForValidCollider())
+			{
+				gameObject.AddComponent<BoxCollider2D>();
+				gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
+			}
+		}
+
+		bool CheckForValidCollider()
+		{
+			bool hasCollider = false;
+
+			if (gameObject.GetComponent<Collider2D>() == null)
+			{
+				hasCollider = false;
+			}
+
+			for (int i = 0; i < transform.childCount; i++)
+			{
+				if (transform.GetChild(i).GetComponent<Collider2D>() != null)
+				{
+					hasCollider = true;
+					break;
+				}
+			}
+
+			return hasCollider;
+
 		}
 
 

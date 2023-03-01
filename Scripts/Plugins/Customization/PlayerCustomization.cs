@@ -301,6 +301,7 @@ public class CustomizationParentData
 	
 		if (listRef is GameObjectList)
 		{
+
 	//		Debug.Log($"GameObjectList | selectedId: {selectedId} " +
 	//$"\nlistRef: {listRef.name} | {parent.GetChild(0)}".Colored());
 
