@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Blabbers
 {
-	public class Trigger : MonoBehaviour
+	public class Trigger2d : MonoBehaviour
 	{
 		//[SerializeReference]
 		//public Filter[] Filters;

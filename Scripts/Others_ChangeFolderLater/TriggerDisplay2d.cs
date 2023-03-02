@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TriggerDisplay : MonoBehaviour
+public class TriggerDisplay2d : MonoBehaviour
 {
 	public GenericTriggerDisplay triggerDisplay;
 
