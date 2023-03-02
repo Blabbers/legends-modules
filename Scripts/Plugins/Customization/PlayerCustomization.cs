@@ -307,9 +307,12 @@ public class CustomizationParentData
 
 			var obj = ((GameObjectList)listRef).gameObjects[selectedId];
 
-			oldComponent = parent.GetChild(0).gameObject;
-			oldComponent.transform.parent = null;
-
+			if (parent.childCount > 0)
+			{
+				oldComponent = parent.GetChild(0).gameObject;
+				if (oldComponent != null) oldComponent.transform.parent = null;
+			}
+		
 			//DestroyAllChildren(parent);
 			var temp = GameObject.Instantiate(obj, parent: this.parent);
 			temp.transform.localPosition = Vector3.zero;

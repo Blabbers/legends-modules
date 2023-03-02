@@ -10,9 +10,9 @@ namespace Blabbers
 		//public Filter[] Filters;
 		[Foldout("Configs")] [ReorderableList]public TagFilter[] Filters;
 
-		[Foldout("Events")] public Collider2DEvent TriggerEnter;
-		[Foldout("Events")] public Collider2DEvent TriggerStay;
-		[Foldout("Events")] public Collider2DEvent TriggerExit;
+		[Foldout("Events")] public Collider2DEvent OnTriggerEnter;
+		[Foldout("Events")] public Collider2DEvent OnTriggerStay;
+		[Foldout("Events")] public Collider2DEvent OnTriggerExit;
 
 
 		[Button]
@@ -83,7 +83,7 @@ namespace Blabbers
 			//}
 
 			//Debug.Log($"Trigger OnTriggerEnter2D\n {t1} -> {t2}".Colored("yellow"));
-			TriggerEnter.Invoke(other);
+			OnTriggerEnter.Invoke(other);
 		}
 
 		private void OnTriggerStay2D(Collider2D other)
@@ -94,7 +94,7 @@ namespace Blabbers
 			}
 
 			//Debug.Log($"OnTriggerStay2D \nTag: {other.tag}".Colored("red"));
-			TriggerStay.Invoke(other);
+			OnTriggerStay.Invoke(other);
 		}
 
 		private void OnTriggerExit2D(Collider2D other)
@@ -106,7 +106,7 @@ namespace Blabbers
 
 
 			//Debug.Log($"OnTriggerExit2D \nTag: {other.tag}".Colored());
-			TriggerExit.Invoke(other);
+			OnTriggerExit.Invoke(other);
 		}
 
 		private bool Filter(Collider2D collider)
