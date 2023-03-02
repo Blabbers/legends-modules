@@ -1,8 +1,8 @@
 using Blabbers.Game00;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 
+[AddComponentMenu("")]
 [DefaultExecutionOrder(+1000)]
 public class TextLocalized : TextMeshProUGUI
 {

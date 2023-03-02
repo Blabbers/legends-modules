@@ -414,7 +414,7 @@ Preset:
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: localization.key
-    value: 956a65bb-03f0-44ef-8462-e7acdaf4d0de
+    value: '*'
     objectReference: {fileID: 0}
   - target: {fileID: 0}
     propertyPath: localization.text
@@ -427,9 +427,5 @@ Preset:
   - target: {fileID: 0}
     propertyPath: playTTSOnEnable
     value: 0
-    objectReference: {fileID: 0}
-  - target: {fileID: 0}
-    propertyPath: applyKeyCodes
-    value: 1
     objectReference: {fileID: 0}
   m_ExcludedProperties: []

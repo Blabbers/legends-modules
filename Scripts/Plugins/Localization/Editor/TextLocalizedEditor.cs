@@ -23,8 +23,8 @@ public class TextLocalizedEditor : TMP_EditorPanelUI
 	protected override void OnEnable()
 	{
 		localizedStringProp = serializedObject.FindProperty("localization");
-		playTTSOnEnableProp = serializedObject.FindProperty("playTTSOnEnable");		
-		applyKeyCodesProp = serializedObject.FindProperty("applyKeyCodes");
+		playTTSOnEnableProp = serializedObject.FindProperty("playTTSOnEnable");
+		//applyKeyCodesProp = serializedObject.FindProperty("applyKeyCodes");
 
 		locString = (LocalizedString)localizedStringProp.GetValue();
 		locString.OnLoad += HandleLocalizedStringLoad;
@@ -47,8 +47,8 @@ public class TextLocalizedEditor : TMP_EditorPanelUI
 		serializedObject.Update();
 		EditorGUILayout.PropertyField(localizedStringProp);
 		EditorGUILayout.PropertyField(playTTSOnEnableProp);
-		EditorGUILayout.PropertyField(applyKeyCodesProp);
-		
+		//EditorGUILayout.PropertyField(applyKeyCodesProp);
+
 		#region Get string value and pass it to other variable
 		string textValue;
 		textValue = (string)m_TextProp.GetValue();
@@ -59,7 +59,7 @@ public class TextLocalizedEditor : TMP_EditorPanelUI
 			loadedText = string.Empty;
 			m_TextProp.SetValue(textValue);
 		}
-	
+
 		locString.Text = textValue;
 		#endregion
 
@@ -68,7 +68,7 @@ public class TextLocalizedEditor : TMP_EditorPanelUI
 	}
 
 	void HandleLocalizedStringLoad(string text)
-	{	
+	{
 		loadedText = text;
 	}
 
@@ -76,13 +76,26 @@ public class TextLocalizedEditor : TMP_EditorPanelUI
 	{
 		serializedObject.ApplyModifiedProperties();
 
-		if (GUI.changed) { 		
+		if (GUI.changed)
+		{
 			EditorUtility.SetDirty(target);
 		}
 	}
 
+	[MenuItem("Component/Scripts/Text Localized")]
+	private static void OnAddComponent()
+	{
+		var textLoc = Selection.activeGameObject.AddComponent<TextLocalized>();
+		try
+		{
+			// Generates new localization key
+			textLoc.Localization.OverrideLocKey(LocalizedString.GenerateLocKey());
+		}
+		catch { }
+	}
+
 	[MenuItem("GameObject/UI/Text - Localized")]
-	public static void CreateMenu()
+	private static void CreateMenu()
 	{
 		//Creates
 		var gameObject = ObjectFactory.CreateGameObject("Text", typeof(TextLocalized));

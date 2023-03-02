@@ -1,41 +1,84 @@
 using UnityEditor;
 using UnityEngine;
 using Blabbers.Game00;
-using Animancer.Editor;
 using System.Reflection;
-using Fungus;
 using System;
+using System.Collections.Generic;
+using DG.DemiEditor;
 
 [CustomPropertyDrawer(typeof(LocalizedString), true)]
-public class LocalizedStringDrawer : PropertyDrawer
+public class LocalizedStringDrawer : PropertyDrawerWithEvents
 {
-	//Criar alguma variável para guardar a ultima key, deletar a antiga quando criar uma nova
+	public static HashSet<LocalizedStringDrawer> LocStringsActiveInEditor = new HashSet<LocalizedStringDrawer>();
+
+	//Criar alguma variavel para guardar a ultima key, deletar a antiga quando criar uma nova
 	int selectedLanguage = 0;
 	bool editingKey = false;
 	bool editTriggeredOnce = false;
 	bool languageTriggeredOnce = false;
 
-	bool firstCheck = true;
 	LocalizedStringOptionsAttribute options;
 	bool hasBigTextArea = true;
 	bool shouldShowTextArea = true;
 	string internalText = "";
 
-	public void OnEnable()
+	public LocalizedString thisLocString;
+	public SerializedProperty thisProperty;
+
+	public LocalizedString GetThisLocString(SerializedProperty property)
+	{
+		var field = fieldInfo.GetValue(property.serializedObject.targetObject);		
+
+		var possibleIndex = property.GetIndexInArray();
+		if (possibleIndex >= 0)
+		{			
+			// Then this is inside an array
+			if(field is LocalizedString[])
+			{
+				var array = (LocalizedString[])field;
+				return array[possibleIndex];
+			}
+			if (field is List<LocalizedString>)
+			{
+				var array = (List<LocalizedString>)field;
+				return array[possibleIndex];
+			}
+			// TODO: But... if the object is son of another object it still bugs out. The "GameData.TextConfigs" is not working...
+			// TODO: Maybe we find it through reflection? Maybe another solution for the "GetValue" function instead
+		}
+
+		return (LocalizedString)field;
+	}
+
+	public override void OnEnable(Rect position, SerializedProperty property, GUIContent label)
 	{
 		options = fieldInfo.GetCustomAttribute<LocalizedStringOptionsAttribute>(true);
 		shouldShowTextArea = options == null || (options != null && !options.hideArea);
 		hasBigTextArea = options != null && options.hasBigTextArea;
 		LocalizationExtensions.ResetLanguageJson();
+		thisLocString = GetThisLocString(property);
+		thisProperty = property;
+
+		// Add to save later
+		LocStringsActiveInEditor.Remove(this);
+		LocStringsActiveInEditor.Add(this);
+	}
+
+	public override void OnDisable()
+	{
+		LocStringsActiveInEditor.Remove(this);
+	}
+
+	public override void OnDestroy()
+	{
+		LocStringsActiveInEditor.Remove(this);
 	}
 
 	public override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
 	{
-		if (firstCheck)
-		{
-			OnEnable();
-			firstCheck = false;
-		}
+		base.OnGUI(rect, property, label);
+
+		thisProperty = property;
 
 		string controlKeyName;
 		string controlTextName;
@@ -60,7 +103,6 @@ public class LocalizedStringDrawer : PropertyDrawer
 		rightBlock.x = leftBlock.width;
 
 		#region Left block
-		//EditorGUILayout.BeginHorizontal();
 		{
 			Rect currentRect;
 			float remainingSize;
@@ -93,7 +135,6 @@ public class LocalizedStringDrawer : PropertyDrawer
 
 			if (GUI.Button(currentRect, buttonContent))
 			{
-				//if(overrideKey) internalKey = 
 				SaveBtn(property, internalKey, internalText);
 			}
 
@@ -103,14 +144,14 @@ public class LocalizedStringDrawer : PropertyDrawer
 
 			GUIStyle style = new GUIStyle(GUI.skin.label);
 			style.richText = true;
-			EditorGUI.LabelField(currentRect, $"{property.displayName} <color=yellow><i><b>({GetLanguageCode()})</b></i></color>", style);
 
+			///var locStringObj = (LocalizedString)fieldInfo.GetValue(property.serializedObject.targetObject);
+			var hasUnsavedChanges = thisLocString.HasUnsavedChanges();
+			EditorGUI.LabelField(currentRect, $"{property.displayName} <color=yellow><i><b>({GetLanguageCode()})</b></i></color> {(hasUnsavedChanges ? "<color=red>* UNSAVED CHANGES *</color>" : "")}", style);
 		}
-		//EditorGUILayout.EndHorizontal();
 		#endregion
 
-		#region Right block
-		//EditorGUILayout.BeginHorizontal();
+		#region Right block		
 		{
 			Rect currentRect;
 			float startX, finalX;
@@ -126,7 +167,6 @@ public class LocalizedStringDrawer : PropertyDrawer
 			GUIContent buttonContent = new GUIContent(null, icon, null);
 
 			Rect temp = currentRect;
-
 
 			EditorGUI.BeginDisabledGroup(!editingKey);
 			currentRect.x = startX;
@@ -170,12 +210,9 @@ public class LocalizedStringDrawer : PropertyDrawer
 					// TODO: This needs to work properly
 					GenerateLocKey(internalKeyProp, "");
 				}
-
 				menu.ShowAsContext();
 			}
-
 		}
-		//EditorGUILayout.EndHorizontal();
 		#endregion
 
 		Rect horizontalLine2;
@@ -195,32 +232,25 @@ public class LocalizedStringDrawer : PropertyDrawer
 
 		if (shouldShowTextArea)
 		{
-			//EditorGUILayout.BeginHorizontal();
+			Rect currentRect;
+
+			currentRect = horizontalLine2;
+			currentRect.height = hasBigTextArea ? 60f : 20;
+
+
+			EditorStyles.textField.wordWrap = true;
+			controlTextName = "controlTextName";
+			GUI.SetNextControlName(controlTextName);
+			if (hasBigTextArea)
 			{
-				Rect currentRect;
-
-				currentRect = horizontalLine2;
-				currentRect.height = hasBigTextArea ? 60f : 20;
-
-
-				EditorStyles.textField.wordWrap = true;
-				controlTextName = "controlTextName";
-				GUI.SetNextControlName(controlTextName);
-				if (hasBigTextArea)
-				{
-					internalTextProp.stringValue = EditorGUI.TextArea(currentRect, internalText);
-				}
-				else
-				{
-					internalTextProp.stringValue = EditorGUI.TextField(currentRect, internalText);
-				}
-				EditorStyles.textField.wordWrap = false;
+				internalTextProp.stringValue = EditorGUI.TextArea(currentRect, internalText);
 			}
-			//EditorGUILayout.EndHorizontal();
+			else
+			{
+				internalTextProp.stringValue = EditorGUI.TextField(currentRect, internalText);
+			}
+			EditorStyles.textField.wordWrap = false;
 		}
-
-
-
 
 		if (Event.current.type == EventType.Repaint)
 		{
@@ -247,10 +277,7 @@ public class LocalizedStringDrawer : PropertyDrawer
 
 			}
 		}
-
 	}
-
-
 
 	void DrawSpace(ref Rect rect, float size, float totalWidth)
 	{
@@ -269,12 +296,11 @@ public class LocalizedStringDrawer : PropertyDrawer
 		EditorGUI.DrawPreviewTexture(current, icon);
 	}
 
-	void SaveBtn(SerializedProperty property, string key, string value)
+	public void SaveBtn(SerializedProperty property, string key, string value)
 	{
 		LocalizationExtensions.EditorSaveToLanguageJson(key, value, langCode: GetLanguageCode());
 
-		LocalizedString locString;
-		locString = (LocalizedString)property.GetValue();
+		var locString = GetThisLocString(property);
 		locString.OnSave?.Invoke();
 	}
 
@@ -284,8 +310,7 @@ public class LocalizedStringDrawer : PropertyDrawer
 		internalTextProp.stringValue = LocalizationExtensions.EditorLoadFromLanguageJson(internalKey, langCode: GetLanguageCode());
 		internalText = internalTextProp.stringValue;
 
-		LocalizedString locString;
-		locString = (LocalizedString)property.GetValue();
+		var locString = GetThisLocString(property);
 		locString.OnLoad?.Invoke(internalText);
 
 		return internalText;
@@ -337,5 +362,23 @@ public class LocalizedStringDrawer : PropertyDrawer
 			var hasKey = !string.IsNullOrEmpty(LocalizationExtensions.EditorLoadFromLanguageJson(smallGuid, displayMessages: false));
 			return hasKey ? GetNewSmallGUID() : smallGuid;
 		}
+	}
+}
+public class LocalizedStringSaveAssets : UnityEditor.AssetModificationProcessor
+{
+	static string[] OnWillSaveAssets(string[] paths)
+	{
+		// Saves the localized string throught the property drawer, during Unity's ctrl+S Save function
+		if (LocalizedStringDrawer.LocStringsActiveInEditor != null)
+		{
+			foreach (var item in LocalizedStringDrawer.LocStringsActiveInEditor)
+			{
+				if (item.thisLocString.HasUnsavedChanges())
+				{
+					item.SaveBtn(item.thisProperty, item.thisLocString.Key, item.thisLocString.GetRawText());
+				}
+			}
+		}
+		return paths;
 	}
 }
