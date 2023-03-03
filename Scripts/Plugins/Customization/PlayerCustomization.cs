@@ -18,15 +18,14 @@ public class PlayerCustomization : MonoBehaviour
 	//[ReorderableList][SerializeField] 
 	Customization[] savedOptions;
 
-	[ReorderableList]
-	[SerializeField]
+	//[ReorderableList][SerializeField]
 	CustomizationData[] configuredOptions;
 
 	[ReorderableList][SerializeField] CustomizationParentData[] parentData;
 
 
 	//[ReorderableList][SerializeField] SlotData[] slots;
-	public CustomizationVisuals customization;
+	//public CustomizationVisuals customization;
 
 	#endregion
 
@@ -88,18 +87,22 @@ public class PlayerCustomization : MonoBehaviour
 	void LoadFromGameData()
 	{
 
-		//int size = Enum.GetNames(typeof(CustomizationSlot)).Length;
 		int size = PossibleCustomizations.Instance.NumberOfSlots;
 
 		savedOptions = GameData.Instance.Progress.customizations;
 
-		if(savedOptions == null) savedOptions = new Customization[size];
+		if (savedOptions == null) savedOptions = new Customization[size];
 
 
-		Debug.Log($"savedOptions.Length: {savedOptions.Length}");
+		Debug.Log($"LoadFromGameData() isInGame == {isInGame}" +
+			$"\nsavedOptions.Length: {savedOptions.Length}" +
+			$"\nGameData.Instance.Progress.customizations {GameData.Instance.Progress.customizations.Length}\n-");
 
 		if (savedOptions.Length == 0)
 		{
+			Debug.Log($"LoadFromGameData() savedOptions.Length == 0");
+
+
 			savedOptions = new Customization[size];
 
 			for (int i = 0; i < size; i++)
@@ -107,23 +110,44 @@ public class PlayerCustomization : MonoBehaviour
 				savedOptions[i] = new Customization();
 
 				savedOptions[i].id = 0;
-				savedOptions[i].name = $"{savedOptions[i].id} - {(CustomizationSlot)i}";
+				savedOptions[i].name = $"{savedOptions[i].id} - {PossibleCustomizations.Instance.GetSlotList(i).name}";
 			}
 
 
 		}
+
+		Debug.Log($"LoadFromGameData() isInGame == {isInGame}" +
+			$"\nsavedOptions.Length: {savedOptions.Length}" +
+			$"\nGameData.Instance.Progress.customizations {GameData.Instance.Progress.customizations.Length}\n-");
 
 	}
 
 
 	void GenerateConfigureOptions()
 	{
+		Debug.Log($"GenerateConfigureOptions()" +
+			$"\nis savedOptions null? {savedOptions == null} | is PossibleCustomizations null? {PossibleCustomizations.Instance == null}\n-");
+
+
+	
 
 		int size = savedOptions.Length;
 		configuredOptions = new CustomizationData[size];
 
+		Debug.Log($"GenerateConfigureOptions()" +
+			$"\nsavedOptions.Length: {savedOptions.Length} |\nconfiguredOptions.Length {configuredOptions.Length}");
+
+		Debug.Log($"GenerateConfigureOptions()\nb4 loop \n-");
+
 		for (int i = 0; i < savedOptions.Length; i++)
 		{
+			Debug.Log($"GenerateConfigureOptions()" +
+				$"\nsavedOptions[{i}] null? {savedOptions[i] == null} " +
+				$"\nGetSlotList({i}) null? {PossibleCustomizations.Instance.GetSlotList(i) == null}");
+
+
+			Debug.Log($"GenerateConfigureOptions() {savedOptions[i].name} | {PossibleCustomizations.Instance.GetSlotList(i)}");
+
 			configuredOptions[i] = new CustomizationData(savedOptions[i], PossibleCustomizations.Instance.GetSlotList(i));
 		}
 
