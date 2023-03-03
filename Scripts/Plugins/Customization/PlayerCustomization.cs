@@ -94,11 +94,42 @@ public class PlayerCustomization : MonoBehaviour
 		if (savedOptions == null) savedOptions = new Customization[size];
 
 
-		Debug.Log($"LoadFromGameData() isInGame == {isInGame}" +
-			$"\nsavedOptions.Length: {savedOptions.Length}" +
-			$"\nGameData.Instance.Progress.customizations {GameData.Instance.Progress.customizations.Length}\n-");
+		//Debug.Log($"LoadFromGameData() isInGame == {isInGame}" +
+		//	$"\nsavedOptions.Length: {savedOptions.Length}" +
+		//	$"\nGameData.Instance.Progress.customizations {GameData.Instance.Progress.customizations.Length}\n-");
 
-		if (savedOptions.Length == 0)
+
+		if(GameData.Instance.Progress.customizations == null)
+		{
+			Debug.Log("LoadFromGameData() customizations is null!");
+		}
+		else
+		{
+			var customizations = "";
+			for (int i = 0; i < GameData.Instance.Progress.customizations.Length; i++)
+			{
+				if (GameData.Instance.Progress.customizations[i] != null)
+				{
+					customizations = $"{customizations}{GameData.Instance.Progress.customizations[i]}\n";
+				}
+				else
+				{
+					customizations = customizations + "null" + "\n";
+				}
+
+			}
+
+			Debug.Log($"LoadFromGameData(isInGame = {isInGame}) " +
+				$"\nsavedOptions.Length: {savedOptions.Length} | customizations.Length: {GameData.Instance.Progress.customizations.Length}" +
+				$"\n{customizations}");
+
+		}
+
+
+
+
+
+		if (savedOptions.Length == 0 || savedOptions[0] == null)
 		{
 			Debug.Log($"LoadFromGameData() savedOptions.Length == 0");
 
@@ -116,9 +147,25 @@ public class PlayerCustomization : MonoBehaviour
 
 		}
 
-		Debug.Log($"LoadFromGameData() isInGame == {isInGame}" +
-			$"\nsavedOptions.Length: {savedOptions.Length}" +
-			$"\nGameData.Instance.Progress.customizations {GameData.Instance.Progress.customizations.Length}\n-");
+		var saved = "";
+		for (int i = 0; i < savedOptions.Length; i++)
+		{
+			if (savedOptions[i] != null)
+			{
+				saved = $"{saved}{savedOptions[i]}\n";
+			}
+			else
+			{
+				saved = saved + "null" + "\n";
+			}
+
+		}
+
+		
+
+		//Debug.Log($"LoadFromGameData(isInGame = {isInGame}) " +
+		//	$"\nsavedOptions.Length: {savedOptions.Length} | customizations.Length: {GameData.Instance.Progress.customizations.Length}" +
+		//	$"\n{saved}");
 
 	}
 
