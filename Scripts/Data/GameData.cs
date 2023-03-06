@@ -125,8 +125,9 @@ public class GameProgress
     public bool enableAutomaticTTS = true;
 
     public Customization[] customizations;
+	public Choice[] choices;
 
-    public bool AllLevelsWith3Stars()
+	public bool AllLevelsWith3Stars()
     {
         foreach (var level in levels)
         {
@@ -152,4 +153,12 @@ public class Customization
     // Info for each specific level instance
     public string name;
     public int id;
+}
+
+[System.Serializable]
+public class Choice
+{
+	// Info for each specific level instance
+	public string name;
+	public int id;
 }
