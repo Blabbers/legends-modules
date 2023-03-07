@@ -181,19 +181,19 @@ public class PlayerCustomization : MonoBehaviour
 		int size = savedOptions.Length;
 		configuredOptions = new CustomizationData[size];
 
-		Debug.Log($"GenerateConfigureOptions()" +
-			$"\nsavedOptions.Length: {savedOptions.Length} |\nconfiguredOptions.Length {configuredOptions.Length}");
+		//Debug.Log($"GenerateConfigureOptions()" +
+		//	$"\nsavedOptions.Length: {savedOptions.Length} |\nconfiguredOptions.Length {configuredOptions.Length}");
 
-		Debug.Log($"GenerateConfigureOptions()\nb4 loop \n-");
+		//Debug.Log($"GenerateConfigureOptions()\nb4 loop \n-");
 
 		for (int i = 0; i < savedOptions.Length; i++)
 		{
-			Debug.Log($"GenerateConfigureOptions()" +
-				$"\nsavedOptions[{i}] null? {savedOptions[i] == null} " +
-				$"\nGetSlotList({i}) null? {PossibleCustomizations.Instance.GetSlotList(i) == null}");
+			//Debug.Log($"GenerateConfigureOptions()" +
+			//	$"\nsavedOptions[{i}] null? {savedOptions[i] == null} " +
+			//	$"\nGetSlotList({i}) null? {PossibleCustomizations.Instance.GetSlotList(i) == null}");
 
 
-			Debug.Log($"GenerateConfigureOptions() {savedOptions[i].name} | {PossibleCustomizations.Instance.GetSlotList(i)}");
+			//Debug.Log($"GenerateConfigureOptions() {savedOptions[i].name} | {PossibleCustomizations.Instance.GetSlotList(i)}");
 
 			configuredOptions[i] = new CustomizationData(savedOptions[i], PossibleCustomizations.Instance.GetSlotList(i));
 		}
@@ -393,8 +393,8 @@ public class CustomizationParentData
 		}
 		if (listRef is MaterialList)
 		{
-			Debug.Log($"MaterialList | selectedId: {selectedId} " +
-				$"\nlistRef: {listRef.name} | {parent.GetChild(0)}".Colored());
+			//Debug.Log($"MaterialList | selectedId: {selectedId} " +
+			//	$"\nlistRef: {listRef.name} | {parent.GetChild(0)}".Colored());
 
 			var mat = ((MaterialList)listRef).materials[selectedId];
 			//parent.GetComponent<Renderer>().material = mat;
