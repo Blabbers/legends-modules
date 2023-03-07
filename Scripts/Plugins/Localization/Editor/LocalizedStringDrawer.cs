@@ -4,7 +4,8 @@ using Blabbers.Game00;
 using System.Reflection;
 using System;
 using System.Collections.Generic;
-using DG.DemiEditor;
+using Animancer.Editor;
+
 
 [CustomPropertyDrawer(typeof(LocalizedString), true)]
 public class LocalizedStringDrawer : PropertyDrawerWithEvents
@@ -27,25 +28,26 @@ public class LocalizedStringDrawer : PropertyDrawerWithEvents
 
 	public LocalizedString GetThisLocString(SerializedProperty property)
 	{
-		var field = fieldInfo.GetValue(property.serializedObject.targetObject);		
+		//var field = fieldInfo.GetValue(property.serializedObject.targetObject);		
+		var field = property.GetValue();
 
-		var possibleIndex = property.GetIndexInArray();
-		if (possibleIndex >= 0)
-		{			
-			// Then this is inside an array
-			if(field is LocalizedString[])
-			{
-				var array = (LocalizedString[])field;
-				return array[possibleIndex];
-			}
-			if (field is List<LocalizedString>)
-			{
-				var array = (List<LocalizedString>)field;
-				return array[possibleIndex];
-			}
-			// TODO: But... if the object is son of another object it still bugs out. The "GameData.TextConfigs" is not working...
-			// TODO: Maybe we find it through reflection? Maybe another solution for the "GetValue" function instead
-		}
+		//var possibleIndex = property.GetIndexInArray();
+		//if (possibleIndex >= 0)
+		//{			
+		//	// Then this is inside an array
+		//	if(field is LocalizedString[])
+		//	{
+		//		var array = (LocalizedString[])field;
+		//		return array[possibleIndex];
+		//	}
+		//	if (field is List<LocalizedString>)
+		//	{
+		//		var array = (List<LocalizedString>)field;
+		//		return array[possibleIndex];
+		//	}
+		//	// TODO: But... if the object is son of another object it still bugs out. The "GameData.TextConfigs" is not working...
+		//	// TODO: Maybe we find it through reflection? Maybe another solution for the "GetValue" function instead
+		//}
 
 		return (LocalizedString)field;
 	}
