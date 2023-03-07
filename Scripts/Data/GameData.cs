@@ -95,6 +95,8 @@ public class GameProgress
     {
         isNewGame = true;
         FirstTimeLevelSelect = true;
+        choices = new Choice[0];
+
 
         levels = new Level[totalLevels];
         for (int i = 0; i < levels.Length; i++)
@@ -137,6 +139,40 @@ public class GameProgress
 
         return true;
     }
+
+    public void AddChoice(Choice choice)
+    {
+        var tempList = new List<Choice>(choices);
+
+        var found = tempList.Find((x) => choice.key == x.key);
+
+        if (found != null)
+        {
+            found.selectedId = choice.selectedId;
+        }
+        else
+        {
+            tempList.Add(choice);
+        }
+
+        choices = tempList.ToArray();
+
+        Singleton.Get<ProgressController>().Save();
+    }
+
+    public Choice GetChoice(string key)
+    {
+        foreach(var choice in choices)
+        {
+            if(choice.key == key)
+            {
+                return choice;
+            }
+        }
+
+        return null;
+    }
+
 }
 
 [System.Serializable]
@@ -159,6 +195,6 @@ public class Customization
 public class Choice
 {
 	// Info for each specific level instance
-	public string name;
-	public int id;
+	public string key;
+	public int selectedId;
 }

@@ -32,7 +32,10 @@ namespace Fungus
 		public Question question;
 
 		[VariableProperty(typeof(BooleanVariable))]
-		[SerializeField] private Variable setAnswerBoolTo;
+		[SerializeField] private BooleanVariable setAnswerBoolTo;
+
+		[VariableProperty(typeof(IntegerVariable))]
+		[SerializeField] private IntegerVariable setAnswerIntTo;
 		[SerializeField] private UI_PopupQuestion overrideQuestionPopup;
 		[SerializeField] private bool showAnswerFeedback = true;
 
@@ -52,9 +55,10 @@ namespace Fungus
 			//}
 		}
 
-		void HandleOnClosedPopup(bool answeredCorrectly)
+		void HandleOnClosedPopup(bool answeredCorrectly, int selectedAnswer)
 		{
 			setAnswerBoolTo?.Apply(SetOperator.Assign, answeredCorrectly);
+			setAnswerIntTo?.Apply(SetOperator.Assign, selectedAnswer);
 			Continue();
 		}
 

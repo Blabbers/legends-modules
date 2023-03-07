@@ -87,10 +87,11 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 
 	public bool shouldShowAnswerAnimationFeedback;
 
-	private UnityAction<bool> OnAnswered;
+	private UnityAction<bool,int> OnAnswered;
 
 	public bool QuestionWasAnsweredThisLevel { get; private set; }  = false;
 	public bool ChoseCorrectly { get; private set; }
+	public int SelectedAnswerId { get; private set; }
 
 	public void OnCreated() {}
 
@@ -123,6 +124,8 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 		var clickedBtn = clickedBtnTransform.GetComponent<Button>();
 
 		var answeredCorrectly = id == 0;
+		SelectedAnswerId = id;
+
 		if (answeredCorrectly)
 		{
 			if (shouldShowAnswerAnimationFeedback)
@@ -145,7 +148,7 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 		}
 	}
 
-	public void ShowQuestion(Question question, bool showAnswerAnimationFeedback, UnityAction<bool> onAnsweredCallback = null)
+	public void ShowQuestion(Question question, bool showAnswerAnimationFeedback, UnityAction<bool, int> onAnsweredCallback = null)
 	{
 		base.ShowPopup();
 		shouldShowAnswerAnimationFeedback = showAnswerAnimationFeedback;
@@ -230,7 +233,7 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 		IEnumerator Run()
 		{
 			yield return Routine.WaitSeconds(1.0f);
-			OnAnswered?.Invoke(ChoseCorrectly);
+			OnAnswered?.Invoke(ChoseCorrectly, SelectedAnswerId);
 			base.HidePopup();
 		}
 	}
