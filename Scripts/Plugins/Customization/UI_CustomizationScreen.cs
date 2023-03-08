@@ -287,6 +287,20 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 		size = PossibleCustomizations.Instance.NumberOfSlots;
 		savedOptions = new Customization[size];
 
+		if(GameData.Instance.Progress == null || GameData.Instance.Progress.customizations == null)
+		{
+			for (int i = 0; i < size; i++)
+			{
+				savedOptions[i] = new Customization();
+				savedOptions[i].id = 0;
+
+				savedOptions[i].name = $"{savedOptions[i].id + 1} - {PossibleCustomizations.Instance.GetName(i)}";
+			}
+
+			return;
+		}
+
+
 		if (GameData.Instance.Progress.customizations.Length == size)
 		{
 			
