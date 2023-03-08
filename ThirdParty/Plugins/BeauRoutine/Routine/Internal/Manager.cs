@@ -47,9 +47,10 @@ namespace BeauRoutine.Internal
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
 		static void Init()
         {
-			s_Instance = new Manager();
+			if (s_Instance == null)
+				s_Instance = new Manager();
+			s_Instance.Initialize();
 			s_AppQuitting = false;
-
 		}
 
 
