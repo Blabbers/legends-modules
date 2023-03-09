@@ -159,8 +159,7 @@ namespace Blabbers
                 parameters += $"\n[{data.Key}]: {data.Value}";
             }
 
-            Debug.Log(
-                $"Analytics → <color=cyan>[{eventName}]</color> event was sent. With the parameters:{parameters}");
+			Debug.Log($"Analytics → <color=cyan>[{eventName}]</color> event was sent. With the parameters:{parameters}");
 #else
             
             UnityEngine.Analytics.Analytics.CustomEvent(eventName, dataDictionary);
@@ -168,6 +167,6 @@ namespace Blabbers
 
 
 
-        }
-    }
+		}
+	}
 }

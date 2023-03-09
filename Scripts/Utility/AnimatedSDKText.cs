@@ -59,7 +59,7 @@ public class AnimatedSDKText : MonoBehaviour
 
 	private void ReproduceText(TextMeshProUGUI text)
 	{
-		Debug.Log($"ReproduceText: {text.text}".Colored("white"));
+		//Debug.Log($"ReproduceText: {text.text}".Colored("white"));
 		//var narratorText = text.text;
 
 		var narratorText = loadSDK.GetTargetTextForAnimatedSDKText();

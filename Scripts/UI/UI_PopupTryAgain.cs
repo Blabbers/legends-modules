@@ -12,14 +12,14 @@ namespace Blabbers.Game00
 
         public void TryAgain()
         {
-            Debug.Log("<UI_PopupTryAgain> TryAgain()".Colored());
-            Singleton.Get<SceneLoader>().ReloadCurrentScene();
+			//Debug.Log("<UI_PopupTryAgain> TryAgain()".Colored());
+			Singleton.Get<SceneLoader>().ReloadCurrentScene();
         }
 
         public void CustomRetry()
         {
-            Debug.Log("<UI_PopupTryAgain> CustomRetry()".Colored("red"));
-            CustomDefeatEvent?.Invoke();
+			//Debug.Log("<UI_PopupTryAgain> CustomRetry()".Colored("red"));
+			CustomDefeatEvent?.Invoke();
         }
 
         public void SetDefeatText(string key)

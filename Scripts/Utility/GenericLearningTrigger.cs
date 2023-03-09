@@ -83,7 +83,7 @@ public class GenericLearningTrigger : MonoBehaviour
 			if (!UI_TutorialController.AlreadyTriggeredInThisLevel.Contains(gameObject.name))
 			{
 
-				Debug.Log("GenericLearningtrigger\nTriggerEnter() hasExplanation complete".Colored("orange"));
+				//Debug.Log("GenericLearningtrigger\nTriggerEnter() hasExplanation complete".Colored("orange"));
 
 				generic.ToggleCollider(false);
 				//callback = () => TutorialEnd();
@@ -100,15 +100,15 @@ public class GenericLearningTrigger : MonoBehaviour
 		}
 
 
-		
-		Debug.Log("GenericLearningtrigger\nTriggerEnter() NO EXPLANATION".Colored("orange"));
+
+		//Debug.Log("GenericLearningtrigger\nTriggerEnter() NO EXPLANATION".Colored("orange"));
 
 	}
 
-    public virtual void TutorialEnd()
+	public virtual void TutorialEnd()
     {
-        Debug.Log("GenericLearningtrigger\nTutorialEnd()".Colored("orange"));
-        TutorialEndGeneric();
+		//Debug.Log("GenericLearningtrigger\nTutorialEnd()".Colored("orange"));
+		TutorialEndGeneric();
     }
 
     protected void TutorialEndGeneric()
@@ -201,9 +201,9 @@ public class BoxTriggerData
     {
         if (onlyTriggerOnce && triggered) return false;
 
-        Debug.Log("Trigger Tutorial");
+		//Debug.Log("Trigger Tutorial");
 
-        triggered = true;
+		triggered = true;
         if (onlyTriggerOnce) collider.enabled = false;
 
         return true;

@@ -68,9 +68,9 @@ public class TutorialTrigger : MonoBehaviour
     {
         if (onlyTriggerOnce && triggered) return;
 
-        Debug.Log("Trigger Tutorial".Colored("orange"));
+		//Debug.Log("Trigger Tutorial".Colored("orange"));
 
-        triggered = true;
+		triggered = true;
         if (onlyTriggerOnce) collider.enabled = false;
 
         Event.Invoke();
