@@ -88,80 +88,106 @@ public class PlayerCustomization : MonoBehaviour
 	{
 
 		int size = PossibleCustomizations.Instance.NumberOfSlots;
-
-		savedOptions = GameData.Instance.Progress.customizations;
-
-		if (savedOptions == null) savedOptions = new Customization[size];
+		savedOptions = new Customization[size];
 
 
-		//Debug.Log($"LoadFromGameData() isInGame == {isInGame}" +
-		//	$"\nsavedOptions.Length: {savedOptions.Length}" +
-		//	$"\nGameData.Instance.Progress.customizations {GameData.Instance.Progress.customizations.Length}\n-");
-
-
-		if(GameData.Instance.Progress.customizations == null)
+		if (GameData.Instance.Progress == null || GameData.Instance.Progress.customizations == null)
 		{
-			Debug.Log("LoadFromGameData() customizations is null!");
-		}
-		else
-		{
-			var customizations = "";
-			for (int i = 0; i < GameData.Instance.Progress.customizations.Length; i++)
-			{
-				if (GameData.Instance.Progress.customizations[i] != null)
-				{
-					customizations = $"{customizations}{GameData.Instance.Progress.customizations[i]}\n";
-				}
-				else
-				{
-					customizations = customizations + "null" + "\n";
-				}
-
-			}
-
-			Debug.Log($"LoadFromGameData(isInGame = {isInGame}) " +
-				$"\nsavedOptions.Length: {savedOptions.Length} | customizations.Length: {GameData.Instance.Progress.customizations.Length}" +
-				$"\n{customizations}");
-
-		}
-
-
-
-
-
-		if (savedOptions.Length == 0 || savedOptions[0] == null)
-		{
-			Debug.Log($"LoadFromGameData() savedOptions.Length == 0");
-
-
-			savedOptions = new Customization[size];
-
 			for (int i = 0; i < size; i++)
 			{
 				savedOptions[i] = new Customization();
-
 				savedOptions[i].id = 0;
-				savedOptions[i].name = $"{savedOptions[i].id} - {PossibleCustomizations.Instance.GetSlotList(i).name}";
+
+				savedOptions[i].name = $"{savedOptions[i].id + 1} - {PossibleCustomizations.Instance.GetName(i)}";
 			}
 
-
+			return;
 		}
 
-		var saved = "";
-		for (int i = 0; i < savedOptions.Length; i++)
+		if (GameData.Instance.Progress.customizations.Length == size)
 		{
-			if (savedOptions[i] != null)
+			savedOptions = GameData.Instance.Progress.customizations;
+		}
+		else
+		{
+			for (int i = 0; i < size; i++)
 			{
-				saved = $"{saved}{savedOptions[i]}\n";
-			}
-			else
-			{
-				saved = saved + "null" + "\n";
+				savedOptions[i] = new Customization();
+				savedOptions[i].id = 0;
+
+				savedOptions[i].name = $"{savedOptions[i].id + 1} - {PossibleCustomizations.Instance.GetName(i)}";
 			}
 
 		}
 
-		
+
+
+		#region OLD
+		//savedOptions = GameData.Instance.Progress.customizations;
+		//if (savedOptions == null) savedOptions = new Customization[size];
+		//if(GameData.Instance.Progress.customizations == null)
+		//{
+		//	Debug.Log("LoadFromGameData() customizations is null!");
+		//}
+		//else
+		//{
+		//	var customizations = "";
+		//	for (int i = 0; i < GameData.Instance.Progress.customizations.Length; i++)
+		//	{
+		//		if (GameData.Instance.Progress.customizations[i] != null)
+		//		{
+		//			customizations = $"{customizations}{GameData.Instance.Progress.customizations[i]}\n";
+		//		}
+		//		else
+		//		{
+		//			customizations = customizations + "null" + "\n";
+		//		}
+
+		//	}
+
+		//	Debug.Log($"LoadFromGameData(isInGame = {isInGame}) " +
+		//		$"\nsavedOptions.Length: {savedOptions.Length} | customizations.Length: {GameData.Instance.Progress.customizations.Length}" +
+		//		$"\n{customizations}");
+
+		//}
+
+
+		//if (savedOptions.Length == 0 || savedOptions[0] == null)
+		//{
+		//	Debug.Log($"LoadFromGameData() savedOptions.Length == 0");
+
+
+		//	savedOptions = new Customization[size];
+
+		//	for (int i = 0; i < size; i++)
+		//	{
+		//		savedOptions[i] = new Customization();
+
+		//		savedOptions[i].id = 0;
+		//		savedOptions[i].name = $"{savedOptions[i].id} - {PossibleCustomizations.Instance.GetSlotList(i).name}";
+		//	}
+
+
+		//} 
+		#endregion
+
+
+		//Debug
+		//var saved = "";
+		//for (int i = 0; i < savedOptions.Length; i++)
+		//{
+		//	if (savedOptions[i] != null)
+		//	{
+		//		saved = $"{saved}{savedOptions[i]}\n";
+		//	}
+		//	else
+		//	{
+		//		saved = saved + "null" + "\n";
+		//	}
+
+		//}
+
+
 
 		//Debug.Log($"LoadFromGameData(isInGame = {isInGame}) " +
 		//	$"\nsavedOptions.Length: {savedOptions.Length} | customizations.Length: {GameData.Instance.Progress.customizations.Length}" +

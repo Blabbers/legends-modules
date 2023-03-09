@@ -216,75 +216,7 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 
 	void GetDataFromSave()
 	{
-		#region MyRegion
-		//int size = 5;
-		//CustomizationSlot current;
-
-		//if (GameData.Instance.progress == null)
-		//{
-		//    size = 0;
-		//}
-		//else if (GameData.Instance.progress.customizations == null)
-		//{
-		//    size = 0;
-		//}
-		//else
-		//{
-
-		//    size = GameData.Instance.progress.customizations.Length;
-		//}
-
-
-
-		//if (size <= 0)
-		//{
-		//    Debug.Log("No saved data found".Colored("red"));
-
-		//    size = PossibleCustomizations.Instance.NumberOfSlots;
-
-		//    //for (int i = 0; i < size; i++)
-		//    //{
-		//    //    selectIds.Add(0);
-		//    //}
-
-		//    for (int i = 0; i < size; i++)
-		//    {
-		//        current = (CustomizationSlot)i;
-		//        slotData.Add(PossibleCustomizations.Instance.GetSlotData(current));
-		//        slotData[i].UpdateCurrent(0);
-		//    }
-
-		//}
-		//else
-		//{
-		//    //for (int i = 0; i < size; i++)
-		//    //{
-		//    //    selectIds.Add(GameData.Instance.progress.customizations[i].id);
-		//    //}
-
-		//    Debug.Log("Found Saved Data".Colored("red"));
-
-		//    for (int i = 0; i < size; i++)
-		//    {
-		//        current = (CustomizationSlot)i;
-		//        slotData.Add(PossibleCustomizations.Instance.GetSlotData(current));
-		//        slotData[i].UpdateCurrent(GameData.Instance.progress.customizations[i].id);
-		//    }
-
-		//}
-
-		//UpdateGameData(); 
-		#endregion
-
-		//Debug.Log($"GetDataFromSave()".Colored("green"));
-		int size = 5;
-		//CustomizationSlot current;
-
-
-		//size = Enum.GetNames(typeof(CustomizationSlot)).Length;
-		//Debug.Log($"is PossibleCustomizations.Instance null? {PossibleCustomizations.Instance == null}");
-
-		size = PossibleCustomizations.Instance.NumberOfSlots;
+		int size = PossibleCustomizations.Instance.NumberOfSlots;
 		savedOptions = new Customization[size];
 
 		if(GameData.Instance.Progress == null || GameData.Instance.Progress.customizations == null)
