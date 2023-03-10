@@ -73,7 +73,10 @@ namespace Blabbers.Game00
 				PlayTween(delayOnEnable);
 			}
 		}
-
+		public void DisableWithExitTween()
+		{
+			DisableWithExitTween(null);
+		}
 		public void DisableWithExitTween(Action onFinished)
 		{
 			if (hasExitTween)
