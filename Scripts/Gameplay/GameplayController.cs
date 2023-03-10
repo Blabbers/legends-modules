@@ -13,10 +13,12 @@ namespace Blabbers.Game00
         [ReadOnly]
         public bool gameOver;
         [BoxGroup("Level Config")] public bool showLevelInfo;
-        [BoxGroup("Level Config")] public CharacterSay initialDialogue;        
+		[BoxGroup("Level Config")] public bool hasAnimation = false;
+		[BoxGroup("Level Config")] public CharacterSay initialDialogue;        
         [BoxGroup("Level Config")] public UnityEvent OnLevelStart;
         [BoxGroup("Level Config")] public UnityEvent OnDefeat;
         [BoxGroup("Level Config")] public UnityEvent OnVictory;
+		
         public Action<bool> OnPause;
 
         //public Question finalLevelQuestion;
@@ -32,16 +34,26 @@ namespace Blabbers.Game00
                 Singleton.Get<UI_PopupLevelInfo>().ShowPopup();
             }
 
-            OnLevelStart?.Invoke();
-           
-            if (!SceneLoader.isStuckOnThisLevel)
-            {
-                if (initialDialogue != null)
-                {
-                    //Debug.Log("<GameplayController>initialDialogue");
-                    initialDialogue.Execute(0.5f);
-                }
-            }
+			StartCoroutine(_WaitForAnimation());
+			IEnumerator _WaitForAnimation()
+			{
+				yield return new WaitUntil(() => !hasAnimation);
+
+				OnLevelStart?.Invoke();
+
+				if (!SceneLoader.isStuckOnThisLevel)
+				{
+					if (initialDialogue != null)
+					{
+						//Debug.Log("<GameplayController>initialDialogue");
+						initialDialogue.Execute(0.5f);
+					}
+				}
+			}
+
+	
+
+
         }
 
         private void Start()
