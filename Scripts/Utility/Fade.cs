@@ -1,42 +1,34 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using DG.Tweening;
+using UnityEngine.UI;
 
 public class Fade : MonoBehaviour {
-    public static Fade Singleton;
 
-    private Texture2D texturea;
-	public Color color;
-
-    private static float fadeSpeed = 1.0f;
-    private static int fadeDir = -1;
-
-    private int drawDepth = -1000;
-    private static float alpha = 1;
-
-    public void FadeOut(float speed)
-    {
-	    alpha = 1;		
-	    fadeDir = -1;
-	    Fade.fadeSpeed = speed;
-    }
-    public void FadeIn(float speed)
-    {
-	    alpha = 0;
-	    fadeDir = 1;
-	    Fade.fadeSpeed = speed;
-    }
-    
-	public static void Out(float speed)
+	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+	static void Init()
 	{
-		alpha = 1;		
-		fadeDir = -1;
-		Fade.fadeSpeed = speed;
+		Singleton = null;
 	}
-	public static void In(float speed)
+
+	public static Fade Singleton;
+	public Color color;
+	public Image fadeSprite;
+	public AnimationCurve easeCurve;
+
+	public static void Out(float duration = 1f)
 	{
-		alpha = 0;
-		fadeDir = 1;
-		Fade.fadeSpeed = speed;
+		var color = Singleton.fadeSprite.color;
+		color.a = 0f;
+		Singleton.fadeSprite.color = color;
+		Singleton.fadeSprite.DOFade(1f, duration).SetEase(Singleton.easeCurve);
+	}
+	public static void In(float duration = 1f)
+	{
+		var color = Singleton.fadeSprite.color;
+		color.a = 1f;
+		Singleton.fadeSprite.color = color;
+		Singleton.fadeSprite.DOFade(0f, duration).SetEase(Singleton.easeCurve);
 	}
 
 	void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode) {
@@ -46,32 +38,23 @@ public class Fade : MonoBehaviour {
     void Awake() {
         Singleton = this;
         SceneManager.sceneLoaded += OnLevelFinishedLoading;
-		texturea = Texture2D.whiteTexture;
     }
+
 	private void OnDestroy()
 	{
 		SceneManager.sceneLoaded -= OnLevelFinishedLoading;
 	}
-
-	void OnGUI() {
-        alpha += fadeDir * fadeSpeed * Time.deltaTime;
-        alpha = Mathf.Clamp01(alpha);
-
-        GUI.color = new Color(color.r, color.g, color.b, alpha);
-        GUI.depth = drawDepth;
-        GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), texturea);
-    }
 
 #if UNITY_EDITOR
 	private void Update()
 	{
 		if (Input.GetKeyDown(KeyCode.F1))
 		{
-			In(0.5f);
+			Fade.In(1f);
 		}
 		if (Input.GetKeyDown(KeyCode.F2))
 		{
-			Out(0.5f);
+			Fade.Out(1f);
 		}
 	}
 #endif
