@@ -36,6 +36,9 @@ namespace Blabbers.Game00
 		[ShowIf(nameof(hasExitTween))]
 		[Tooltip("Call from 'DisableWithExitTween()' method. Tween to play before disabling the object. This will NOT trigger the OnAnimationStart/Finshed events above.")]
 		public MotionTween exitTween;
+		[ShowIf(nameof(hasExitTween))]
+		[BoxGroup("Default Tween")]
+		public UnityEvent OnHideAnimationStart, OnHideAnimationFinished;
 
 		public Vector3 StartAnchoredPosition { get; private set; }
 		public Vector3 StartPosition { get; private set; }
@@ -81,12 +84,14 @@ namespace Blabbers.Game00
 		{
 			if (hasExitTween)
 			{
+				OnHideAnimationStart?.Invoke();
 				exitTween.PlaySequence(this, playEvents: true, isLoop: false, null, HandleExitTweenFinished);
 
 				void HandleExitTweenFinished()
 				{
 					onFinished?.Invoke();
 					gameObject.SetActive(false);
+					OnHideAnimationFinished?.Invoke();
 				}
 			}
 		}
