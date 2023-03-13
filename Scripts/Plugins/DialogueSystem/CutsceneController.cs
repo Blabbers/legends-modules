@@ -35,7 +35,8 @@ namespace Blabbers.Game00
 			Singleton.Get<AudioController>().FadeMusicVolume(musicVolume, 0.5f);
 			Analytics.OnCutsceneStart(cutsceneNameKey);
 
-			Fade.Out(3f);
+			//Fade.Out(3f);
+			Fade.In(3f);
 			OnStart?.Invoke();
 		}
 
@@ -69,7 +70,7 @@ namespace Blabbers.Game00
 
 			IEnumerator Run()
 			{
-				Fade.In(2.0f);
+				Fade.Out(2.0f);
 				yield return Routine.WaitSeconds(2f);
 				Analytics.OnCutsceneEnd(cutsceneNameKey);
 				LoadNextScene();

@@ -51,11 +51,13 @@ public class Fade : MonoBehaviour {
 	{
 		if (Input.GetKeyDown(KeyCode.F1))
 		{
-			Fade.In(1f);
+			//Fade.In(1f);
+			Fade.Out(1f);
 		}
 		if (Input.GetKeyDown(KeyCode.F2))
 		{
-			Fade.Out(1f);
+			//Fade.Out(1f);
+			Fade.In(1f);
 		}
 	}
 #endif
