@@ -90,7 +90,7 @@ namespace Blabbers.Game00
 				void HandleExitTweenFinished()
 				{
 					onFinished?.Invoke();
-					gameObject.SetActive(false);
+					//gameObject.SetActive(false);
 					OnHideAnimationFinished?.Invoke();
 				}
 			}
