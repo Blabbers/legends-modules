@@ -45,16 +45,33 @@ public class GameData : ScriptableObject
 	[Tooltip("Everytime a level finishes it automatically goes to the level select scene. If you populate this list, you can override this behaviour and go to a simulation screen instead for example.")]
     [ReorderableList]
     public SceneToLoad[] levelSelectOverrideScenes;
-    
 
-    [System.Serializable]
+	[Tooltip("Scenes that when entered or exited will trigger a loading screen first")]
+	[ReorderableList]
+	public SceneReference[] scenesWithLoadingScreen;
+
+	[Tooltip("Hints/Learning that will be displayed on the loading screen before a scene")]
+	[ReorderableList]
+	public LoadingHint[] loadingHints;
+
+
+	[System.Serializable]
     public struct SceneToLoad
 	{
         public SceneReference previousScene;
         public SceneReference targetScene;
 	}
 
-    private GameProgress progress;    
+	[System.Serializable]
+	public struct LoadingHint
+	{
+		public string hintKey;
+		public SceneReference nextScene;
+      
+	}
+
+
+	private GameProgress progress;    
     public GameProgress Progress => this.progress;
     public void SetProgressData(GameProgress newProgressData)
 	{

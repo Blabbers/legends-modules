@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using BeauRoutine;
+using System.Collections;
+using System.Linq;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Blabbers.Game00
@@ -34,27 +37,79 @@ namespace Blabbers.Game00
 			}
 		}
 
-		public void LoadScene(string sceneName)
+		public void LoadScene(string nextSceneName)
 		{
-			SceneManager.LoadScene(sceneName);
+			
+
+			var previousScene = SceneManager.GetActiveScene().name;
+			var scenes = GameData.Instance.scenesWithLoadingScreen.ToList();
+			
+			if (scenes.Find(x => ConvertScenePathToName(x.ScenePath) == previousScene || ConvertScenePathToName(x.ScenePath) == nextSceneName) !=null)
+			{
+
+				Debug.Log($"LoadScene: {nextSceneName} with Loading".Colored("cyan"));
+
+
+				Routine.Start(_LoadRoutine());
+
+				//StartCoroutine(_LoadRoutine());
+				IEnumerator _LoadRoutine()
+				{
+
+					SceneManager.LoadScene("loading", LoadSceneMode.Additive);
+					yield return new WaitForSeconds(1);
+					Singleton.Get<UI_LoadingScreen>().SetNextSceneName(nextSceneName);
+
+
+					SceneManager.UnloadSceneAsync(previousScene);
+					yield return new WaitForSeconds(2);
+					SceneManager.LoadSceneAsync(nextSceneName, LoadSceneMode.Additive);
+
+
+					var loaded = false;
+					SceneManager.sceneLoaded += LoadedNextScene;
+					yield return new WaitUntil(()=> loaded);
+					SceneManager.sceneLoaded -= LoadedNextScene;
+
+					Singleton.Get<UI_LoadingScreen>().motionTween.DisableWithExitTween(() => { SceneManager.UnloadSceneAsync("loading"); });
+					
+
+					void LoadedNextScene(Scene scene, LoadSceneMode mode)
+					{
+						if (scene.name.Equals(nextSceneName)) loaded = true;
+					}
+				}
+
+
+			}
+			else
+			{
+
+				Debug.Log($"LoadScene: {nextSceneName} without Loading".Colored("orange"));
+				SceneManager.LoadScene(nextSceneName);
+			}
+
 		}
 
 		public void ReloadCurrentScene()
 		{
-			SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+			//SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+			LoadScene(SceneManager.GetActiveScene().name);
 		}
 
 		public void LoadGameLevel(int level)
 		{
 			ProgressController.GameProgress.currentLevelId = level - 1;
-			SceneManager.LoadScene($"level-{level}");
+			//SceneManager.LoadScene($"level-{level}");
+			LoadScene($"level-{level}");
 		}
 
 		public void LoadLevelSelectScene()
 		{
 			if (gameData.levelSelectOverrideScenes.Length == 0)
 			{
-				SceneManager.LoadScene("level-select");
+				//SceneManager.LoadScene("level-select");
+				LoadScene("level-select");
 			}
 			else
 			{
@@ -77,7 +132,9 @@ namespace Blabbers.Game00
 						return;
 					}
 				}
-				SceneManager.LoadScene("level-select");
+
+				//SceneManager.LoadScene("level-select");
+				LoadScene("level-select");
 			}
 		}
 
@@ -97,12 +154,14 @@ namespace Blabbers.Game00
 
 		public void LoadMainMenuScene()
 		{
-			SceneManager.LoadScene("main-menu");
+			//SceneManager.LoadScene("main-menu");
+			LoadScene("main-menu");
 		}
 
 		public void LoadSceneByName(string fullSceneName)
 		{
-			SceneManager.LoadScene(fullSceneName);
+			//SceneManager.LoadScene(fullSceneName);
+			LoadScene(fullSceneName);
 		}
 
 		//Added
