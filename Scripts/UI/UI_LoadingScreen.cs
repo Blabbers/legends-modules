@@ -27,6 +27,7 @@ public class UI_LoadingScreen : MonoBehaviour,ISingleton
 	{
 		//Checar qual a cena atual ou previous e carregar o texto baseado nisso
 		hintBlock.alpha = 0;
+		//Debug.Break();
 	}
 
 

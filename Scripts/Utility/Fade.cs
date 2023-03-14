@@ -33,6 +33,7 @@ public class Fade : MonoBehaviour {
 
 	void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode) {
 		//Out(1f);
+		if (scene.name == "loading") return;
 		In(1f);
     }
 

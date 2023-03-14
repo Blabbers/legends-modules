@@ -9,6 +9,7 @@ using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Xml.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
 public class PlayerCustomization : MonoBehaviour
@@ -23,6 +24,7 @@ public class PlayerCustomization : MonoBehaviour
 
 	[ReorderableList][SerializeField] CustomizationParentData[] parentData;
 
+	public UnityEvent OnCustomizationFinsihed;
 
 	//[ReorderableList][SerializeField] SlotData[] slots;
 	//public CustomizationVisuals customization;
@@ -71,8 +73,6 @@ public class PlayerCustomization : MonoBehaviour
 	} 
 	#endregion
 
-
-
 	private void Start()
 	{
 		if (isInGame)
@@ -81,6 +81,8 @@ public class PlayerCustomization : MonoBehaviour
 			GenerateConfigureOptions();
 			//UpdateVisual(savedOptions);
 			UpdateVisual(configuredOptions);
+
+			OnCustomizationFinsihed?.Invoke();
 		}
 	}
 
@@ -281,6 +283,11 @@ public class PlayerCustomization : MonoBehaviour
 
 	}
 
+	public CustomizationParentData[] GetCustomizationData()
+	{
+		return parentData;
+	}
+ 
 	void PostDelay()
 	{
 		for (int i = 0; i < parentData.Length; i++)
