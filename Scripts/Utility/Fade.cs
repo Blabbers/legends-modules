@@ -2,45 +2,43 @@
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 using UnityEngine.UI;
+using Blabbers.Game00;
 
-public class Fade : MonoBehaviour {
-
-	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-	static void Init()
+public class Fade : MonoBehaviour, ISingleton
+{
+	public void OnCreated()
 	{
-		Singleton = null;
 	}
 
-	public static Fade Singleton;
+	public static Fade Instance => Singleton.Get<Fade>();
 	public Color color;
 	public Image fadeSprite;
 	public AnimationCurve easeCurve;
 
 	public static void Out(float duration = 1f)
 	{
-		var color = Singleton.fadeSprite.color;
+		var color = Instance.fadeSprite.color;
 		color.a = 0f;
-		Singleton.fadeSprite.color = color;
-		Singleton.fadeSprite.DOFade(1f, duration).SetEase(Singleton.easeCurve);
+		Instance.fadeSprite.color = color;
+		Instance.fadeSprite.DOFade(1f, duration).SetEase(Instance.easeCurve);
 	}
 	public static void In(float duration = 1f)
 	{
-		var color = Singleton.fadeSprite.color;
+		var color = Instance.fadeSprite.color;
 		color.a = 1f;
-		Singleton.fadeSprite.color = color;
-		Singleton.fadeSprite.DOFade(0f, duration).SetEase(Singleton.easeCurve);
+		Instance.fadeSprite.color = color;
+		Instance.fadeSprite.DOFade(0f, duration).SetEase(Instance.easeCurve);
 	}
 
 	void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode) {
-		//Out(1f);
 		if (scene.name == "loading") return;
 		In(1f);
-    }
+	}
 
-    void Awake() {
-        Singleton = this;
-        SceneManager.sceneLoaded += OnLevelFinishedLoading;
-    }
+	void Awake()
+	{
+		SceneManager.sceneLoaded += OnLevelFinishedLoading;
+	}
 
 	private void OnDestroy()
 	{
