@@ -66,15 +66,8 @@ namespace Blabbers.Game00
 
 		public void FinishCutscene()
 		{
-			Routine.Start(Run());
-
-			IEnumerator Run()
-			{
-				Fade.Out(2.0f);
-				yield return Routine.WaitSeconds(2f);
-				Analytics.OnCutsceneEnd(cutsceneNameKey);
-				LoadNextScene();
-			}
+			Analytics.OnCutsceneEnd(cutsceneNameKey);
+			LoadNextScene();			
 		}
 
 		public void LoadNextScene()
