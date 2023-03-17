@@ -74,8 +74,16 @@ public class TriggerDisplay3d : MonoBehaviour
 
 	private void OnDrawGizmos()
 	{
-		if(drawTrigger) triggerDisplay.DrawGizmos();
-
+		if (triggerDisplay.collider.isTrigger)
+		{
+			if (!GizmosConfigs.Instance.triggerGizmos) return;
+		}
+		else
+		{
+			if (!GizmosConfigs.Instance.colliderGizmos) return;
+		}
+	
+		if (drawTrigger) triggerDisplay.DrawGizmos();
 	}
 }
 
