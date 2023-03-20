@@ -2,6 +2,7 @@
 using Raycast.Utility;
 using System.Collections;
 using System.Collections.Generic;
+//using System.Drawing;
 using UnityEditor;
 using UnityEngine;
 
@@ -56,28 +57,52 @@ public static class GizmosUtility
 	public static void DrawWireCube(Transform current, BoxCollider collider, Color color)
 	{
 
-        Transform parent;
-
-        if(current.parent != null)
-        {
-			parent = current.parent;
-        }
-        else
-        {
-            parent = current;
-        }
 
 
 
-        var scaleX = collider.size.x * parent.localScale.x * current.localScale.x;
-		var scaleY = collider.size.y * parent.localScale.y * current.localScale.y;
-		var scaleZ = collider.size.z * parent.localScale.z * current.localScale.z;
-        var scale = new Vector3(scaleX, scaleY, scaleZ);
+
+
+		#region MyRegion
+
+		//Transform parent;
+		//Vector3 parentScale;
+
+		//parentScale = Vector3.one;
+
+
+		//if (current.parent != null)
+		//{
+		//	parent = current.parent;
+		//	parentScale = parent.lossyScale;
+
+		//}
+
+		//var scaleX = collider.size.x * parent.localScale.x * current.localScale.x;
+		//var scaleY = collider.size.y * parent.localScale.y * current.localScale.y;
+		//var scaleZ = collider.size.z * parent.localScale.z * current.localScale.z;
+
+		//var scaleX = collider.size.x * parentScale.x * current.localScale.x;
+		//var scaleY = collider.size.y * parentScale.y * current.localScale.y;
+		//var scaleZ = collider.size.z * parentScale.z * current.localScale.z; 
+
+		//var rotation = current.rotation.eulerAngles;
+		//      var center = current.position + collider.center;
+
+		//var scale = collider.bounds.size;
+
+		#endregion
+
+		var scaleX = collider.size.x * current.lossyScale.x;
+		var scaleY = collider.size.y * current.lossyScale.y;
+		var scaleZ = collider.size.z * current.lossyScale.z;
+
+		var scale = new Vector3(scaleX, scaleY, scaleZ);
+
 
 		var rotation = current.rotation.eulerAngles;
-        var center = current.position + collider.center;
+		var center = collider.bounds.center;
 
-        DrawWireCube(scale, center, rotation,color);
+		DrawWireCube(scale, center, rotation,color);
 	}
 
 	public static void DrawWireCube(Vector3 scale, Vector3 center, Vector3 rotation , Color color)
@@ -104,27 +129,67 @@ public static class GizmosUtility
 
 	public static void DrawFilledCube(Transform current, BoxCollider collider, Color fillColor, Color wireColor)
 	{
-		Transform parent;
+        #region MyRegion
+        //Transform parent;
+        //      Transform gParent;
 
-		if (current.parent != null)
-		{
-			parent = current.parent;
-		}
-		else
-		{
-			parent = current;
-		}
+        //      Vector3 parentScale, gParentScale;
 
-		var scaleX = collider.size.x * parent.localScale.x * current.localScale.x;
-		var scaleY = collider.size.y * parent.localScale.y * current.localScale.y;
-		var scaleZ = collider.size.z * parent.localScale.z * current.localScale.z;
+        //      parentScale = gParentScale = Vector3.one;
+
+        //if (current.parent != null)
+        //{
+        //	parent = current.parent;
+        //          parentScale = parent.localScale;
+
+        //	if (parent.parent != null)
+        //	{
+        //		gParent = parent.parent;
+        //		gParentScale = parent.localScale;
+        //	}
+
+        //}
+
+
+        ////var scaleX = collider.size.x * parent.localScale.x * current.localScale.x;
+        ////var scaleY = collider.size.y * parent.localScale.y * current.localScale.y;
+        ////var scaleZ = collider.size.z * parent.localScale.z * current.localScale.z;
+
+        //var scaleX = collider.size.x * parentScale.x * gParentScale.x * current.localScale.x;
+        //var scaleY = collider.size.y * parentScale.y * gParentScale.y * current.localScale.y;
+        //var scaleZ = collider.size.z * parentScale.z * gParentScale.z * current.localScale.z;
+
+        #endregion
+
+
+  //      var scale = collider.bounds.size;
+		//var rotation = current.rotation.eulerAngles;
+  //      var center = collider.bounds.center;
+
+		#region MyRegion
+		//var scale = new Vector3(scaleX, scaleY, scaleZ);
+
+		//var rotation = current.rotation.eulerAngles;
+		//var center = current.position + collider.center; 
+		#endregion
+
+
+		var scaleX = collider.size.x * current.lossyScale.x;
+		var scaleY = collider.size.y * current.lossyScale.y;
+		var scaleZ = collider.size.z * current.lossyScale.z;
+
 		var scale = new Vector3(scaleX, scaleY, scaleZ);
 
+
 		var rotation = current.rotation.eulerAngles;
-		var center = current.position + collider.center;
+		var center = collider.bounds.center;
+
 
 		DrawFilledCube(scale, center, rotation, fillColor, wireColor);
 	}
+
+
+
 
 
 
