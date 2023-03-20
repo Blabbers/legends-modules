@@ -200,8 +200,8 @@ public class PlayerCustomization : MonoBehaviour
 
 	void GenerateConfigureOptions()
 	{
-		Debug.Log($"GenerateConfigureOptions()" +
-			$"\nis savedOptions null? {savedOptions == null} | is PossibleCustomizations null? {PossibleCustomizations.Instance == null}\n-");
+		//Debug.Log($"GenerateConfigureOptions()" +
+		//	$"\nis savedOptions null? {savedOptions == null} | is PossibleCustomizations null? {PossibleCustomizations.Instance == null}\n-");
 
 
 	
@@ -469,7 +469,7 @@ public class CustomizationParentData
 				return;
 			}
 
-			Debug.Log($"TextureList \nlistRef: {listRef.name} | {parent.GetChild(0).GetChild(0)}");
+			//Debug.Log($"TextureList \nlistRef: {listRef.name} | {parent.GetChild(0).GetChild(0)}");
 			parent.GetChild(0).GetChild(0).GetComponent<Renderer>().material.mainTexture = mat;
 
 			tempRef = parent.GetChild(0).GetChild(0);

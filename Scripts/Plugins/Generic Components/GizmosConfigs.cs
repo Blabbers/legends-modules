@@ -32,6 +32,6 @@ public class GizmosConfigs : ScriptableObject
 	public bool colliderGizmos;
 	public bool triggerGizmos;
 	public bool cameraGizmos;
-
+	public bool toolGizmos = false;
 
 }
