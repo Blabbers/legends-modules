@@ -47,6 +47,11 @@ namespace Blabbers.Game00
             SceneManager.sceneUnloaded += HandleSceneLoaded;
 		}
 
+		private void Start()
+		{
+			//GameAnalytics.Initialize()
+		}
+
 		private void OnDestroy()
 		{
             SceneManager.sceneUnloaded -= HandleSceneLoaded;
