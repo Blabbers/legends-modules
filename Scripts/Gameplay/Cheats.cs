@@ -13,6 +13,7 @@ public class Cheats : RuntimeDebugBehaviour {
 
 
 	public string langCode;
+	public float timeScale;
 
 	#region Cheats Screen
 	[DebugAction]
@@ -50,6 +51,16 @@ public class Cheats : RuntimeDebugBehaviour {
 
 	protected virtual void Awake()
 	{
+
+		LanguageCheat();
+		TimeScaleCheat();
+
+		base.Awake();
+	}
+	
+
+	void LanguageCheat()
+	{
 		var allLanguageNames = new string[2];
 		allLanguageNames[0] = "en";
 		allLanguageNames[1] = "es";
@@ -73,8 +84,33 @@ public class Cheats : RuntimeDebugBehaviour {
 			.WithAction(() => LoadLanguage(langCode));
 
 		RuntimeDebugSystem.RegisterActions(applyLanguageAction);
+	}
 
-		base.Awake();
+
+	void TimeScaleCheat()
+	{
+
+		RuntimeDebugSystem.RegisterActions(
+			DebugActionBuilder.Button()
+			.WithGroup("TimeScale")
+			.WithName("Increase TimeScale")
+			.WithAction(() => IncreaseTimeScale())
+		);
+
+
+		RuntimeDebugSystem.RegisterActions(
+			DebugActionBuilder.Button()
+			.WithGroup("TimeScale")
+			.WithName("Decrease TimeScale")
+			.WithAction(() => DecreaseTimeScale())
+		);
+
+		RuntimeDebugSystem.RegisterActions(
+			DebugActionBuilder.Button()
+			.WithGroup("TimeScale")
+			.WithName("Reset TimeScale")
+			.WithAction(() => ResetTimeScale())
+		);
 	}
 
 	#region Shortcuts
@@ -92,13 +128,15 @@ public class Cheats : RuntimeDebugBehaviour {
 
 	#endregion
 
+	#region Language
 	void SelectLanguage(int id)
 	{
 
-		if(id == 0)
+		if (id == 0)
 		{
 			langCode = "en";
-		}else if(id == 1)
+		}
+		else if (id == 1)
 		{
 			langCode = "es";
 		}
@@ -111,6 +149,27 @@ public class Cheats : RuntimeDebugBehaviour {
 
 
 		InstantReloadScene();
+	}
+
+
+	#endregion
+
+	void IncreaseTimeScale()
+	{
+		timeScale += 0.5f;
+		Time.timeScale = timeScale;
+	}
+
+	void DecreaseTimeScale()
+	{
+		timeScale -= 0.5f;
+		Time.timeScale = timeScale;
+	}
+
+	void ResetTimeScale()
+	{
+		timeScale = 1;
+		Time.timeScale = timeScale;
 	}
 
 	void InstantReloadScene()
