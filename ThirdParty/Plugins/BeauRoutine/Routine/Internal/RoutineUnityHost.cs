@@ -147,6 +147,8 @@ namespace BeauRoutine.Internal
 
         private void Update()
         {
+            if (m_Manager == null) return;
+
             m_Manager.MarkFrameStart();
 
             Manager m = m_Manager;
@@ -187,7 +189,9 @@ namespace BeauRoutine.Internal
 
         private void FixedUpdate()
         {
-            m_Manager.MarkFrameStart();
+			if (m_Manager == null) return;
+
+			m_Manager.MarkFrameStart();
 
             if (m_Manager != null)
             {
