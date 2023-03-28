@@ -72,7 +72,7 @@ namespace Blabbers
 			}
 
 
-			Debug.Log($"Trigger OnTriggerEnter\n {other.transform.name} -> {this.transform.name}".Colored("yellow"));
+			//Debug.Log($"Trigger OnTriggerEnter\n {other.transform.name} -> {this.transform.name}".Colored("yellow"));
 			TriggerEnter.Invoke(other);
 		}
 
@@ -95,7 +95,7 @@ namespace Blabbers
 			}
 
 
-			Debug.Log($"OnTriggerExit2D \nTag: {other.tag}".Colored());
+			//Debug.Log($"OnTriggerExit2D \nTag: {other.tag}".Colored());
 			TriggerExit.Invoke(other);
 		}
 
