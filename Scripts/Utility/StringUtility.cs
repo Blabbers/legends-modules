@@ -10,6 +10,12 @@ public static class StringUtility
 		success = true;
 		string termFormat = "";
 
+		if (mainText.Length == 0)
+		{
+			success = false;
+			return mainText;
+		}
+
 		//First check
 		termFormat = term;
 		if (mainText.Contains(termFormat)) return termFormat;
@@ -45,6 +51,8 @@ public static class StringUtility
 	{
 		string updated = "";
 		updated = mainText;
+
+		if(term.Length ==0 || mainText.Length==0) return updated;
 
 		updated = mainText.Replace(term, newTerm);
 

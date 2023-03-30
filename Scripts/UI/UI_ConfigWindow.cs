@@ -15,12 +15,24 @@ public class UI_ConfigWindow : MonoBehaviour, ISingleton //can be based on UI Po
     }
     public void OnYesButton()
     {
-        ProgressController.GameProgress.enableAutomaticTTS = true;
+		if (ProgressController.GameProgress == null)
+		{
+			Debug.Log("OnYesButton() | ProgressController.GameProgress == null");
+			return;
+		}
+
+		ProgressController.GameProgress.enableAutomaticTTS = true;
         ProgressController.enableAutomaticTTS = true;
     }
     public void OnNoButton()
     {
-        ProgressController.GameProgress.enableAutomaticTTS = false;
+        if(ProgressController.GameProgress == null)
+        {
+            Debug.Log("OnNoButton() | ProgressController.GameProgress == null");
+            return;
+        }
+
+		ProgressController.GameProgress.enableAutomaticTTS = false;
         ProgressController.enableAutomaticTTS = false;
     }
 }

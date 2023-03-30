@@ -43,8 +43,12 @@ namespace Blabbers.Game00
 
 			var previousScene = SceneManager.GetActiveScene().name;
 			var scenes = GameData.Instance.scenesWithLoadingScreen.ToList();
-			
-			if (scenes.Find(x => ConvertScenePathToName(x.ScenePath) == previousScene || ConvertScenePathToName(x.ScenePath) == nextSceneName) !=null)
+
+			bool foundScene = scenes.Find(x => ConvertScenePathToName(x.ScenePath) == previousScene || ConvertScenePathToName(x.ScenePath) == nextSceneName) != null;
+
+			//foundScene = false;
+
+			if (foundScene)
 			{
 
 				Debug.Log($"LoadScene: {nextSceneName} with Loading".Colored("cyan"));

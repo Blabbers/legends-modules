@@ -15,11 +15,14 @@ namespace Blabbers.Game00
         public UnityEvent OnStart;
         public void OnCreated()
         {
-            Singleton.Get<ProgressController>().OnGameDataLoaded += HandleGameDataLoaded;
+			Debug.Log($"UI_MainMenu.OnCreated()");
+			Singleton.Get<ProgressController>().OnGameDataLoaded += HandleGameDataLoaded;
         }
         public void OnDestroy()
         {
-            Singleton.Get<ProgressController>().OnGameDataLoaded -= HandleGameDataLoaded;
+
+			Debug.Log($"UI_MainMenu.OnDestroy()");
+			Singleton.Get<ProgressController>().OnGameDataLoaded -= HandleGameDataLoaded;
         }
 
         public void Start()
@@ -29,6 +32,8 @@ namespace Blabbers.Game00
 
 		public void HandleGameDataLoaded(GameProgress progress)
         {
+
+            Debug.Log($"UI_MainMenu.HandleGameDataLoaded() progress == null: {progress == null}");
 
             btnPlay.gameObject.SetActive(true);
             btnContinue.gameObject.SetActive(false);
@@ -46,7 +51,10 @@ namespace Blabbers.Game00
 
 
             }
-            Analytics.OnGameStart();
+
+			Debug.Log($"UI_MainMenu.HandleGameDataLoaded() progress == null: {progress == null}\n End Before Analytics");
+
+			Analytics.OnGameStart();
         }
     }
 }

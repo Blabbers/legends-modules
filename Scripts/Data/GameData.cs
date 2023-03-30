@@ -114,7 +114,6 @@ public class GameProgress
         FirstTimeLevelSelect = true;
         choices = new Choice[0];
 
-
         levels = new Level[totalLevels];
         for (int i = 0; i < levels.Length; i++)
         {
