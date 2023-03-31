@@ -124,7 +124,7 @@ namespace Blabbers.Game00
 
         public void CreateNewGameData()
         {
-            Debug.Log($"{this}.CreateNewGameData()");
+            //Debug.Log($"{this}.CreateNewGameData()");
 
             // If there is no data to load, we start the game from scratch
             // (this is just because this variable is saved in an SO that is persistent in the editor)
@@ -144,11 +144,11 @@ namespace Blabbers.Game00
         public void StateInitialize(Action<GameProgress> callback)
         {
 
-            Debug.Log($"{this}.StateInitialize()");
+            //Debug.Log($"{this}.StateInitialize()");
 
 			try
             {
-				Debug.Log($"{this}.StateInitialize() try");
+				//Debug.Log($"{this}.StateInitialize() try");
 
 				// Check for valid state data, from server or fallback local ( PlayerPrefs )
 				LOLSDK.Instance.LoadState<GameProgress>(state =>
@@ -208,7 +208,7 @@ namespace Blabbers.Game00
             }
 
 
-			Debug.Log($"{this}.StateInitialize() End");
+			//Debug.Log($"{this}.StateInitialize() End");
 		}
         #endregion
 

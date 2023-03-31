@@ -51,7 +51,7 @@ namespace Blabbers.Game00
 			if (foundScene)
 			{
 
-				Debug.Log($"LoadScene: {nextSceneName} with Loading".Colored("cyan"));
+				//Debug.Log($"LoadScene: {nextSceneName} with Loading".Colored("cyan"));
 
 
 				Routine.Start(_LoadRoutine());
@@ -89,7 +89,7 @@ namespace Blabbers.Game00
 			else
 			{
 
-				Debug.Log($"LoadScene: {nextSceneName} without Loading".Colored("orange"));
+				//Debug.Log($"LoadScene: {nextSceneName} without Loading".Colored("orange"));
 				SceneManager.LoadScene(nextSceneName);
 			}
 
