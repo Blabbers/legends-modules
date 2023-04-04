@@ -24,7 +24,8 @@ namespace Fungus
 		protected LocalizedString storyText;
 		[SerializeField] 
         protected bool applyKeyCodes = true;
-                
+		[SerializeField] protected FacingDirection dialogueOrigin = FacingDirection.Left;
+
 		[Tooltip("Plays Text-to-Speech when this command starts")]
 		[SerializeField] protected bool playTTS = true;
 
@@ -99,7 +100,7 @@ namespace Fungus
             var flowchart = GetFlowchart();
 
             sayDialog.SetActive(true);
-
+            sayDialog.SetSide(dialogueOrigin);
             sayDialog.SetCharacter(character);
             sayDialog.SetCharacterImage(portrait);
 

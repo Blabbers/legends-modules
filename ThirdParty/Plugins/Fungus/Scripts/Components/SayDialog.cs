@@ -23,17 +23,20 @@ namespace Fungus
             ActiveSayDialog = null;
 		}
 
-		[Tooltip("Duration to fade dialogue in/out")]
+        #region Variables
+        [Tooltip("Duration to fade dialogue in/out")]
         [SerializeField] protected float fadeDuration = 0.25f;
+
+        [Tooltip("The canvas UI object")]
+        [SerializeField] protected Canvas dialogCanvas;
+        public DialogBlock leftBlock;
+        public DialogBlock rightBlock;
 
         [Tooltip("The continue button UI object")]
         [SerializeField] protected Button continueButton;
 
-        [Tooltip("The canvas UI object")]
-        [SerializeField] protected Canvas dialogCanvas;
-
         [Tooltip("The name text UI object")]
-        [SerializeField] protected TextMeshProUGUI nameText;        
+        [SerializeField] protected TextMeshProUGUI nameText;
         protected TextAdapter nameTextAdapter = new TextAdapter();
         public virtual string NameText
         {
@@ -72,18 +75,18 @@ namespace Fungus
         [Tooltip("The character UI object")]
         [SerializeField] protected Image characterImage;
         public virtual Image CharacterImage { get { return characterImage; } }
-    
+
         [Tooltip("Adjust width of story text when Character Image is displayed (to avoid overlapping)")]
         [SerializeField] protected bool fitTextWithImage = true;
 
         [Tooltip("Close any other open Say Dialogs when this one is active")]
         [SerializeField] protected bool closeOtherDialogs;
 
-        protected float startStoryTextWidth; 
+        protected float startStoryTextWidth;
         protected float startStoryTextInset;
 
-        protected WriterAudio writerAudio;
-        protected Writer writer;
+		[SerializeField] protected WriterAudio writerAudio;
+		[SerializeField] protected Writer writer;
         protected CanvasGroup canvasGroup;
 
         protected bool fadeWhenDone = true;
@@ -97,19 +100,53 @@ namespace Fungus
 
         protected StringSubstituter stringSubstituter = new StringSubstituter();
 
-		// Cache active Say Dialogs to avoid expensive scene search
-		protected static List<SayDialog> activeSayDialogs = new List<SayDialog>();
+        // Cache active Say Dialogs to avoid expensive scene search
+        protected static List<SayDialog> activeSayDialogs = new List<SayDialog>();
 
-		protected virtual void Awake()
+        #endregion
+        protected virtual void Awake()
 		{
-			if (!activeSayDialogs.Contains(this))
+
+   //         SetDialogueSide(FacingDirection.Right);
+
+			//if (!activeSayDialogs.Contains(this))
+   //         {
+   //             activeSayDialogs.Add(this);
+   //         }
+
+   //         nameTextAdapter.InitFromGameObject(nameText.gameObject);
+   //         storyTextAdapter.InitFromGameObject(storyText.gameObject);
+        }
+
+		void SetDialogueSide(FacingDirection side)
+		{
+			if (side == FacingDirection.Left)
 			{
-				activeSayDialogs.Add(this);
+				leftBlock.ToggleBlock(true);
+				rightBlock.ToggleBlock(false);
+
+				continueButton = leftBlock.ContinueButton;
+				nameText = leftBlock.NameText;
+				storyText = leftBlock.StoryText;
+				characterImage = leftBlock.CharacterImage;
+                writer = leftBlock.Writer;
+                writerAudio = leftBlock.WriterAudio;
+			}
+			else
+			{
+				leftBlock.ToggleBlock(false);
+				rightBlock.ToggleBlock(true);
+
+				continueButton = rightBlock.ContinueButton;
+				nameText = rightBlock.NameText;
+				storyText = rightBlock.StoryText;
+				characterImage = rightBlock.CharacterImage;
+				writer = rightBlock.Writer;
+				writerAudio = rightBlock.WriterAudio;
 			}
 
-            nameTextAdapter.InitFromGameObject(nameText.gameObject);
-            storyTextAdapter.InitFromGameObject(storyText.gameObject);
-        }
+
+		}
 
 		protected virtual void OnDestroy()
 		{
@@ -256,7 +293,7 @@ namespace Fungus
         /// Returns a SayDialog by searching for one in the scene or creating one if none exists.
         /// </summary>
         public static SayDialog GetSayDialog()
-        {			
+        {
 			if (ActiveSayDialog == null)
             {
 				SayDialog sd = null;
@@ -324,6 +361,19 @@ namespace Fungus
         {
             gameObject.SetActive(state);
         }
+
+        public void SetSide(FacingDirection dir)
+        {
+			SetDialogueSide(dir);
+
+			if (!activeSayDialogs.Contains(this))
+			{
+				activeSayDialogs.Add(this);
+			}
+
+			nameTextAdapter.InitFromGameObject(nameText.gameObject);
+			storyTextAdapter.InitFromGameObject(storyText.gameObject);
+		}
 
         /// <summary>
         /// Sets the active speaking character.
@@ -553,4 +603,59 @@ namespace Fungus
 
         #endregion
     }
+
+
+
+    [Serializable]
+    public class DialogBlock {
+
+        [SerializeField] GameObject parent;
+        [SerializeField] Writer writer;
+        [SerializeField] WriterAudio writerAudio;
+        //[SerializeField] DialogInput dialogInput;
+
+		public Writer Writer { get { return writer; } }
+        public WriterAudio WriterAudio { get { return writerAudio; } }
+       // public DialogInput DialogInput { get { return dialogInput; } }
+
+		[Tooltip("The continue button UI object")]
+		[SerializeField] protected Button continueButton;
+        public Button ContinueButton { get { return continueButton; } }
+
+
+
+		[Tooltip("The name text UI object")]
+		[SerializeField] protected TextMeshProUGUI nameText;
+		public TextMeshProUGUI NameText
+		{
+			get
+			{
+				return nameText;
+			}
+		}
+
+		[Tooltip("The story text UI object")]
+		[SerializeField] protected TextMeshProUGUI storyText;
+		public TextMeshProUGUI StoryText
+		{
+			get
+			{
+				return storyText;
+			}
+
+		}
+
+		[Tooltip("The character UI object")]
+		[SerializeField] protected Image characterImage;
+		public Image CharacterImage { get { return characterImage; } }
+
+
+
+        public void ToggleBlock(bool active)
+        {
+            parent.SetActive(active);
+
+		}
+	}
+
 }
