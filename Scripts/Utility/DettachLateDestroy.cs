@@ -19,8 +19,16 @@ public class DettachLateDestroy : MonoBehaviour
 	{
 		_allParticles = GetComponentsInChildren<ParticleSystem>();
 		_tempParent = new GameObject("[VirtualParent] " + this.name);
+		_tempParent.transform.SetParent(this.transform);
+		_tempParent.transform.SetParent(null);
+
 		UpdateAttachmentPosition();
 		this.transform.SetParent(_tempParent.transform, true);
+	}
+
+	private void OnDestroy()
+	{
+		//Debug.Log($"DettachLateDestroy.OnDestroy()\n_tempParent: {_tempParent}");
 	}
 
 	private void Update()
@@ -42,6 +50,7 @@ public class DettachLateDestroy : MonoBehaviour
 		}
 		else
 		{
+
 			_parentWasDestroyed = true;
 			// Sets this to be destroyed with a delay and turn of emissions of all subparticles
 			Destroy(_tempParent, _delayToDestroyAfterDettach);
