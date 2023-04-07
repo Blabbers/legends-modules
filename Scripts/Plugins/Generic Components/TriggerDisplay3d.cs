@@ -131,10 +131,10 @@ public class GenericTriggerDisplay3d
 	{
 		if (boxCollider != null)
 		{
-			var scale = new Vector3(boxCollider.size.x * parent.localScale.x, boxCollider.size.y * parent.localScale.y, boxCollider.size.z * parent.localScale.z);
+			//var scale = new Vector3(boxCollider.size.x * parent.localScale.x, boxCollider.size.y * parent.localScale.y, boxCollider.size.z * parent.localScale.z);
 
-			colliderSize = boxCollider.size;
-			parentScale = parent.localScale;
+			//colliderSize = boxCollider.size;
+			//parentScale = parent.localScale;
 
 
 

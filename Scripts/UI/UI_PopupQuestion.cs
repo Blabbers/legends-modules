@@ -78,8 +78,10 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 	public bool enableQuestionTTS = true;
 	public Transform PopupParent;
 	public Transform ButtonsParent;
+	public Button btnConfirm;
 	public TextMeshProUGUI QuestionDescriptionText;
 	public List<TextMeshProUGUI> AnswerTests;
+	[SerializeField] List<string> answerKeys;
 
 	public MotionTweenPlayer starMotionPlayer;
 	public MotionTween motionStarCorrect, motionStarWrong;
@@ -97,6 +99,7 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 
 	private void Awake()
 	{
+		btnConfirm.interactable = false;
 		SceneManager.sceneUnloaded += HandleSceneLoaded;
 	}
 
@@ -113,6 +116,53 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 
 	public void ClickOption(int id)
 	{
+
+		SelectedAnswerId = id;
+		btnConfirm.interactable = true;
+
+		//Make TTS speak the option
+		LocalizationExtensions.PlayTTS(answerKeys[id]);
+
+
+		//var clickedBtnTransform = AnswerTests[id].transform.parent;
+
+		//if (shouldShowAnswerAnimationFeedback)
+		//{
+		//	// Position star at the correct place
+		//	starMotionPlayer.gameObject.SetActive(true);
+		//	starMotionPlayer.transform.position = clickedBtnTransform.position;
+		//}
+		//var clickedBtn = clickedBtnTransform.GetComponent<Button>();
+
+		//var answeredCorrectly = id == 0;
+		//SelectedAnswerId = id;
+
+		//if (answeredCorrectly)
+		//{
+		//	if (shouldShowAnswerAnimationFeedback)
+		//	{
+		//		motionStarCorrect.PlaySequence(starMotionPlayer);
+		//		sfxExtraStar.PlaySelectedIndex(1);
+		//		clickedBtn.image.DOColor(Color.green, 0.5f);
+		//	}
+		//	CorrectOptionMethod();
+		//}
+		//else
+		//{
+		//	if (shouldShowAnswerAnimationFeedback)
+		//	{
+		//		motionStarWrong.PlaySequence(starMotionPlayer);
+		//		sfxExtraStar.PlaySelectedIndex(0);
+		//		clickedBtn.image.DOColor(Color.red, 0.5f);
+		//	}
+		//	WrongOptionMethod();
+		//}
+	}
+
+	public void ConfirmOption()
+	{
+		int id = SelectedAnswerId;
+
 		var clickedBtnTransform = AnswerTests[id].transform.parent;
 
 		if (shouldShowAnswerAnimationFeedback)
@@ -156,7 +206,8 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 		AudioController.Instance.FadeGameplayVolume(0.1f);
 		AudioController.Instance.FadeMusicVolume(0.02f);
 		// Loads the question
-		this.QuestionDescriptionText.text = question.questionDescription;		
+		this.QuestionDescriptionText.text = question.questionDescription;
+		answerKeys = new List<string>();
 
 		OnAnswered = onAnsweredCallback;
 
@@ -170,7 +221,8 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 		{
 			var answerKey = $"{question.questionDescription.Key}_answer_{i}";
 			var textMesh = AnswerTests[i];
-			
+
+			answerKeys.Add(answerKey);
 			textMesh.text = LocalizationExtensions.LocalizeText(answerKey, applyColorCode: false);
 
 			var buttonObject = textMesh.transform.parent.gameObject;
@@ -208,6 +260,11 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 		}
 		// Since the first item is a label, we move it back to the top.
 		titleLabel.SetSiblingIndex(0);
+
+		Debug.Log($"ShuffleAnswers()  btnConfirm == null? {btnConfirm == null}");
+		Debug.Log($"ShuffleAnswers()  btnConfirm = {btnConfirm.name} | index: {ButtonsParent.childCount - 1}");
+
+		btnConfirm.transform.SetSiblingIndex(ButtonsParent.childCount-1);
 	}
 
 	public void CorrectOptionMethod()
