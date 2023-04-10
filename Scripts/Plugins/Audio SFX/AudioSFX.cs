@@ -1,4 +1,8 @@
-﻿using System;
+﻿/* The Preview audio method constantly needs to be changed since we access it through reflection and Untiy sometimes changes its name
+ * If it stopped working, follow this thread to see if there was any updated and change it accordingly
+ * https://forum.unity.com/threads/way-to-play-audio-in-editor-using-an-editor-script.132042/
+ */
+using System;
 using NaughtyAttributes;
 using System.Collections.Generic;
 using System.Reflection;
@@ -56,38 +60,41 @@ namespace Blabbers.Game00
         
         public static void EditorPlayClip(AudioClip clip, int startSample = 0, bool loop = false)
         {
-            System.Reflection.Assembly unityEditorAssembly = typeof(AudioImporter).Assembly;
-            System.Type audioUtilClass = unityEditorAssembly.GetType("UnityEditor.AudioUtil");
-            System.Reflection.MethodInfo method = audioUtilClass.GetMethod(
-                "PlayClip",
-                System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public,
-                null,
-                new System.Type[] { typeof(AudioClip), typeof(int), typeof(bool) },
-                null
-            );
-            method.Invoke(
-                null,
-                new object[] { clip, startSample, loop }
-            );
-        }
+			Assembly unityEditorAssembly = typeof(AudioImporter).Assembly;
+
+			Type audioUtilClass = unityEditorAssembly.GetType("UnityEditor.AudioUtil");
+			MethodInfo method = audioUtilClass.GetMethod(
+				"PlayPreviewClip",
+				BindingFlags.Static | BindingFlags.Public,
+				null,
+				new Type[] { typeof(AudioClip), typeof(int), typeof(bool) },
+				null
+			);
+
+			method.Invoke(
+				null,
+				new object[] { clip, startSample, loop }
+			);
+		}
         
         public static void EditorStopAllClips()
         {
-            Assembly unityEditorAssembly = typeof(AudioImporter).Assembly;
-            Type audioUtilClass =
-                unityEditorAssembly.GetType("UnityEditor.AudioUtil");
-            MethodInfo method = audioUtilClass.GetMethod(
-                "StopAllClips",
-                BindingFlags.Static | BindingFlags.Public,
-                null,
-                new System.Type[]{},
-                null
-            );
-            method.Invoke(
-                null,
-                new object[] {}
-            );
-        }
+			Assembly unityEditorAssembly = typeof(AudioImporter).Assembly;
+
+			Type audioUtilClass = unityEditorAssembly.GetType("UnityEditor.AudioUtil");
+			MethodInfo method = audioUtilClass.GetMethod(
+				"StopAllPreviewClips",
+				BindingFlags.Static | BindingFlags.Public,
+				null,
+				new Type[] { },
+				null
+			);
+
+			method.Invoke(
+				null,
+				new object[] { }
+			);
+		}
         #endif
 	}
 }
