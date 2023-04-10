@@ -229,14 +229,21 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 			// Enable back the needed ones
 			buttonObject.gameObject.SetActive(true);
 
-			Routine.Start(Run());
-			IEnumerator Run()
-			{
-				var button = buttonObject.GetComponent<Button>();
-				button.interactable = false;
-				yield return Routine.WaitRealSeconds(3f);
-				button.interactable = true;
-			}
+
+			var button = buttonObject.GetComponent<Button>();
+			button.interactable = true;
+
+
+			#region old delay before confirm button was added
+			//Routine.Start(Run());
+			//IEnumerator Run()
+			//{
+			//	var button = buttonObject.GetComponent<Button>();
+			//	button.interactable = false;
+			//	yield return Routine.WaitRealSeconds(3f);
+			//	button.interactable = true;
+			//} 
+			#endregion
 		}
 		ShuffleAnswers();
 
@@ -289,6 +296,7 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 		Routine.Start(Run());
 		IEnumerator Run()
 		{
+			Debug.Log("UI_PopupQuestion.ClosePopup()");
 			yield return Routine.WaitSeconds(1.0f);
 			OnAnswered?.Invoke(ChoseCorrectly, SelectedAnswerId);
 			base.HidePopup();
