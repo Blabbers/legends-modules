@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
+//#if UNITY_EDITOR || DEVELOPMENT_BUILD || UNITY_CLOUD_BUILD
 public class FPS_Counter : MonoBehaviour
 {
     /* Assign this script to any object in the Scene to display frames per second */
@@ -29,11 +27,13 @@ public class FPS_Counter : MonoBehaviour
         textStyle.fontStyle = FontStyle.Bold;
         textStyle.normal.textColor = displayColor;
         textStyle.fontSize = fontSize;
+#if UNITY_CLOUD_BUILD
+        cloudBuild = "__CloudBuild";
+#endif
+	}
 
-    }
-
-    // Update is called once per frame
-    void Update()
+	// Update is called once per frame
+	void Update()
     {
 		textStyle.normal.textColor = displayColor;
 		timeleft -= Time.deltaTime;
@@ -50,12 +50,13 @@ public class FPS_Counter : MonoBehaviour
             frames = 0;
         }
     }
-
+    const string cloudBuild = "";
     void OnGUI()
     {
         //Display the fps and round to 2 decimals
-        GUI.Label(new Rect(5, 5, textDimensions.x, textDimensions.y), fps.ToString("F2") + "FPS", textStyle);
+
+        GUI.Label(new Rect(5, 5, textDimensions.x, textDimensions.y), fps.ToString("F2") + "FPS" + cloudBuild, textStyle);
     }
 }
 
-#endif
+//#endif
