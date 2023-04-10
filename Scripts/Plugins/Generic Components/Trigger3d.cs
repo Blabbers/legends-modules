@@ -11,10 +11,9 @@ namespace Blabbers
 
 		[Foldout("Configs")] [ReorderableList]public TagFilter[] Filters;
 
-		[Foldout("Events")] public ColliderEvent TriggerEnter;
-		[Foldout("Events")] public ColliderEvent TriggerStay;
-		[Foldout("Events")] public ColliderEvent TriggerExit;
-
+		public ColliderEvent TriggerEnter;
+		public ColliderEvent TriggerStay;
+		public ColliderEvent TriggerExit;
 
 		[Button]
 		void SetUpTrigger()
