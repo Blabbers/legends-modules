@@ -50,7 +50,7 @@ public class FPS_Counter : MonoBehaviour
             frames = 0;
         }
     }
-    const string cloudBuild = "";
+    string cloudBuild = "";
     void OnGUI()
     {
         //Display the fps and round to 2 decimals
