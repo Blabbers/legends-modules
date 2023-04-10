@@ -88,7 +88,6 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 	public AudioSFX sfxExtraStar;
 
 	public bool shouldShowAnswerAnimationFeedback;
-
 	private UnityAction<bool,int> OnAnswered;
 
 	public bool QuestionWasAnsweredThisLevel { get; private set; }  = false;
@@ -297,7 +296,17 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 		IEnumerator Run()
 		{
 			Debug.Log("UI_PopupQuestion.ClosePopup()");
-			yield return Routine.WaitSeconds(1.0f);
+			//yield return Routine.WaitSeconds(1.0f);
+
+			for (int i = 0; i < AnswerTests.Count; i++)
+			{
+				var button = AnswerTests[i].transform.parent.gameObject.GetComponent<Button>();
+				button.interactable = false;
+			}
+
+			btnConfirm.interactable = false;
+
+			yield return Routine.WaitSeconds(0.2f);
 			OnAnswered?.Invoke(ChoseCorrectly, SelectedAnswerId);
 			base.HidePopup();
 		}
