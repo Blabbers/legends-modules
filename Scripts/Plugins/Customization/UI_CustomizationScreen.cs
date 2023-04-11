@@ -467,7 +467,7 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 	public void Finish()
 	{
 		buttonParent.DOFade(0.0f, 0.75f).OnComplete(PostAnimation);
-		//Analytics.OnSkinSelected();
+		Analytics.OnSkinSelected();
 
 		UpdateGameData();
 
