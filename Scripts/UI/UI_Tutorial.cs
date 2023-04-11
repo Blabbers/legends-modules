@@ -37,7 +37,7 @@ public class UI_Tutorial : UI_TutorialWindowBase
             this.gameObject.SetActive(true);
             Analytics.OnTutorialShown(this.name);
 
-            Debug.Log($"<UI_TutorialLevel1> ShowScreen(): {pause}");
+            //Debug.Log($"<UI_TutorialLevel1> ShowScreen(): {pause}");
             Singleton.Get<GameplayController>()?.TogglePause(pause);
             if (autoHideShowHUD)
             {

@@ -35,8 +35,8 @@ namespace Blabbers.Game00
 
         private void HandleSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-			Debug.Log($"ProgressController.HandleSceneLoaded() | scene is null? {scene == null}" +
-				$"\nGameProgress == null? {GameProgress == null}");
+			//Debug.Log($"ProgressController.HandleSceneLoaded() | scene is null? {scene == null}" +
+			//	$"\nGameProgress == null? {GameProgress == null}");
 
 			//Erro on findinding scene.name??
 		//	Debug.Log($"{this.name}.HandleSceneLoaded({scene.name})" +

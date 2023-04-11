@@ -266,10 +266,6 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 		}
 		// Since the first item is a label, we move it back to the top.
 		titleLabel.SetSiblingIndex(0);
-
-		Debug.Log($"ShuffleAnswers()  btnConfirm == null? {btnConfirm == null}");
-		Debug.Log($"ShuffleAnswers()  btnConfirm = {btnConfirm.name} | index: {ButtonsParent.childCount - 1}");
-
 		btnConfirm.transform.SetSiblingIndex(ButtonsParent.childCount-1);
 	}
 
