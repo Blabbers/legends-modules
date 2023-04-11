@@ -302,9 +302,10 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 
 			btnConfirm.interactable = false;
 
-			yield return Routine.WaitSeconds(0.2f);
+			yield return Routine.WaitSeconds(0.5f);
 			OnAnswered?.Invoke(ChoseCorrectly, SelectedAnswerId);
 			base.HidePopup();
 		}
 	}
+
 }
