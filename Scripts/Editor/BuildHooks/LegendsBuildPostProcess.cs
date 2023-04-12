@@ -14,11 +14,11 @@ public class LegendsBuildPostProcess: IPreprocessBuildWithReport
         Debug.Log($"Pre build hook process.");
 #if !UNITY_CLOUD_BUILD
         // Se a build é local (fora do Cloud), fazer aparecer um popup de contexto perguntando se as infos do GAME DATA estao corretas.        
-        if (!EditorUtility.DisplayDialog($"Legends of Learning platform. Is the GameData correct?",
+        if (EditorUtility.DisplayDialog($"Legends of Learning platform. Is the GameData correct?",
                 $"AppID: {GameData.Instance.applicationID}" +
                 $"\nMaxProgress: {GameData.Instance.maxProgress}" +
                 $"\nTotal Levels: {GameData.Instance.totalLevels}",
-                "Yes it looks right!", "No, it is wrong. I will fix it now."))
+                "No, it is wrong. I will fix it now.", "Yes it looks right!"))
 		{
             EditorGUIUtility.PingObject(GameData.Instance);
             Selection.activeObject = GameData.Instance;
