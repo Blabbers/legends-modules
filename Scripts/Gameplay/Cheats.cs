@@ -33,23 +33,36 @@ public class Cheats : RuntimeDebugBehaviour {
 	}
 
 	[DebugAction]
-	public void LevelVictory()
+	public void EndScene()
 	{
-		Debug.Log($"{ScriptName()}" + $".LevelVictory() ".Colored("white"));
+	
 		RuntimeDebugSystem.Instance.runtimeDebugUI.TogglePanel();
 
-		Singleton.Get<GameplayController>().Victory();
+		if (Singleton.Get<GameplayController>() != null)
+		{
+			Debug.Log($"{ScriptName()}" + $".LevelVictory() ".Colored("white"));
+
+			Singleton.Get<GameplayController>().Victory();
+			return;
+		}
+
+		if (Singleton.Get<SimulationEnvironment>() != null)
+		{
+			Debug.Log($"{ScriptName()}" + $".SkipSimulation() ".Colored("white"));
+
+			Singleton.Get<SimulationEnvironment>().FinishSimulation();
+			return;
+		}
+
+		if (Singleton.Get<CutsceneController>() != null)
+		{
+			Debug.Log($"{ScriptName()}" + $".SkipCutscene() ".Colored("white"));
+			Singleton.Get<CutsceneController>().LoadNextScene();
+			return;
+		}
+
+		Debug.Log($"{ScriptName()}" + $"This scene cannot be ended".Colored("red"));
 	}
-
-	[DebugAction]
-	public void SkipSimulation()
-	{
-		Debug.Log($"{ScriptName()}" + $".SkipSimulation() ".Colored("white"));
-		RuntimeDebugSystem.Instance.runtimeDebugUI.TogglePanel();
-
-		Singleton.Get<SimulationEnvironment>().FinishSimulation();
-	}
-
 
 	[DebugAction]
 	public void ResetProgress()
