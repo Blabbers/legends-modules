@@ -26,10 +26,30 @@ public class Cheats : RuntimeDebugBehaviour {
 	[DebugAction]
 	public void AdvanceLevel()
 	{
+
 		Debug.Log($"{ScriptName()}" + $".AdvanceLevel() ".Colored("white"));
 		RuntimeDebugSystem.Instance.runtimeDebugUI.TogglePanel();
 		Singleton.Get<ProgressController>().FinishLevel();
 	}
+
+	[DebugAction]
+	public void LevelVictory()
+	{
+		Debug.Log($"{ScriptName()}" + $".LevelVictory() ".Colored("white"));
+		RuntimeDebugSystem.Instance.runtimeDebugUI.TogglePanel();
+
+		Singleton.Get<GameplayController>().Victory();
+	}
+
+	[DebugAction]
+	public void SkipSimulation()
+	{
+		Debug.Log($"{ScriptName()}" + $".SkipSimulation() ".Colored("white"));
+		RuntimeDebugSystem.Instance.runtimeDebugUI.TogglePanel();
+
+		Singleton.Get<SimulationEnvironment>().FinishSimulation();
+	}
+
 
 	[DebugAction]
 	public void ResetProgress()
@@ -188,7 +208,11 @@ public class Cheats : RuntimeDebugBehaviour {
 
 	string ScriptName()
 	{
-		return (this.GetType().ToString().Colored("orange"));
+		string header = "CHEAT USED\n".Colored("orange");
+		string title = header + (this.GetType().ToString().Colored("orange"));
+	
+
+		return title;
 	}
 
 	
