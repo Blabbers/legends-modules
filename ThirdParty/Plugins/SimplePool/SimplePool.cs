@@ -197,8 +197,6 @@ public static class SimplePool
     
     static public GameObject Spawn(GameObject prefab, Transform parent = null)
     {
-        Init(prefab);
-
         return Spawn(prefab, prefab.transform.position, prefab.transform.rotation, parent);
     }
     
