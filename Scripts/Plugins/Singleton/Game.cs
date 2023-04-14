@@ -14,6 +14,7 @@ namespace Blabbers.Game00
 		// Singleton instances management
 		public static Game instance;
 		public List<MonoBehaviour> instances;
+		public bool updateInstancesToInspectEditorOnly;
 
 
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -28,6 +29,9 @@ namespace Blabbers.Game00
 #if UNITY_EDITOR
 		private void Update()
 		{
+			if (!updateInstancesToInspectEditorOnly)
+				return;
+			
 			instances = new List<MonoBehaviour>(Singleton.Instances.Values);
 		}
 #endif
