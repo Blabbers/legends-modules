@@ -60,7 +60,7 @@ namespace Fungus
 			//string namePrefix = $"\"{choiceKey}\" = ";
 			//return namePrefix + (selectedChoiceValue?.Key);
 
-			string namePrefix = $"\tSets an object: " + $"\"{active}\"";
+			string namePrefix = $"\t {(active ? "Enable" : "Disable")}: [{target.name}] GameObject";
 			return namePrefix;
 		}
 
