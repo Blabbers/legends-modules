@@ -17,22 +17,35 @@ public class UI_LoadingScreen : MonoBehaviour,ISingleton
 	[Foldout("Components")] [SerializeField] TextLocalized displayText;
 	[Foldout("Components")][SerializeField] CanvasGroup hintBlock;
 	[Foldout("Components")] public MotionTweenPlayer motionTween;
-
+	[Foldout("Components")] public AudioListener audioListener;
 
 	public void OnCreated()
 	{
+	}
+
+	void Awake()
+	{
+		ToggleAudioListener(false);
 	}
 
 	private void OnEnable()
 	{
 		//Checar qual a cena atual ou previous e carregar o texto baseado nisso
 		hintBlock.alpha = 0;
+		
 		//Debug.Break();
 	}
 
 
+	public void ToggleAudioListener(bool active)
+	{
+		audioListener.enabled = active;
+	}
+
 	public void SetNextSceneName(string nextScene)
 	{
+
+		
 		this.nextScene = nextScene;
 
 		var scenes = GameData.Instance.loadingHints.ToList();
@@ -47,11 +60,10 @@ public class UI_LoadingScreen : MonoBehaviour,ISingleton
 		}
 		else
 		{
-			//Disable hint
-			
+			//Disable hint		
 		}
 
-
+		ToggleAudioListener(true);
 	}
 
 

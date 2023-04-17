@@ -61,12 +61,12 @@ namespace Blabbers.Game00
 				{
 
 					SceneManager.LoadScene("loading", LoadSceneMode.Additive);
-					yield return new WaitForSeconds(1);
-					Singleton.Get<UI_LoadingScreen>().SetNextSceneName(nextSceneName);
-
+					yield return new WaitForSeconds(0.5f);
 
 					SceneManager.UnloadSceneAsync(previousScene);
-					yield return new WaitForSeconds(2);
+					Singleton.Get<UI_LoadingScreen>().SetNextSceneName(nextSceneName);
+
+					yield return new WaitForSeconds(1);
 					SceneManager.LoadSceneAsync(nextSceneName, LoadSceneMode.Additive);
 
 
@@ -77,6 +77,7 @@ namespace Blabbers.Game00
 
 					Singleton.Get<UI_LoadingScreen>().motionTween.DisableWithExitTween(() => { SceneManager.UnloadSceneAsync("loading"); });
 					
+
 
 					void LoadedNextScene(Scene scene, LoadSceneMode mode)
 					{
