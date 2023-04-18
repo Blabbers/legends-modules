@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 
-
-//#if UNITY_EDITOR || DEVELOPMENT_BUILD || UNITY_CLOUD_BUILD
+#if UNITY_EDITOR || DEVELOPMENT_BUILD || UNITY_CLOUD_BUILD
 public class FPS_Counter : MonoBehaviour
 {
     /* Assign this script to any object in the Scene to display frames per second */
@@ -54,4 +53,4 @@ public class FPS_Counter : MonoBehaviour
         GUI.Label(new Rect(5, 5, textDimensions.x, textDimensions.y), fps.ToString("F2") + "FPS", textStyle);
     }
 }
-//#endif
+#endif
