@@ -18,7 +18,9 @@ namespace Blabbers.Game00
         [BoxGroup("Level Config")] public UnityEvent OnLevelStart;
         [BoxGroup("Level Config")] public UnityEvent OnDefeat;
         [BoxGroup("Level Config")] public UnityEvent OnVictory;
-		
+
+        [field: ReadOnly, SerializeField]
+        public bool IsPaused { get; private set; }
         public Action<bool> OnPause;
 
         //public Question finalLevelQuestion;
@@ -103,9 +105,11 @@ namespace Blabbers.Game00
             }
         }
 
-        public void TogglePause(bool active)
+        public void TogglePause(bool value)
         {
-            Singleton.Get<GameplayController>().OnPause?.Invoke(active);
+            var gameplayInstance = Singleton.Get<GameplayController>();
+			gameplayInstance.IsPaused = value;
+			gameplayInstance.OnPause?.Invoke(value);
         }
 
         public void Defeat()

@@ -51,7 +51,7 @@ namespace Blabbers.Game00
         public void EnableSkip()
         {
             CanTapToDisableScreen = true;
-            HoldSlider.gameObject.SetActive(true);
+			if (HoldSlider) HoldSlider.gameObject.SetActive(true);
         }
 
 		private void Update()

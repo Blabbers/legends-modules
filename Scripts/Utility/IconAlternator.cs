@@ -7,65 +7,68 @@ using UnityEngine.UI;
 
 public class IconAlternator : MonoBehaviour
 {
-    public SpriteRenderer mySprite;
-    public Image myImage;
+	public SpriteRenderer mySprite;
+	public Image myImage;
 
-    public List<Sprite> spriteList;
-    float delay = 0.75f;
-    [SerializeField] int id = 0;
+	public List<Sprite> spriteList;
+	float delay = 0.75f;
+	[SerializeField] int id = 0;
 
-
-    private void Awake()
+	private void OnEnable()
 	{
-        if (!mySprite)
-        {         
-            if(GetComponent<SpriteRenderer>() != null)
+		if (!mySprite)
+		{
+			if (GetComponent<SpriteRenderer>() != null)
 			{
-                mySprite = GetComponent<SpriteRenderer>();
-            }
+				mySprite = GetComponent<SpriteRenderer>();
+			}
 
-        }
+		}
 
-        if (!myImage)
-        {
-            if (GetComponent<Image>() != null)
-            {
-                myImage = GetComponent<Image>();
-            }
-        }
+		if (!myImage)
+		{
+			if (GetComponent<Image>() != null)
+			{
+				myImage = GetComponent<Image>();
+			}
+		}
 
 		if (!Game.IsMobile)
 		{
-            Routine.Start(_IconCoroutine(delay));
-        }
+			StartCoroutine(IconChangeRoutine(delay));
+		}
 
-    }
+	}
 
-    IEnumerator _IconCoroutine(float delay)
+	private void OnDisable()
 	{
-        UpdateSprite(0);
+		StopAllCoroutines();
+	}
 
-        while (true)
+	IEnumerator IconChangeRoutine(float delay)
+	{
+		UpdateSprite(0);
+
+		var wait = new WaitForSecondsRealtime(delay);
+
+		while (true)
 		{
-            yield return new WaitForSecondsRealtime(delay);
+			yield return wait;
 
-            id++;
+			id++;
 
-            if (id >= spriteList.Count)
-            {
-                id = 0;
-            }
+			if (id >= spriteList.Count)
+			{
+				id = 0;
+			}
 
-            UpdateSprite(id);
-        }
-    }
+			UpdateSprite(id);
+		}
+	}
 
-    void UpdateSprite(int id)
+	void UpdateSprite(int id)
 	{
-
 		if (myImage) myImage.sprite = spriteList[id];
-        if (mySprite) mySprite.sprite = spriteList[id];
-    }
-
-
+		if (mySprite) mySprite.sprite = spriteList[id];
+	}
 }

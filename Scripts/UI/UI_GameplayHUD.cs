@@ -1,10 +1,13 @@
-﻿using UnityEngine;
+﻿using DG.Tweening;
+using System;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace Blabbers.Game00
 {
 	public class UI_GameplayHUD : MonoBehaviour, ISingleton
 	{
+		public CanvasGroup canvasGroup;
 		public bool shouldHideHUDAfterPopup;
 		public UnityEvent OnGameplayHudShown;
 		public GameObject touchInput;
@@ -37,10 +40,24 @@ namespace Blabbers.Game00
 			}
 		}
 
+		public void ToggleDisplay(bool active, bool instantly = false)
+		{
+			var value = active ? 1.0f : 0f;
+			if (instantly)
+			{
+				canvasGroup.alpha = value;
+			}
+			else
+			{
+				canvasGroup.DOFade(value, 0.5f);
+			}
+		}
+
 		public void HideFullHUD()
 		{
 			this.gameObject.SetActive(false);
 		}
+
 		public void ShowFullHUD()
 		{
 			//if(UI_PopupWindow.IsAnyPopupOpen) return;

@@ -4,8 +4,8 @@ using UnityEngine;
 namespace Fungus
 {
     [CommandInfo("Blabbers",
-				 "GameObjectSetActive",
-				 "Sets an object enabled/disabled and checks if it has UI")]
+				 "Set Active",
+				 "Sets an object enabled/disabled and checks if it has Blabbers UI.")]
     [AddComponentMenu("")]
     public class GameObjectSetActive : Command
     {
@@ -60,7 +60,7 @@ namespace Fungus
 			//string namePrefix = $"\"{choiceKey}\" = ";
 			//return namePrefix + (selectedChoiceValue?.Key);
 
-			string namePrefix = $"\t {(active ? "Enable" : "Disable")}: [{target.name}] GameObject";
+			string namePrefix = $"{(active ? "Enable" : "Disable")}: [{(target == null ? "null" : target.name)}] GameObject";
 			return namePrefix;
 		}
 

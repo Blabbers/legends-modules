@@ -4,17 +4,18 @@ using UnityEngine;
 namespace Fungus
 {
     [CommandInfo("Blabbers",
-                 "Pause Game",
-                 "Pauses the game.")]
+                 "Toggle HUD",
+				 "Toggles the game HUD")]
     [AddComponentMenu("")]
-    public class PauseGame : Command
+    public class UIToggleHUD : Command
     {
-        public bool pause = true;
-        #region Public members
+        public bool enable = true;
+		public bool instantly = false;
+		#region Public members
 
-        public override void OnEnter()
+		public override void OnEnter()
         {
-            Singleton.Get<GameplayController>().TogglePause(pause);
+            Singleton.Get<UI_GameplayHUD>().ToggleDisplay(enable, instantly);
             Continue();
         }
 

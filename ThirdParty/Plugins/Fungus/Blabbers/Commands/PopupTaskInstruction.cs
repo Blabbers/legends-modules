@@ -46,7 +46,7 @@ namespace Fungus
 			}
 			else
 			{
-				PopupInstance.gameObject.SetActive(false);
+				PopupInstance.Hide();
 			}
 			Continue();
 		}

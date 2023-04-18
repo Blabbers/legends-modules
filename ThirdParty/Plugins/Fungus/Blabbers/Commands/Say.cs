@@ -82,9 +82,11 @@ namespace Fungus
 
 		public override void OnEnter()
         {
-            if (!showAlways && executionCount >= showCount)
+            var gameplayController = Singleton.Get<GameplayController>();
+			gameplayController?.TogglePause(true);
+			if (!showAlways && executionCount >= showCount)
             {
-                Continue();
+				UnpauseAndContinue();
                 return;
             }
 
@@ -93,8 +95,8 @@ namespace Fungus
             var sayDialog = SayDialog.GetSayDialog();
             if (sayDialog == null)
             {
-                Continue();
-                return;
+				UnpauseAndContinue();
+				return;
             }
     
             var flowchart = GetFlowchart();
@@ -122,8 +124,15 @@ namespace Fungus
 			LocalizationExtensions.PlayTTS(storyText.Key);
 
 			sayDialog.Say(subbedText, true, true, true, true, false, null, delegate {
-                Continue();
-            });
+                UnpauseAndContinue();
+			});
+		}
+
+        private void UnpauseAndContinue()
+        {
+			var gameplayController = Singleton.Get<GameplayController>();
+			gameplayController?.TogglePause(false);
+			Continue();
 		}
 
         public void Update()
@@ -136,7 +145,7 @@ namespace Fungus
                 sayDialog.Clear();
 				sayDialog.Stop();
 				// Skip this dialogue                
-				Continue();
+				UnpauseAndContinue();
 			}
 #endif			
 		}

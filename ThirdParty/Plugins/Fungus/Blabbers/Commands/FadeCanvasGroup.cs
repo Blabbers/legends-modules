@@ -23,11 +23,9 @@ namespace Fungus
 			{
 				if (duration > 0)
 				{
-					Debug.Log("<><> START FADE " + duration, canvasGroup);
 					canvasGroup.DOFade(fadeTo, duration).SetEase(curve).SetUpdate(true).OnComplete(HandleOnComplete);
 					void HandleOnComplete()
 					{
-						Debug.Log("<><> ONCOMPLETE ", canvasGroup);
 						if (waitUntilFinished)
 						{
 							Continue();
@@ -49,7 +47,7 @@ namespace Fungus
 		}
 		public override string GetSummary()
 		{
-			return canvasGroup.name + " = " + fadeTo.ToString() + " alpha";
+			return (canvasGroup == null ? "[null]" : canvasGroup.name) + " = " + fadeTo.ToString() + " alpha";
 		}
 
 		public override Color GetButtonColor()
