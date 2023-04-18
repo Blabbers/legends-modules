@@ -11,7 +11,8 @@ public class UI_Tutorial : UI_TutorialWindowBase
     public float delay;
 
     public bool pause;
-    public bool showOnlyOnce;
+	public bool ignorePause = false;
+	public bool showOnlyOnce;
     public bool autoHideShowHUD;
     [Foldout("Components")]
     public Writer writer;
@@ -38,8 +39,10 @@ public class UI_Tutorial : UI_TutorialWindowBase
             Analytics.OnTutorialShown(this.name);
 
             //Debug.Log($"<UI_TutorialLevel1> ShowScreen(): {pause}");
-            Singleton.Get<GameplayController>()?.TogglePause(pause);
-            if (autoHideShowHUD)
+
+            if(!ignorePause) Singleton.Get<GameplayController>()?.TogglePause(pause);
+
+			if (autoHideShowHUD)
             {
                 Singleton.Get<UI_GameplayHUD>()?.HideFullHUD();                
             }
@@ -58,9 +61,8 @@ public class UI_Tutorial : UI_TutorialWindowBase
         this.gameObject.SetActive(false);
         if (Singleton.Get<GameplayController>() != null)
         {
-            Singleton.Get<GameplayController>()?.TogglePause(false);
-            
-        }
+			if (!ignorePause) Singleton.Get<GameplayController>()?.TogglePause(false);
+		}
 		if (autoHideShowHUD)
 		{
             Singleton.Get<UI_GameplayHUD>()?.ShowFullHUD();
