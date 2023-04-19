@@ -18,8 +18,18 @@ namespace Fungus
 		public override void OnEnter()
         {
 			var choice = GameData.Instance.Progress.GetChoice(choiceKey);
-			setChoiceIdTo?.Apply(SetOperator.Assign, choice.selectedId);
+			int id;
 
+			if(choice == null)
+			{
+				id = 0;
+			}
+			else
+			{
+				id = choice.selectedId;
+			}
+
+			setChoiceIdTo?.Apply(SetOperator.Assign, id);
 			//TODO: Implement PAUSE call.
 			Continue();
         }
