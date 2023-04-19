@@ -146,6 +146,8 @@ namespace Blabbers
 
         public static void OnSkinSelected()
         {
+            return;
+            // Disabled for now
             dataDictionary.Clear();
             var skinSet = "";
             var first = true;
