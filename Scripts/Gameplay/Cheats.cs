@@ -84,11 +84,13 @@ public class Cheats : RuntimeDebugBehaviour {
 
 	protected virtual void Awake()
 	{
+		if (RuntimeDebugSystem.IsSystemEnabled)
+		{
+			LanguageCheat();
+			TimeScaleCheat();
 
-		LanguageCheat();
-		TimeScaleCheat();
-
-		base.Awake();
+			base.Awake();
+		}
 	}
 	
 

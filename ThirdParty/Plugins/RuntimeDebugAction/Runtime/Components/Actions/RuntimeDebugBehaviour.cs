@@ -10,11 +10,20 @@ namespace BennyKok.RuntimeDebug.Components
 
         protected virtual void Awake()
         {
-            actions = RuntimeDebugSystem.RegisterActionsAuto(this);
+			if (!RuntimeDebugSystem.IsSystemEnabled)
+            {
+                Debug.Log("RuntimeDebugBehaviour Awake() SystemNotEnabled");
+				return;
+			}
+			actions = RuntimeDebugSystem.RegisterActionsAuto(this);
         }
 
         protected virtual void OnDestroy()
         {
+            if (!RuntimeDebugSystem.IsSystemEnabled) {
+				Debug.Log("RuntimeDebugBehaviour OnDestroy() SystemNotEnabled");
+				return;
+			} 
             RuntimeDebugSystem.UnregisterActions(actions);
         }
     }
