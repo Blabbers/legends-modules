@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bcb3b9b853adea48be36b686d2ce19e, type: 3}
   m_Name: RDASettings
   m_EditorClassIdentifier: 
-  enableMode: 0
+  enableMode: 1
   menuPauseMode: 1
   themes:
     values:
