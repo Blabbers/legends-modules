@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using BeauRoutine;
 using UnityEngine;
 using DG.Tweening;
-using NaughtyAttributes;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -76,6 +76,10 @@ public class Question
 public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 {
 	public bool enableQuestionTTS = true;
+	public Transform selectedOptionFrame;
+	public  Color selectedButtonColor;
+	public Color disabledBtnColor;
+	private Color originalBtnColor;
 	public Transform PopupParent;
 	public Transform ButtonsParent;
 	public Button btnConfirm;
@@ -89,6 +93,8 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 
 	public bool shouldShowAnswerAnimationFeedback;
 	private UnityAction<bool,int> OnAnswered;
+	private Color originalTextColor;
+	
 
 	public bool QuestionWasAnsweredThisLevel { get; private set; }  = false;
 	public bool ChoseCorrectly { get; private set; }
@@ -98,7 +104,9 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 
 	private void Awake()
 	{
-		btnConfirm.interactable = false;
+		originalTextColor = AnswerTests[0].color;
+		originalBtnColor = btnConfirm.GetComponent<Image>().color;
+		EnableBtnConfirm(false);
 		SceneManager.sceneUnloaded += HandleSceneLoaded;
 	}
 
@@ -113,15 +121,43 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 		ChoseCorrectly = false;
 	}
 
+	public void EnableBtnConfirm(bool value)
+	{
+		btnConfirm.interactable = value;
+		btnConfirm.GetComponent<CanvasGroup>().alpha = value ? 1.0f : 0.2f;
+		btnConfirm.GetComponent<Image>().color = value ? originalBtnColor : disabledBtnColor;
+		if (value)
+		{
+			btnConfirm.GetComponent<MotionTweenPlayer>().PlayTween();
+		}
+	}
+	
+	public void HighlightSelectedButton(Transform buttonTransform)
+	{
+		ResetButtonAndTextColors();
+		selectedOptionFrame.gameObject.SetActive(true);
+		selectedOptionFrame.SetParent(buttonTransform);
+		selectedOptionFrame.localPosition = Vector3.zero;
+		buttonTransform.GetComponent<Image>().color = selectedButtonColor;
+		buttonTransform.GetComponentInChildren<TextMeshProUGUI>().color = Color.white;
+	}
+
+	private void DisableSelectedButtonFrame()
+	{
+		selectedOptionFrame.SetParent(this.transform);
+		selectedOptionFrame.gameObject.SetActive(false);
+	}
+
 	public void ClickOption(int id)
 	{
+		//Make TTS speak the option
+		if (SelectedAnswerId != id)
+		{
+			LocalizationExtensions.PlayTTS(answerKeys[id]);
+		}
 
 		SelectedAnswerId = id;
-		btnConfirm.interactable = true;
-
-		//Make TTS speak the option
-		LocalizationExtensions.PlayTTS(answerKeys[id]);
-
+		EnableBtnConfirm(true);
 
 		//var clickedBtnTransform = AnswerTests[id].transform.parent;
 
@@ -197,9 +233,20 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 		}
 	}
 
+	void ResetButtonAndTextColors()
+	{
+		foreach (var text in AnswerTests)
+		{
+			text.transform.parent.GetComponent<Image>().color = Color.white;
+			text.color = originalTextColor;
+		}
+	}
+	
 	public void ShowQuestion(Question question, bool showAnswerAnimationFeedback, UnityAction<bool, int> onAnsweredCallback = null)
 	{
 		base.ShowPopup();
+		ResetButtonAndTextColors();
+		DisableSelectedButtonFrame();
 		shouldShowAnswerAnimationFeedback = showAnswerAnimationFeedback;
 
 		AudioController.Instance.FadeGameplayVolume(0.1f);
@@ -266,7 +313,7 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 		}
 		// Since the first item is a label, we move it back to the top.
 		titleLabel.SetSiblingIndex(0);
-		btnConfirm.transform.SetSiblingIndex(ButtonsParent.childCount-1);
+		btnConfirm.transform.parent.SetSiblingIndex(ButtonsParent.childCount-1);
 	}
 
 	public void CorrectOptionMethod()
@@ -300,7 +347,7 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 				button.interactable = false;
 			}
 
-			btnConfirm.interactable = false;
+			EnableBtnConfirm(false);
 
 			yield return Routine.WaitSeconds(0.5f);
 			OnAnswered?.Invoke(ChoseCorrectly, SelectedAnswerId);
