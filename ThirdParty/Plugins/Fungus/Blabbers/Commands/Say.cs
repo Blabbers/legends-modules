@@ -130,6 +130,7 @@ namespace Fungus
 
         private void UnpauseAndContinue()
         {
+	        System.GC.Collect();
 			var gameplayController = Singleton.Get<GameplayController>();
 			gameplayController?.TogglePause(false);
 			Continue();

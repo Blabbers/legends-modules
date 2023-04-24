@@ -58,6 +58,7 @@ public class UI_Tutorial : UI_TutorialWindowBase
 
     public override void HideScreen()
     {
+	    System.GC.Collect();
         this.gameObject.SetActive(false);
         if (Singleton.Get<GameplayController>() != null)
         {
