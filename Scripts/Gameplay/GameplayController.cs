@@ -29,6 +29,8 @@ namespace Blabbers.Game00
 
         void ISingleton.OnCreated()
         {
+            Debug.Log("GameplayController.OnCreated()".Colored("red"));
+
             UI_PopupPlayAgainWarning.HasClearedWithTwoStars = false;
             
             if (showLevelInfo)

@@ -36,6 +36,7 @@ public static class SharedState
 	{
 		languageDefs = null;
 		startGameData = null;
-		maxProgress = 0;
+		//maxProgress = 0;
+		maxProgress = GameData.Instance.maxProgress;
 	}
 }

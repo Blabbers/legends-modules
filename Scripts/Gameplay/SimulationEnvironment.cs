@@ -28,6 +28,7 @@ public class SimulationEnvironment : MonoBehaviour, ISingleton
 	void Start()
 	{
 		OnStart?.Invoke();
+		ProgressController.AddProgress();
 	} 
 	#endregion
 
