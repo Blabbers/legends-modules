@@ -15,7 +15,7 @@ namespace Blabbers.Game00
 		public static Game instance;
 		public List<MonoBehaviour> instances;
 		public bool updateInstancesToInspectEditorOnly;
-
+		public static Action OnGameQuit;
 
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
 		static void Init()
@@ -59,6 +59,7 @@ namespace Blabbers.Game00
 		private void OnDestroy()
 		{
             SceneManager.sceneUnloaded -= HandleSceneLoaded;
+            OnGameQuit?.Invoke();
         }
 
 		private void HandleSceneLoaded(Scene arg0)

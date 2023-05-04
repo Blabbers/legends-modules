@@ -177,14 +177,19 @@ namespace Blabbers.Game00
 			return termFormat;
 		}
 
+		public static Action<string> EditorPreviewTTS;
 		public static void PlayTTS(string key)
 		{
 			try
 			{
-				//Debug.Log($"PlayTTS → [{key}] / Enabled [{ProgressController.GameProgress.enableAutomaticTTS}]");
 				if (ProgressController.GameProgress.enableAutomaticTTS)
 				{
+#if  UNITY_EDITOR
+					EditorPreviewTTS?.Invoke(key);
+#else
+					// Real TTS from the LOL platform
 					LOLSDK.Instance?.SpeakText(key);
+#endif
 					LocalizationExtensions.AlreadyPlayedTTS.Add(key);
 				}
 			}
