@@ -35,14 +35,7 @@ namespace Blabbers.Game00
 
         private void HandleSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-			//Debug.Log($"ProgressController.HandleSceneLoaded() | scene is null? {scene == null}" +
-			//	$"\nGameProgress == null? {GameProgress == null}");
-
-			//Erro on findinding scene.name??
-		//	Debug.Log($"{this.name}.HandleSceneLoaded({scene.name})" +
-		//$"\nGameProgress == null? {GameProgress == null}");
-
-			if (GameProgress == null) return;
+            if (GameProgress == null) return;
 
 			// If on a level, set its score to zero?
 			if (GameProgress.currentLevelId < GameProgress.levels.Length)
@@ -105,19 +98,14 @@ namespace Blabbers.Game00
         /// </summary>
         public void OnLoad(GameProgress loadedData)
         {
-            //Debug.Log($"{this.name}.OnLoad() | loadedData == null? {loadedData == null}");
-
 			// Overrides serialized state data or continues with editor serialized values.
 			if (loadedData != null)
             {
-				//Debug.Log($"OnLoad()" + $"\n{this}.OnLoad() | loadedData != null");
-
 				gameData.SetProgressData(loadedData);
                 gameData.Progress.isNewGame = false;
             }
             else
             {
-				//Debug.Log($"OnLoad()" + $"\n{this}.OnLoad() | loadedData == null");
 				CreateNewGameData();
             }
         }
@@ -143,13 +131,8 @@ namespace Blabbers.Game00
         public Action<GameProgress> OnGameDataLoaded;
         public void StateInitialize(Action<GameProgress> callback)
         {
-
-            //Debug.Log($"{this}.StateInitialize()");
-
 			try
             {
-				//Debug.Log($"{this}.StateInitialize() try");
-
 				// Check for valid state data, from server or fallback local ( PlayerPrefs )
 				LOLSDK.Instance.LoadState<GameProgress>(state =>
                 {
@@ -157,46 +140,20 @@ namespace Blabbers.Game00
                     {
                         if (state.data.HasFinishedTheGame)
                         {
-                            //Normally follows this path
-							//Debug.Log($"{this}.StateInitialize() HasFinishedTheGame");
-
-							// If the game was already finished before, then we want this to defintelly be a new game
-							// TODO: Maybe in a state like this one, we will later want to make sure to
-							// add some ACHIEVEMENT or something to remember the player that they have already BEATTEN THE GAME once!!!
-							// Like "second run" or "champion" or something like that
 							callback(null);
-
-							//Debug.Log($"{this}.StateInitialize() after callback(null)");
-
-                            //Error was here
                             OnGameDataLoaded?.Invoke(null);
-
-                            //Doesn't reach this
-							//Debug.Log($"{this}.StateInitialize() HasFinishedTheGame End");
-
-							// If legends of learning wants, we may add the possibility to leave the old scores and stars there yet, but at this point we just reset "level" progress
-						}
+                        }
                         else
                         {
-							//Debug.Log($"{this}.StateInitialize() !HasFinishedTheGame");
-
-							// If we have a partial state of a saved game, then we load it
+                            // If we have a partial state of a saved game, then we load it
 							callback(state.data);
 							OnGameDataLoaded?.Invoke(state.data);
 						}
 						// Broadcast saved progress back to the teacher app.
-
-
-
-						//Debug.Log($"{this.name}.StateInitialize()" + $"\nGameProgress == null? {GameProgress == null}");
-						LOLSDK.Instance.SubmitProgress(GameProgress.score, GameProgress.currentProgress, SharedState.maxProgress);
-
+                        SubmitProgress();
                     }
                     else
                     {
-
-						//Debug.Log($"{this}.StateInitialize() state == null? {state == null}");
-
 						callback(null);
                         OnGameDataLoaded(null);
                     }
@@ -206,9 +163,6 @@ namespace Blabbers.Game00
             {
                 Debug.Log("[Could not LOAD save state] " + e);
             }
-
-
-			//Debug.Log($"{this}.StateInitialize() End");
 		}
         #endregion
 
@@ -252,9 +206,9 @@ namespace Blabbers.Game00
         /// </summary>
         public static void SubmitProgress()
         {
-            if (LoLSDK.LOLSDK.Instance && LoLSDK.LOLSDK.Instance.IsInitialized)
+            if (LOLSDK.Instance && LOLSDK.Instance.IsInitialized)
             {
-                LoLSDK.LOLSDK.Instance.SubmitProgress(GameProgress.score, GameProgress.currentProgress, SharedState.maxProgress);
+                LOLSDK.Instance.SubmitProgress(GameProgress.score, GameProgress.currentProgress, SharedState.maxProgress);
             }
             Debug.Log("[Current Progress] " + GameProgress.currentProgress + "/" + SharedState.maxProgress);
         }
@@ -292,8 +246,6 @@ namespace Blabbers.Game00
             {
                 SubmitProgress();
             }
-
-            //Debug.Log("Total Score: " + GameProgress.score + " | Level Score: " + GameProgress.CurrentLevel.score);
         }
         #endregion
     }
