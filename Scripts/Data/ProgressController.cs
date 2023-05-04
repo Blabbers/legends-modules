@@ -140,8 +140,7 @@ namespace Blabbers.Game00
                             OnGameDataLoaded(state.data);
                         }
                         // Broadcast saved progress back to the teacher app.
-                        LOLSDK.Instance.SubmitProgress(GameProgress.score, GameProgress.currentProgress, SharedState.maxProgress);
-
+                        SubmitProgress();
                     }
                     else
                     {
