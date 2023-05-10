@@ -11,7 +11,14 @@ namespace Blabbers.Game00
 		public bool shouldHideHUDAfterPopup;
 		public UnityEvent OnGameplayHudShown;
 		public GameObject touchInput;
-		
+
+
+		//Lives
+		public Action<int> OnLivesUpdate;
+		public Action<int> OnMaxLivesSet;
+		[SerializeField] int currentLives = 3;
+		[SerializeField] int maxLives = 3;
+
 		public void OnCreated()
 		{
 		}
@@ -65,5 +72,20 @@ namespace Blabbers.Game00
 			this.gameObject.SetActive(true);
 			OnGameplayHudShown?.Invoke();
 		}
+
+		#region Lives
+		public void SetLivesValue(int lives)
+		{
+			currentLives = lives;
+			OnLivesUpdate?.Invoke(currentLives);
+		}
+
+		public void UpdateMaxLives(int lives)
+		{
+			maxLives = lives;
+			OnMaxLivesSet?.Invoke(maxLives);
+		}
+		#endregion
+
 	}
 }
