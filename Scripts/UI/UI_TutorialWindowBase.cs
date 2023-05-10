@@ -21,6 +21,8 @@ namespace Blabbers.Game00
 		private void OnEnable()
 		{
 			// Calls "ShowScreen" to be sure this works out of the box.
+
+			UI_PopupWindow.OpenedPopupList.Add(this.gameObject);
 			ShowScreen();
 			HideHoldSlider();
 			var gameplayHUD = Singleton.Get<UI_GameplayHUD>();
@@ -31,13 +33,15 @@ namespace Blabbers.Game00
         private void OnDisable()
         {
 			// Calls "HideScreen" to be sure this works out of the box.
+
+			UI_PopupWindow.OpenedPopupList.Remove(this.gameObject);
 			HideScreen();
 			var gameplayHUD = Singleton.Get<UI_GameplayHUD>();
             if (gameplayHUD) { gameplayHUD.ShowFullHUD(); }
 			OnWindowClosed?.Invoke();
 		}
 
-        public abstract void ShowScreen();
+		public abstract void ShowScreen();
 		public abstract void HideScreen();
 
 		public void HideHoldSlider()

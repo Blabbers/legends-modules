@@ -21,9 +21,9 @@ public class UI_Tutorial : UI_TutorialWindowBase
 
     public override void ShowScreen()
     {
-        if (showOnlyOnce && UI_TutorialController.AlreadyTriggeredInThisLevel.Contains(gameObject.name)) return;
+        //if (showOnlyOnce && UI_TutorialController.AlreadyTriggeredInThisLevel.Contains(gameObject.name)) return;
+        //UI_TutorialController.AlreadyTriggeredInThisLevel.Add(gameObject.name);
 
-        UI_TutorialController.AlreadyTriggeredInThisLevel.Add(gameObject.name);
         AudioController.Instance.FadeGameplayVolume(0.1f);
 
         Routine.Start(Run());
