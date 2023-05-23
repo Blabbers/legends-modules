@@ -320,7 +320,18 @@ public static class GizmosUtility
         Gizmos.DrawCube(adjustedCenter, dimensions);
     }
 
-    public static void DrawWireRectangle(Vector3 center, Vector2 dimensions, Color color, Vector2 offset)
+	public static void DrawSphere(Vector3 center, float radius, Color color, Vector3 offset, float alpha = 1.0f)
+	{
+		Vector3 adjustedCenter;
+		Gizmos.color = new Color(color.r, color.g, color.b, color.a * alpha);
+
+		adjustedCenter = new Vector3(center.x + offset.x, center.y + offset.y, center.z);
+		
+		Gizmos.DrawSphere(adjustedCenter, radius);
+	}
+
+
+	public static void DrawWireRectangle(Vector3 center, Vector2 dimensions, Color color, Vector2 offset)
     {
         Vector3 adjustedCenter;
         adjustedCenter = new Vector3(center.x + offset.x, center.y + offset.y, center.z);

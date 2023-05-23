@@ -113,6 +113,11 @@ public class GenericTriggerDisplay
 			GizmosUtility.DrawRectangle(transform.position, new Vector2(boxCollider.size.x * parent.localScale.x, boxCollider.size.y * parent.localScale.y), gizmosColor, collider.offset);
 		}
 
+		if (circleCollider != null)
+		{
+			GizmosUtility.DrawSphere(transform.position, circleCollider.radius, gizmosColor, new Vector3(0,0,10),0.25f);
+		}
+
 
 	}
 
