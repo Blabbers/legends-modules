@@ -70,5 +70,14 @@ public static class CameraToWorldUtility
 
 		return worldPosition;
 	}
+
+	public static Vector2 CameraPosToWorldPos2d(Vector2 mousePos, Camera cam)
+	{
+		Vector2 worldPosition = Vector2.zero;
+
+		Ray ray = cam.ScreenPointToRay(mousePos);
+		return ray.origin;
+	}
+
 	#endregion
 }
