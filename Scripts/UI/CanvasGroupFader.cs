@@ -9,6 +9,7 @@ public class CanvasGroupFader : MonoBehaviour
 	public float startValue = 0f;
 	public CanvasGroup group;
 	public UnityEvent OnFadeInFinish, OnFadeOutFinish;
+	public bool unscaledTime = true;
 
 	private void Awake()
 	{
@@ -22,11 +23,11 @@ public class CanvasGroupFader : MonoBehaviour
 
 	public void FadeIn(float duration)
 	{
-		group.DOFade(1.0f, duration).OnComplete(()=> FadeInFinish());
+		group.DOFade(1.0f, duration).SetUpdate(unscaledTime).OnComplete(()=> FadeInFinish());
 	}
 	public void FadeOut(float duration)
 	{
-		group.DOFade(0.0f, duration).OnComplete(() => FadeOutFinish());
+		group.DOFade(0.0f, duration).SetUpdate(unscaledTime).OnComplete(() => FadeOutFinish());
 	}
 
 
