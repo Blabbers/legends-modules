@@ -31,6 +31,14 @@ public class TriggerDisplay2d : MonoBehaviour
 					triggerDisplay.GetTriggerData();
 				}
 			}
+
+			if(triggerDisplay.collider == null)
+			{
+				if (FindValidCollider())
+				{
+					triggerDisplay.GetTriggerData();
+				}
+			}
 		}
 
 		
