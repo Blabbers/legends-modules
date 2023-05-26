@@ -15,6 +15,11 @@ public static class CameraToWorldUtility
 		return WorldToCameraPosition(target, cam, new Vector2(offsetX,offsetY));
 	}
 
+	public static Vector3 WorldToCameraPosition(Vector3 target, Camera cam, float offsetX = 0, float offsetY = 0)
+	{
+		return WorldToCameraPosition(target, cam, new Vector2(offsetX, offsetY));
+	}
+
 
 	public static Vector3 WorldToCameraPosition_Clamped(Transform target, Camera cam, float offsetX = 0, float offsetY = 0, float paddingX = 0, float paddingY = 0)
 	{
@@ -50,6 +55,11 @@ public static class CameraToWorldUtility
 	public static Vector3 WorldToCameraPosition(Transform target, Camera cam, Vector2 offSet)
 	{
 		return cam.WorldToScreenPoint(target.position).To2d() + offSet;
+	}
+
+	static Vector3 WorldToCameraPosition(Vector3 target, Camera cam, Vector2 offSet)
+	{
+		return cam.WorldToScreenPoint(target).To2d() + offSet;
 	}
 
 	#endregion
