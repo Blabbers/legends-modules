@@ -560,7 +560,7 @@ namespace Fungus
             UpdateOpenMarkup();
             UpdateCloseMarkup();
 
-            float timeAccumulator = Time.deltaTime;
+            float timeAccumulator = Time.unscaledDeltaTime;
             float invWritingSpeed = 1f / currentWritingSpeed;
 
             //refactor this, its mostly the same 30 lines of code
@@ -604,8 +604,8 @@ namespace Fungus
                         timeAccumulator -= invWritingSpeed;
                         if (timeAccumulator <= 0f)
                         {
-                            var waitTime = Mathf.Max(invWritingSpeed, Time.deltaTime);
-                            yield return new WaitForSeconds(waitTime);
+                            var waitTime = Mathf.Max(invWritingSpeed, Time.unscaledDeltaTime);
+                            yield return new WaitForSecondsRealtime(waitTime);
                             timeAccumulator += waitTime;
                         }
                     }
@@ -653,8 +653,8 @@ namespace Fungus
                         timeAccumulator -= invWritingSpeed;
                         if (timeAccumulator <= 0f)
                         {
-                            var waitTime = Mathf.Max(invWritingSpeed, Time.deltaTime);
-                            yield return new WaitForSeconds(waitTime);
+                            var waitTime = Mathf.Max(invWritingSpeed, Time.unscaledDeltaTime);
+                            yield return new WaitForSecondsRealtime(waitTime);
                             timeAccumulator += waitTime;
                         }
                     }
@@ -771,7 +771,7 @@ namespace Fungus
                     break;
                 }
 
-                timeRemaining -= Time.deltaTime;
+                timeRemaining -= Time.unscaledDeltaTime;
                 yield return null;
             }
 

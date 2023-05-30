@@ -166,7 +166,7 @@ namespace Fungus
 
         protected virtual void Update()
         {
-            targetAudioSource.volume = Mathf.MoveTowards(targetAudioSource.volume, targetVolume, Time.deltaTime * 5f);
+            targetAudioSource.volume = Mathf.MoveTowards(targetAudioSource.volume, targetVolume, Time.unscaledDeltaTime * 5f);
         }
 
         #region IWriterListener implementation
