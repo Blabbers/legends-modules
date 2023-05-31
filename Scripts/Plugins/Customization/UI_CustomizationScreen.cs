@@ -126,9 +126,8 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 		SetRotation(targetRotation);
 
 		hairActive = skinActive = false;
-		//customization.UpdateVisual(slotData);
-		//customization.UpdateVisual(savedOptions);
-		customization.UpdateVisual(configuredOptions);
+
+		if(customization) customization.UpdateVisual(configuredOptions);
 
 		SetSelectorEvents();
 		//characterVisual.UpdateVisual();
@@ -389,6 +388,7 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 	void SetRotation(float angle)
 	{
 		targetRotation = angle;
+		if (!playerTransform) return;
 		playerTransform.rotation = Quaternion.Euler(new Vector3(0, angle, 0));
 	}
 
@@ -552,11 +552,7 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 		//Debug.Log("UpdateVisualGeneric()");
 
 		UpdateGameData();
-		//customization.UpdateVisual(slotData);
-		//customization.UpdateVisual(savedOptions);
-		customization.UpdateVisual(configuredOptions);
-
-		//characterVisual.UpdateVisual();
+		if (customization) customization.UpdateVisual(configuredOptions);
 	}
 
 

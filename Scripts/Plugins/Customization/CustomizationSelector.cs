@@ -137,6 +137,7 @@ public class CustomizationSelector : MonoBehaviour
 
 	public void UpdateDisplay()
 	{
+		if (!title) return;
 		//Debug.Log($"UpdateDisplay() \n groupId: {groupId} | selected: {selectedId}");
 		title.text = $"{displayTitle} {selectedId + 1}";
 	}

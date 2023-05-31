@@ -381,10 +381,12 @@ public class CustomizationParentData
 {
 	public string name;
 	public Transform parent;
+	public GenericSOList listRef;
+
+	[Header("Runtime")]
 	public Transform tempRef;
 	public GameObject oldComponent;
-	//public SlotType type;
-	public GenericSOList listRef;
+	
 
 	public CustomizationParentData(GenericSOList listRef)
 	{
