@@ -307,12 +307,18 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 	{
 
 		int size = savedOptions.Length;
-		configuredOptions = new CustomizationData[size];
 
-		for (int i = 0; i < savedOptions.Length; i++)
+		if(configuredOptions == null || configuredOptions.Length == 0)
 		{
-			configuredOptions[i] = new CustomizationData(savedOptions[i], PossibleCustomizations.Instance.GetSlotList(i));
+
+			configuredOptions = new CustomizationData[size];
+
+			for (int i = 0; i < savedOptions.Length; i++)
+			{
+				configuredOptions[i] = new CustomizationData(savedOptions[i], PossibleCustomizations.Instance.GetSlotList(i));
+			}
 		}
+
 
 	}
 
