@@ -1,6 +1,7 @@
 // This code is part of the Fungus library (https://github.com/snozbot/fungus)
 // It is released for free under the MIT open source license (https://github.com/snozbot/fungus/blob/master/LICENSE)
 
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -18,17 +19,40 @@ namespace Fungus
     {
         [Tooltip("Duration to wait for")]
         [SerializeField] protected FloatData _duration = new FloatData(1);
+		[SerializeField] protected bool ignoreTimeScale = true;
 
-        protected virtual void OnWaitComplete()
+		protected virtual void OnWaitComplete()
         {
-            Continue();
+			Debug.Log($"OnWaitComplete()\nignoreTimeScale: {ignoreTimeScale}");
+			Continue();
         }
 
         #region Public members
 
         public override void OnEnter()
         {
-            Invoke ("OnWaitComplete", _duration.Value);
+
+			StartCoroutine(_Wait());
+			IEnumerator _Wait()
+            {
+				if (ignoreTimeScale)
+                {
+					yield return new WaitForSecondsRealtime(_duration.Value);
+					OnWaitComplete();
+				}
+                else{
+
+					var t = _duration.Value;
+					while(t > 0){
+                        t -= Time.deltaTime;
+                        yield return null;         
+                    }
+
+					OnWaitComplete();
+				}
+			}
+
+			//Invoke ("OnWaitComplete", _duration.Value);
         }
 
         public override string GetSummary()
