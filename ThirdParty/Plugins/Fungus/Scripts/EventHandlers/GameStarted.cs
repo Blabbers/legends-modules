@@ -3,6 +3,7 @@
 
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 namespace Fungus
 {
@@ -25,7 +26,11 @@ namespace Fungus
 
         protected virtual IEnumerator GameStartCoroutine()
         {
-            int frameCount = waitForFrames;
+
+			//Wait until load finish
+			yield return new WaitUntil(() => !SceneManager.GetSceneByName("loading").isLoaded);
+
+			int frameCount = waitForFrames;
             while (frameCount > 0)
             {
                 yield return new WaitForEndOfFrame();
