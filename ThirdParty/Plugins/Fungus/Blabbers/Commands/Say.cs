@@ -32,6 +32,9 @@ namespace Fungus
 		[Tooltip("Always show this Say text when the command is executed multiple times")]
 		[SerializeField] protected bool showAlways = true;
 
+		[Tooltip("If the game will unpause after the dialog")]
+		[SerializeField] protected bool unpauseOnFinish = true;
+
 		[Tooltip("Number of times to show this Say text when the command is executed multiple times")]
 		[HideIf(nameof(showAlways))]
 		[SerializeField] protected int showCount = 1;
@@ -132,7 +135,7 @@ namespace Fungus
         {
 	        System.GC.Collect();
 			var gameplayController = Singleton.Get<GameplayController>();
-			gameplayController?.TogglePause(false);
+            if(unpauseOnFinish) gameplayController?.TogglePause(false);
 			Continue();
 		}
 

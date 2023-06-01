@@ -14,6 +14,7 @@ namespace Fungus
 
         public override void OnEnter()
         {
+            Debug.Log($"PauseGame.OnEnter({pause})");
             Singleton.Get<GameplayController>().TogglePause(pause);
             Continue();
         }
