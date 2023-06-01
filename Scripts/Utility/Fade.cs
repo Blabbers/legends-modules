@@ -20,14 +20,14 @@ public class Fade : MonoBehaviour, ISingleton
 		var color = Instance.fadeSprite.color;
 		color.a = 0f;
 		Instance.fadeSprite.color = color;
-		Instance.fadeSprite.DOFade(1f, duration).SetEase(Instance.easeCurve);
+		Instance.fadeSprite.DOFade(1f, duration).SetEase(Instance.easeCurve).SetUpdate(true);
 	}
 	public static void In(float duration = 1f)
 	{
 		var color = Instance.fadeSprite.color;
 		color.a = 1f;
 		Instance.fadeSprite.color = color;
-		Instance.fadeSprite.DOFade(0f, duration).SetEase(Instance.easeCurve);
+		Instance.fadeSprite.DOFade(0f, duration).SetEase(Instance.easeCurve).SetUpdate(true);
 	}
 
 	void OnLevelFinishedLoading(Scene scene, LoadSceneMode mode) {

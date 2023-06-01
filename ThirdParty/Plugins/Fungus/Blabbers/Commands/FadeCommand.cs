@@ -37,7 +37,7 @@ namespace Fungus
 				StartCoroutine(Routine());
 				IEnumerator Routine()
 				{
-					yield return new WaitForSeconds(duration);
+					yield return new WaitForSecondsRealtime(duration);
 					Continue();
 				}
 			}
