@@ -20,6 +20,12 @@ public static class CameraToWorldUtility
 		return WorldToCameraPosition(target, cam, new Vector2(offsetX, offsetY));
 	}
 
+	public static Vector3 WorldToScreenSpaceCameraPosition(Vector3 target, Camera cam, float offsetX = 0, float offsetY = 0)
+	{
+		//return WorldToCameraPosition(target, cam, new Vector2(offsetX, offsetY));
+		return cam.WorldToViewportPoint(target);
+	} 
+
 
 	public static Vector3 WorldToCameraPosition_Clamped(Transform target, Camera cam, float offsetX = 0, float offsetY = 0, float paddingX = 0, float paddingY = 0)
 	{
