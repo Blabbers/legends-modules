@@ -16,6 +16,9 @@ public class PlayerCustomization : MonoBehaviour
 {
 	#region Variables
 	public bool isInGame = true;
+	public bool scaleOverride = false;
+	[SerializeField] Vector3 scale;
+
 	//[ReorderableList][SerializeField] 
 	Customization[] savedOptions;
 
@@ -81,6 +84,12 @@ public class PlayerCustomization : MonoBehaviour
 			GenerateConfigureOptions();
 			//UpdateVisual(savedOptions);
 			UpdateVisual(configuredOptions);
+
+			if (scaleOverride)
+			{
+				var child = this.transform.GetChild(0);
+				child.localScale = scale;
+			}
 
 			OnCustomizationFinsihed?.Invoke();
 		}
