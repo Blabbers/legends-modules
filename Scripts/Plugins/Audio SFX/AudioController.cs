@@ -12,6 +12,7 @@ namespace Blabbers.Game00
 
         public AudioSource musicSource;
         public AudioSource gameplaySource;
+        public bool isMuted = false;
 
         private float baseMusicVolume;
         private float baseGameplayVolume;
@@ -115,7 +116,11 @@ namespace Blabbers.Game00
 
         public void Mute(bool value)
         {
-            Instance.gameplaySource.mute = value;
+            //Debug.Log($"AudioController.Mute({value})");
+
+            isMuted = value;
+
+			Instance.gameplaySource.mute = value;
             Instance.musicSource.mute = value;
         }
     }
