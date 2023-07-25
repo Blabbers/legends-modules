@@ -114,8 +114,8 @@ public class CustomizationSelector : MonoBehaviour
 
 		UpdateDisplay();
 
-		Debug.Log($"{groupName} ".Colored() +
-			$"\nNext() groupId: {groupIds[0]} |selectedId: {selectedId}");
+		//Debug.Log($"{groupName} ".Colored() +
+		//	$"\nNext() groupId: {groupIds[0]} |selectedId: {selectedId}");
 		OnOptionChanged?.Invoke(groupIds, selectedId);
 	}
 
@@ -130,8 +130,8 @@ public class CustomizationSelector : MonoBehaviour
 
 		UpdateDisplay();
 
-		Debug.Log($"{groupName} ".Colored("orange") +
-	$"\nPrevious() groupId: {groupIds[0]} |selectedId: {selectedId}");
+	//	Debug.Log($"{groupName} ".Colored("orange") +
+	//$"\nPrevious() groupId: {groupIds[0]} |selectedId: {selectedId}");
 		OnOptionChanged?.Invoke(groupIds, selectedId);
 	}
 

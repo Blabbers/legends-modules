@@ -348,13 +348,7 @@ public class UI_CustomizationScreen : MonoBehaviour, ISingleton
 			display = display + $"{groupId[i]} ";
 		}
 
-		Debug.Log($"HandleSelectionUpdate()\ngroupId: {display} |selectedId: {selectedId}");
-
-		#region MyRegion
-		//slotData[groupId].UpdateCurrent(selectedId);
-		//ArrowButtonsGeneric(id);
-		//slotData[id].Previous(); 
-		#endregion
+		//Debug.Log($"HandleSelectionUpdate()\ngroupId: {display} |selectedId: {selectedId}");
 
 		for (int i = 0; i < groupId.Count; i++)
 		{
