@@ -34,7 +34,6 @@ public class UI_Clickblock : MonoBehaviour, ISingleton
 
 	public void ToggleClickBlock(bool active)
 	{
-		Debug.Log($"ToggleClickBlock: {active}");
 		_instance.gameObject.SetActive(active);
 	}
 

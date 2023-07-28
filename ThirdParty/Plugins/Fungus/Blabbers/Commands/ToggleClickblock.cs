@@ -14,7 +14,6 @@ namespace Fungus
 
 		public override void OnEnter()
 		{
-			Debug.Log($"ToggleClickBlock.OnEnter(): {active}");
 			UI_Clickblock.Instance.ToggleClickBlock(active);
 			Continue();
 		}
@@ -26,7 +25,7 @@ namespace Fungus
 
 		public override string GetSummary()
 		{
-			string namePrefix = $"ToggleClickBlock: {active}" ;
+			string namePrefix = "";
 
 			if (active) {
 				namePrefix = $"Enable Clickblock";
