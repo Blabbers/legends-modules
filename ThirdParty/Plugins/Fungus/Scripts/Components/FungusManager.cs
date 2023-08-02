@@ -3,6 +3,8 @@
 
 using UnityEngine;
 using System.Collections;
+using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
+using System.Collections.Generic;
 
 namespace Fungus
 {
@@ -23,7 +25,16 @@ namespace Fungus
         static bool applicationIsQuitting = false;
         readonly static object _lock = new object();  // The keyword "readonly" is friendly to the multi-thread.
 
-        void Awake()
+
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		static void Init()
+		{
+            instance = null;
+            applicationIsQuitting = false;
+
+		}
+
+		void Awake()
         {
             CameraManager = GetComponent<CameraManager>();
             MusicManager = GetComponent<MusicManager>();
