@@ -1,7 +1,9 @@
 using Animancer;
+using NaughtyAttributes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -18,6 +20,7 @@ public class StreamingAssetsManager : MonoBehaviour
 
 	#endregion
 
+	[SerializeField] string folderPath;
 	[SerializeField] List<string> audioLoadKeys = new List<string>();
 	[SerializeField] List<AudioClip> audioClips = new List<AudioClip>();
 
@@ -110,6 +113,42 @@ public class StreamingAssetsManager : MonoBehaviour
 	}
 	#endregion
 
+
+	[Button]
+	void LoadAllKeysOnFolder()
+	{
+		
+
+		if (Directory.Exists(folderPath))
+		{
+			audioLoadKeys.Clear();
+
+			// Get the names of all the files in the folder
+			string[] fileNames = Directory.GetFiles(folderPath);
+
+			// Display the names of the files in the Unity console
+			foreach (string fileName in fileNames)
+			{
+				Debug.Log("File Name: " + Path.GetFileName(fileName));
+				string completeFileName = Path.GetFileName(fileName);
+
+
+				//string fileNameOnly = Path.GetFileNameWithoutExtension(fileName);
+
+				if (!completeFileName.Contains("meta"))
+				{
+					string fileNameOnly = Path.GetFileNameWithoutExtension(fileName);
+					audioLoadKeys.Add(fileNameOnly);
+				}
+
+
+			}
+		}
+		else
+		{
+			Debug.LogError("Folder path is invalid or does not exist.");
+		}
+	}
 
 	public AudioClip GetClipByKey(string key)
 	{
