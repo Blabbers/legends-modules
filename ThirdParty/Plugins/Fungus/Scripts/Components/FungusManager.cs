@@ -3,8 +3,6 @@
 
 using UnityEngine;
 using System.Collections;
-using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
-using System.Collections.Generic;
 
 namespace Fungus
 {
