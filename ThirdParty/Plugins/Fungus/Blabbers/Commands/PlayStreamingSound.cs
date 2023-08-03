@@ -33,8 +33,10 @@ public class PlayStreamingSound : Command
 		Debug.Log($"PlayStreamingSound.OnEnter({key})");
 
 		//var _duration = Fungus_StreamingAudioPlayer.Instance.PlayAudio(key, volume);
-		string fullPath = Application.streamingAssetsPath + "/Audio/EN/" + key + ".mp3"; //or ES for spanish, grab the language code needed from the start game payload.
-		StartCoroutine(LoadAudio(fullPath,key));
+		//string fullPath = Application.streamingAssetsPath + "/Audio/EN/" + key + ".mp3"; //or ES for spanish, grab the language code needed from the start game payload.
+																						 //StartCoroutine(LoadAudio(fullPath,key));
+
+		PostRequest(StreamingAssetsManager.Instance.GetClipByKey(key));
 	}
 
 	//void Awake()
