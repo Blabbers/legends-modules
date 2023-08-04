@@ -20,9 +20,14 @@ public class StreamingAssetsManager : MonoBehaviour
 
 	#endregion
 
-	[SerializeField] string folderPath;
+
+	[SerializeField] int languageId;
+	//[SerializeField] string folderPath;
+	[SerializeField] List<string> audioFileNames = new List<string>();
 	[SerializeField] List<string> audioLoadKeys = new List<string>();
+
 	[SerializeField] List<AudioClip> audioClips = new List<AudioClip>();
+
 
 	Dictionary<string, int> keyValuePairs = new Dictionary<string, int>();
 
@@ -40,23 +45,37 @@ public class StreamingAssetsManager : MonoBehaviour
 			return;
 		}
 
+
+		//GetLanguageId
 		GetAudioClips();
 	} 
 
 	void GetAudioClips()
 	{
 		string basePath = Application.streamingAssetsPath + "/Audio/EN/";
+
+		if(languageId == 0)
+		{
+			basePath = Application.streamingAssetsPath + "/Audio/EN/";
+		}
+		else
+		{
+			basePath = Application.streamingAssetsPath + "/Audio/ES/";
+		}
+
 		string fullPath;
 
 		//string fullPath = basePath + key + ".mp3"; //or ES for spanish, grab the language code needed from the start game payload.
 		//string fullPath = Application.streamingAssetsPath + "/Audio/EN/" + key + ".mp3"; //or ES for spanish, grab the language code needed from the start game payload.
 
 
-		for (int i = 0; i < audioLoadKeys.Count; i++)
+		for (int i = 0; i < audioFileNames.Count; i++)
 		{
-			fullPath = basePath + audioLoadKeys[i] + ".mp3";
+			fullPath = basePath + audioFileNames[i] + ".mp3";
+			//keyValuePairs.Add(audioFileNames[i], i);
 			keyValuePairs.Add(audioLoadKeys[i], i);
-			StartCoroutine(LoadAudio(fullPath, audioLoadKeys[i]));
+
+			StartCoroutine(LoadAudio(fullPath, audioFileNames[i]));
 		}
 
 		
@@ -113,46 +132,69 @@ public class StreamingAssetsManager : MonoBehaviour
 	}
 	#endregion
 
+	#region MyRegion
 
-	[Button]
-	void LoadAllKeysOnFolder()
+	//[Button]
+	//void LoadAllKeysOnFolder()
+	//{
+
+
+	//	if (Directory.Exists(folderPath))
+	//	{
+	//		audioFileNames.Clear();
+
+	//		// Get the names of all the files in the folder
+	//		string[] fileNames = Directory.GetFiles(folderPath);
+
+	//		// Display the names of the files in the Unity console
+	//		foreach (string fileName in fileNames)
+	//		{
+	//			Debug.Log("File Name: " + Path.GetFileName(fileName));
+	//			string completeFileName = Path.GetFileName(fileName);
+
+
+	//			//string fileNameOnly = Path.GetFileNameWithoutExtension(fileName);
+
+	//			if (!completeFileName.Contains("meta"))
+	//			{
+	//				string fileNameOnly = Path.GetFileNameWithoutExtension(fileName);
+	//				audioFileNames.Add(fileNameOnly);
+	//			}
+
+
+	//		}
+	//	}
+	//	else
+	//	{
+	//		Debug.LogError("Folder path is invalid or does not exist.");
+	//	}
+	//}
+
+	#endregion
+
+
+	//Editor
+	public void SetUpDictionaries(List<string> loadNames, List<string> loadKeys)
 	{
-		
-
-		if (Directory.Exists(folderPath))
-		{
-			audioLoadKeys.Clear();
-
-			// Get the names of all the files in the folder
-			string[] fileNames = Directory.GetFiles(folderPath);
-
-			// Display the names of the files in the Unity console
-			foreach (string fileName in fileNames)
-			{
-				Debug.Log("File Name: " + Path.GetFileName(fileName));
-				string completeFileName = Path.GetFileName(fileName);
-
-
-				//string fileNameOnly = Path.GetFileNameWithoutExtension(fileName);
-
-				if (!completeFileName.Contains("meta"))
-				{
-					string fileNameOnly = Path.GetFileNameWithoutExtension(fileName);
-					audioLoadKeys.Add(fileNameOnly);
-				}
-
-
-			}
-		}
-		else
-		{
-			Debug.LogError("Folder path is invalid or does not exist.");
-		}
+		audioFileNames = loadNames;
+		audioLoadKeys = loadKeys;		
 	}
+
+
 
 	public AudioClip GetClipByKey(string key)
 	{
-		int id = keyValuePairs[key];
+		int id = 0;
+
+		if (keyValuePairs.TryGetValue(key, out int value))
+		{
+			id = value;
+		}
+		else
+		{
+			return null;
+		}
 		return audioClips[id];
 	}
 }
+
