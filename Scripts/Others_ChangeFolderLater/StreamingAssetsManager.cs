@@ -23,11 +23,14 @@ public class StreamingAssetsManager : MonoBehaviour
 
 	[SerializeField] int languageId;
 	//[SerializeField] string folderPath;
+
+	[SerializeField][ReorderableList] List<LinkBlocks> linkBlocks = new List<LinkBlocks>();
 	[SerializeField] List<string> audioFileNames = new List<string>();
+	//[SerializeField] string[] audioFileNames;
 	[SerializeField] List<string> audioLoadKeys = new List<string>();
 
-	[SerializeField] List<AudioClip> audioClips = new List<AudioClip>();
-
+	//[SerializeField] List<AudioClip> audioClips = new List<AudioClip>();
+	[SerializeField] AudioClip[] audioClips;
 
 	Dictionary<string, int> keyValuePairs = new Dictionary<string, int>();
 
@@ -65,6 +68,10 @@ public class StreamingAssetsManager : MonoBehaviour
 
 		string fullPath;
 
+		audioFileNames = linkBlocks[languageId].links;
+		//audioFileNames = linkBlocks[languageId].links.ToArray();
+		audioClips = new AudioClip[audioFileNames.Count];
+
 		//string fullPath = basePath + key + ".mp3"; //or ES for spanish, grab the language code needed from the start game payload.
 		//string fullPath = Application.streamingAssetsPath + "/Audio/EN/" + key + ".mp3"; //or ES for spanish, grab the language code needed from the start game payload.
 
@@ -75,7 +82,7 @@ public class StreamingAssetsManager : MonoBehaviour
 			//keyValuePairs.Add(audioFileNames[i], i);
 			keyValuePairs.Add(audioLoadKeys[i], i);
 
-			StartCoroutine(LoadAudio(fullPath, audioFileNames[i]));
+			StartCoroutine(LoadAudio(fullPath, audioFileNames[i], i));
 		}
 
 		
@@ -83,7 +90,7 @@ public class StreamingAssetsManager : MonoBehaviour
 
 
 
-	private IEnumerator LoadAudio(string path, string key)
+	private IEnumerator LoadAudio(string path, string key, int id)
 	{
 		UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(path, AudioType.MPEG); // Create the UnityWebRequest
 		yield return www.SendWebRequest(); // Send the request
@@ -95,20 +102,23 @@ public class StreamingAssetsManager : MonoBehaviour
 			_audioClip.name = key; // Set the name of the audio clip
 
 			//_audioSource.clip = _audioClip; // Set the audio clip on the AudioSource component
-			PostRequest(_audioClip);
+			PostRequest(_audioClip, id);
 		}
 		else
 		{
 			Debug.LogError("Error loading audio file: " + www.error); // Log an error message if the request failed
-			PostRequest(null);
+			PostRequest(null, 0);
 		}
 
 		www.Dispose(); // Clean up the UnityWebRequest object
 	}
 
-	void PostRequest(AudioClip clip)
+	void PostRequest(AudioClip clip, int id)
 	{
-		if(clip!=null) audioClips.Add(clip);
+		if(clip!=null)
+		{
+			audioClips[id]= clip;
+		}
 	}
 
 
@@ -132,52 +142,18 @@ public class StreamingAssetsManager : MonoBehaviour
 	}
 	#endregion
 
-	#region MyRegion
-
-	//[Button]
-	//void LoadAllKeysOnFolder()
-	//{
-
-
-	//	if (Directory.Exists(folderPath))
-	//	{
-	//		audioFileNames.Clear();
-
-	//		// Get the names of all the files in the folder
-	//		string[] fileNames = Directory.GetFiles(folderPath);
-
-	//		// Display the names of the files in the Unity console
-	//		foreach (string fileName in fileNames)
-	//		{
-	//			Debug.Log("File Name: " + Path.GetFileName(fileName));
-	//			string completeFileName = Path.GetFileName(fileName);
-
-
-	//			//string fileNameOnly = Path.GetFileNameWithoutExtension(fileName);
-
-	//			if (!completeFileName.Contains("meta"))
-	//			{
-	//				string fileNameOnly = Path.GetFileNameWithoutExtension(fileName);
-	//				audioFileNames.Add(fileNameOnly);
-	//			}
-
-
-	//		}
-	//	}
-	//	else
-	//	{
-	//		Debug.LogError("Folder path is invalid or does not exist.");
-	//	}
-	//}
-
-	#endregion
-
-
 	//Editor
-	public void SetUpDictionaries(List<string> loadNames, List<string> loadKeys)
+	public void SetUpDictionaries(string langCode,int id, List<string> fileLoadNames, List<string> loadKeys)
 	{
-		audioFileNames = loadNames;
-		audioLoadKeys = loadKeys;		
+		//audioFileNames = fileLoadNames;
+		audioLoadKeys = loadKeys;
+
+		if(id == 0)
+		{
+			linkBlocks.Clear();
+		}
+
+		linkBlocks.Add(new LinkBlocks(langCode, fileLoadNames));
 	}
 
 
@@ -198,3 +174,22 @@ public class StreamingAssetsManager : MonoBehaviour
 	}
 }
 
+
+[Serializable]
+public class LinkBlocks
+{
+	public string langCode;
+	[ReorderableList] public List<string> links = new List<string>();
+
+	public LinkBlocks(string langCode)
+	{
+		this.langCode = langCode;
+		links = new List<string>();
+	}
+
+	public LinkBlocks(string langCode, List<string> links)
+	{
+		this.langCode = langCode;
+		this.links = links;
+	}
+}
