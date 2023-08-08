@@ -1,10 +1,13 @@
+using Animancer;
 using Blabbers.Game00;
 using Fungus;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Networking;
+using Random = UnityEngine.Random;
 
 
 [CommandInfo("Blabbers",
@@ -14,7 +17,8 @@ using UnityEngine.Networking;
 
 public class PlayStreamingSound : Command
 {
-	public string key;
+	//public string key;
+	public List<string> keys;
 
 	[Range(0, 1)]
 	[Tooltip("Volume level of the sound effect")]
@@ -30,13 +34,17 @@ public class PlayStreamingSound : Command
 
 	public override void OnEnter()
 	{
-		Debug.Log($"PlayStreamingSound.OnEnter({key})");
+		if (keys == null) return;
 
-		//var _duration = Fungus_StreamingAudioPlayer.Instance.PlayAudio(key, volume);
-		//string fullPath = Application.streamingAssetsPath + "/Audio/EN/" + key + ".mp3"; //or ES for spanish, grab the language code needed from the start game payload.
-																						 //StartCoroutine(LoadAudio(fullPath,key));
+		if(keys.Count > 0)
+		{
+			var id = Random.Range(0, keys.Count);
 
-		PostRequest(StreamingAssetsManager.Instance.GetClipByKey(key));
+			Debug.Log($"PlayStreamingSound.OnEnter({keys[id]})");
+			PostRequest(StreamingAssetsManager.Instance.GetClipByKey(keys[id]));
+		}
+
+
 	}
 
 	//void Awake()
@@ -124,14 +132,40 @@ public class PlayStreamingSound : Command
 
 	public override string GetSummary()
 	{
-		string namePrefix = $"Play Sound: {key}";
+		string namePrefix = $"Play Sound:";
+		string suffix = "";
 
-		if (string.IsNullOrEmpty(key))
+		if (keys == null || keys.Count==0)
 		{
-			namePrefix = "<color=red><b>*INSERT KEY TO PLAY SOUND*</b></color>";
+			namePrefix = "<color=red><b>*INSERT ONE OR MORE KEYS TO PLAY SOUND*</b></color>";
+		}
+		else
+		{
+			if (string.IsNullOrEmpty(keys[0]))
+			{
+				namePrefix = "<color=red><b>*INSERT ONE OR MORE KEYS TO PLAY SOUND*</b></color>";
+			}
+			else
+			{
+				//namePrefix = $"Play Sound: {keys[0]}";
+				suffix = keys[0];
+			}
 		}
 
-		return namePrefix;
+
+		////suffix = keys[0];
+
+		if (keys.Count > 1)
+		{
+
+			for (int i = 1; i < keys.Count; i++)
+			{
+				suffix += $" or {keys[i]}";
+			}
+		}
+
+
+		return $"{namePrefix} {suffix}";
 	} 
 	#endregion
 
