@@ -138,17 +138,20 @@ public class PlayStreamingSound : Command
 		if (keys == null || keys.Count==0)
 		{
 			namePrefix = "<color=red><b>*INSERT ONE OR MORE KEYS TO PLAY SOUND*</b></color>";
+			return namePrefix;
 		}
 		else
 		{
 			if (string.IsNullOrEmpty(keys[0]))
 			{
 				namePrefix = "<color=red><b>*INSERT ONE OR MORE KEYS TO PLAY SOUND*</b></color>";
+				return namePrefix;
 			}
 			else
 			{
 				//namePrefix = $"Play Sound: {keys[0]}";
 				suffix = keys[0];
+				return $"{namePrefix} {suffix}";
 			}
 		}
 
