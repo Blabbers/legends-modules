@@ -40,19 +40,12 @@ public class PlayStreamingSound : Command
 		{
 			var id = Random.Range(0, keys.Count);
 
-			Debug.Log($"PlayStreamingSound.OnEnter({keys[id]})");
+			//Debug.Log($"PlayStreamingSound.OnEnter({keys[id]})");
 			PostRequest(StreamingAssetsManager.Instance.GetClipByKey(keys[id]));
 		}
 
 
 	}
-
-	//void Awake()
-	//{
-	//	string fullPath = Application.streamingAssetsPath + "/Audio/EN/" + audioFilePath; //or ES for spanish, grab the language code needed from the start game payload.
-	//	StartCoroutine(LoadAudio(fullPath));
-	//}
-
 
 	private IEnumerator LoadAudio(string path, string key)
 	{
@@ -89,7 +82,7 @@ public class PlayStreamingSound : Command
 		{
 			var duration = clip.length;
 
-			Debug.Log($"PlayStreamingSound.PostRequest({clip.name})");
+			//Debug.Log($"PlayStreamingSound.PostRequest({clip.name})");
 
 			Fungus_StreamingAudioPlayer.Instance.PlayAudio(clip, volume);
 
