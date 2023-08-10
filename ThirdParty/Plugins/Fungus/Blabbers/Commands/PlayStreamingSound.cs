@@ -75,7 +75,7 @@ public class PlayStreamingSound : Command
 	{
 		if(clip == null)
 		{
-			Debug.LogError($"PlayStreamingSound: Clip not found\nFaltando nova implementacao");
+			Debug.LogError($"PlayStreamingSound: Clip not found\nCheck this key: {keys[0]}");
 			Continue();
 		}
 		else
