@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using NaughtyAttributes;
 using UnityEngine;
+using static Animancer.Validate;
 
 namespace Blabbers.Game00
 {
@@ -123,5 +124,32 @@ namespace Blabbers.Game00
 			Instance.gameplaySource.mute = value;
             Instance.musicSource.mute = value;
         }
-    }
+
+
+        public void MuteMusic(bool value)
+        {
+            Instance.musicSource.mute = value;
+			MuteCheck();
+		}
+
+		public void MuteSFX(bool value)
+		{
+			Instance.gameplaySource.mute = value;
+            MuteCheck();
+		}
+
+
+        void MuteCheck()
+        {
+
+            if(Instance.gameplaySource.mute && Instance.musicSource.mute)
+            {
+				isMuted = true;
+            }
+            else
+            {
+                isMuted = false;
+            }
+        }
+	}
 }
