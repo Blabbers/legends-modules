@@ -20,6 +20,9 @@ public class PlayStreamingSound : Command
 	//public string key;
 	public List<string> keys;
 
+	[SerializeField] protected bool animateCharacterIn;
+	[SerializeField] protected bool animateCharacterOut;
+
 	[Range(0, 1)]
 	[Tooltip("Volume level of the sound effect")]
 	[SerializeField] protected float volume = 1;
