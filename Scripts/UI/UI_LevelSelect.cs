@@ -18,6 +18,11 @@ public class UI_LevelSelect : MonoBehaviour, ISingleton
     public UI_PopupPlayAgainWarning playAgainPopup;
     public float TotalButtonDropTime => buttonDropInterval *  ButtonMotions.Length;
 
+
+    public UnityEvent OnButtonAnimationFinished;
+
+
+
     private MotionTweenPlayer[] buttonMotions;
     public MotionTweenPlayer[] ButtonMotions
     {
@@ -65,8 +70,10 @@ public class UI_LevelSelect : MonoBehaviour, ISingleton
             }
 
             yield return Routine.WaitSeconds(buttonDropInterval + 0.25f);
-            
-        }
+
+            OnButtonAnimationFinished?.Invoke();
+
+		}
     }
 
     public void OnCreated()
