@@ -85,10 +85,12 @@ public class UI_AudioCharacterScreen : MonoBehaviour
 
 	}
 
-	public void AnimateOut(float duration)
+	public void AnimateOut(float duration, bool showHudOnCharacterOut = true)
 	{
 		//characterBlock.gameObject.SetActive(true);
 		//Singleton.Get<UI_GameplayHUD>().ToggleDisplay(false);
+
+		if (showHudOnCharacterOut) lastHudState = showHudOnCharacterOut;
 
 		StartCoroutine(_Delay());
 		IEnumerator _Delay()

@@ -22,6 +22,7 @@ public class PlayStreamingSound : Command
 
 	[SerializeField] protected bool animateCharacterIn = false;
 	[SerializeField] protected bool animateCharacterOut = false;
+	[SerializeField] protected bool showHudOnCharacterOut = true;
 
 	[Range(0, 1)]
 	[Tooltip("Volume level of the sound effect")]
@@ -159,7 +160,7 @@ public class PlayStreamingSound : Command
 		if (animateCharacterOut)
 		{
 			//Animate character out
-			UI_AudioCharacterScreen.Instance.AnimateOut(animDuration);
+			UI_AudioCharacterScreen.Instance.AnimateOut(animDuration, showHudOnCharacterOut);
 			Wait(animDuration +0.5f, () => Continue());		
 		}
 		else
