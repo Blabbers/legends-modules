@@ -73,6 +73,12 @@ namespace Blabbers.Game00
 			OnGameplayHudShown?.Invoke();
 		}
 
+		public bool IsActive()
+		{
+			if (canvasGroup.alpha > 0) return true;
+			else return false;
+		}
+
 		#region Lives
 		public void SetLivesValue(int lives)
 		{
