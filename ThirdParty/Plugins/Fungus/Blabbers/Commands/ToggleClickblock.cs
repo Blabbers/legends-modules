@@ -28,11 +28,11 @@ namespace Fungus
 			string namePrefix = "";
 
 			if (active) {
-				namePrefix = $"Enable Clickblock";
+				namePrefix = $"Clickblock: Enabled";
 			}
 			else
 			{
-				namePrefix = $"Disable Clickblock";
+				namePrefix = $"Clickblock: Disabled";
 			}
 
 			return namePrefix;

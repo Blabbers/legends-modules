@@ -7,18 +7,40 @@ using UnityEngine;
 
 public class UI_AudioCharacterScreen : MonoBehaviour
 {
-	//[SerializeField] Transform characterBlock;
-	//[SerializeField] Transform helpButton;
-	//[SerializeField] Transform characterBox;
+	#region Init
+	[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+	static void Init()
+	{
+		_instance = null;
+	}
+	#endregion
 
 	[SerializeField] UI_CharacterBlock characterBlock;
-
 	[SerializeField] Transform originPos;
 	[SerializeField] Transform dialoguePos;
 
+	#region Instance
+	private static UI_AudioCharacterScreen _instance = null;
+	public static UI_AudioCharacterScreen Instance
+	{
+		get
+		{
+			if (!_instance)
+			{
+				_instance = Instantiate(Resources.Load<UI_AudioCharacterScreen>("UI/--Popup--StreamAudioCharacter"));
+				_instance.gameObject.name = "--Popup--SpeakingCharacter";
+				DontDestroyOnLoad(_instance.gameObject);
+			}
+			return _instance;
+		}
+	}
+	#endregion
+
+	#region Test Buttons
+
 	[Button]
-    void AnimateInTest()
-    {
+	void AnimateInTest()
+	{
 		AnimateIn(0.5f);
 
 	}
@@ -29,11 +51,13 @@ public class UI_AudioCharacterScreen : MonoBehaviour
 		AnimateOut(0.5f);
 	}
 
+	#endregion
 
 
 	public void AnimateIn(float duration)
 	{
 
+		gameObject.SetActive(true);
 		characterBlock.gameObject.SetActive(true);
 		Singleton.Get<UI_GameplayHUD>().ToggleDisplay(false);
 
@@ -48,6 +72,10 @@ public class UI_AudioCharacterScreen : MonoBehaviour
 		
 	}
 
+	public void ToggleCharacterSpeaking(bool active)
+	{
+
+	}
 
 	public void AnimateOut(float duration)
 	{
@@ -72,6 +100,7 @@ public class UI_AudioCharacterScreen : MonoBehaviour
 		{
 			yield return new WaitForSeconds(0.5f);
 			characterBlock.gameObject.SetActive(false);
+			gameObject.SetActive(false);
 		}
 	}
 }

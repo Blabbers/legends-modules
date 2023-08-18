@@ -1,4 +1,5 @@
 using Blabbers.Game00;
+using System;
 using UnityEngine;
 
 namespace Fungus
@@ -24,6 +25,22 @@ namespace Fungus
             return new Color32(216, 228, 170, 255);
         }
 
-        #endregion
-    }
+		public override string GetSummary()
+		{
+			string namePrefix = "";
+
+			if (enable)
+			{
+				namePrefix = $"HUD: Enabled";
+			}
+			else
+			{
+				namePrefix = $"HUD: Disabled";
+			}
+
+			return namePrefix;
+		}
+
+		#endregion
+	}
 }

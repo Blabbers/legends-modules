@@ -20,8 +20,8 @@ public class PlayStreamingSound : Command
 	//public string key;
 	public List<string> keys;
 
-	[SerializeField] protected bool animateCharacterIn;
-	[SerializeField] protected bool animateCharacterOut;
+	[SerializeField] protected bool animateCharacterIn = false;
+	[SerializeField] protected bool animateCharacterOut = false;
 
 	[Range(0, 1)]
 	[Tooltip("Volume level of the sound effect")]
@@ -33,6 +33,7 @@ public class PlayStreamingSound : Command
 
 	AudioClip _audioClip;
 	AudioSource _audioSource;
+	float animDuration = 1;
 	//string audioFilePath;
 
 	public override void OnEnter()
@@ -83,42 +84,117 @@ public class PlayStreamingSound : Command
 		}
 		else
 		{
-			var duration = clip.length;
-
+		
 			//Debug.Log($"PlayStreamingSound.PostRequest({clip.name})");
 
-			Fungus_StreamingAudioPlayer.Instance.PlayAudio(clip, volume);
-
-			if (waitUntilFinished)
+			if(animateCharacterIn)
 			{
-				StartCoroutine(_Wait());
-				IEnumerator _Wait()
-				{
-					if (ignoreTimeScale)
-					{
-						yield return new WaitForSecondsRealtime(duration);
-						Continue();
-					}
-					else
-					{
+				//Animate character in
+				//UI_Clickblock.Instance.ToggleClickBlock(active);
 
-						var t = duration;
-						while (t > 0)
-						{
-							t -= Time.deltaTime;
-							yield return null;
-						}
-
-						Continue();
-					}
-				}
+				UI_AudioCharacterScreen.Instance.AnimateIn(animDuration);
+				Wait(animDuration + 0.5f, () => PlayAudio(clip,volume));
 			}
 			else
 			{
-				Continue();
+				PlayAudio(clip, volume);
+			}
+
+		}
+	}
+
+
+	void PlayAudio(AudioClip clip, float volume)
+	{
+		var clipDuration = clip.length;
+
+		
+		Fungus_StreamingAudioPlayer.Instance.PlayAudio(clip, volume);
+
+		//Set speaking = true	
+		UI_AudioCharacterScreen.Instance.ToggleCharacterSpeaking(true);
+
+		if (waitUntilFinished)
+		{
+
+			Wait(clipDuration, () => PostAudioPlay());
+
+			#region MyRegion
+			//StartCoroutine(_Wait());
+			//IEnumerator _Wait()
+			//{
+			//	if (ignoreTimeScale)
+			//	{
+			//		yield return new WaitForSecondsRealtime(duration);
+			//		Continue();
+			//	}
+			//	else
+			//	{
+
+			//		var t = duration;
+			//		while (t > 0)
+			//		{
+			//			t -= Time.deltaTime;
+			//			yield return null;
+			//		}
+
+			//		Continue();
+			//	}
+			//} 
+			#endregion
+		}
+		else
+		{
+			PostAudioPlay();
+			
+		}
+	}
+
+	void PostAudioPlay()
+	{
+
+		//Set speaking = false
+		UI_AudioCharacterScreen.Instance.ToggleCharacterSpeaking(false);
+
+		if (animateCharacterOut)
+		{
+			//Animate character out
+			UI_AudioCharacterScreen.Instance.AnimateOut(animDuration);
+			Wait(animDuration +0.5f, () => Continue());		
+		}
+		else
+		{
+			Continue();
+		}
+
+	}
+
+
+	void Wait(float duration, Action callback)
+	{
+		StartCoroutine(_Wait());
+		IEnumerator _Wait()
+		{
+			if (ignoreTimeScale)
+			{
+				yield return new WaitForSecondsRealtime(duration);
+				callback?.Invoke();
+			}
+			else
+			{
+
+				var t = duration;
+				while (t > 0)
+				{
+					t -= Time.deltaTime;
+					yield return null;
+				}
+
+				callback?.Invoke();
 			}
 		}
 	}
+
 
 	#region Default
 	public override Color GetButtonColor()
@@ -130,6 +206,9 @@ public class PlayStreamingSound : Command
 	{
 		string namePrefix = $"Play Sound:";
 		string suffix = "";
+		string inPrefix, outPrefix;
+
+		inPrefix = outPrefix = "";
 
 		if (keys == null || keys.Count==0)
 		{
@@ -147,24 +226,14 @@ public class PlayStreamingSound : Command
 			{
 				//namePrefix = $"Play Sound: {keys[0]}";
 				suffix = keys[0];
-				return $"{namePrefix} {suffix}";
+
+				if (animateCharacterIn) inPrefix = "<color=red><b>(ANIMATE IN)</b></color>";
+				if (animateCharacterOut) outPrefix = "<color=red><b>(ANIMATE OUT)</b></color>";
+
+				return $"{inPrefix} {namePrefix} {suffix} {outPrefix}";
 			}
 		}
 
-
-		////suffix = keys[0];
-
-		if (keys.Count > 1)
-		{
-
-			for (int i = 1; i < keys.Count; i++)
-			{
-				suffix += $" or {keys[i]}";
-			}
-		}
-
-
-		return $"{namePrefix} {suffix}";
 	} 
 	#endregion
 

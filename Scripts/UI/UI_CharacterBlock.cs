@@ -10,21 +10,30 @@ public class UI_CharacterBlock : MonoBehaviour
 	[SerializeField] Transform helpButton;
 	[SerializeField] Transform characterBox;
 	Action exitCallback;
+	float blobDuration;
+	float moveDuration;
 
 
 	public void AnimateIn(Vector3 pos, float duration)
 	{
-		MoveTo(pos, duration, FinishAnimateIn);
+		blobDuration = duration * (0.7f);
+		moveDuration = duration * 0.3f;
+
+		MoveTo(pos, moveDuration, FinishAnimateIn);
 	}
 
 	public void AnimateOut(Vector3 pos, float duration, Action callback)
 	{
 		//exitCallback = callback;
 
+		blobDuration = duration * (0.7f);
+		moveDuration = duration * 0.3f;
+
+
 		Sequence s = DOTween.Sequence();
-		s.Append(characterBox.DOScale(Vector3.zero, 0.25f));
-		s.Append(helpButton.DOScale(Vector3.one, 0.5f));
-		s.AppendCallback(() => MoveTo(pos, duration, callback));
+		s.Append(characterBox.DOScale(Vector3.zero, blobDuration/2));
+		s.Append(helpButton.DOScale(Vector3.one, blobDuration));
+		s.AppendCallback(() => MoveTo(pos, moveDuration, callback));
 
 		//MoveTo(pos, duration, FinishAnimateOut);
 	}
@@ -35,8 +44,8 @@ public class UI_CharacterBlock : MonoBehaviour
 	void FinishAnimateIn()
 	{
 		Sequence s = DOTween.Sequence();
-		s.Append(helpButton.DOScale(Vector3.zero, 0.25f));
-		s.Append(characterBox.DOScale(Vector3.one, 0.5f));
+		s.Append(helpButton.DOScale(Vector3.zero, blobDuration/2)) ;
+		s.Append(characterBox.DOScale(Vector3.one, blobDuration));
 	}
 
 	//void FinishAnimateOut()
