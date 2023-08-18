@@ -75,7 +75,7 @@ namespace Blabbers.Game00
 
 		public bool IsActive()
 		{
-			if (canvasGroup.alpha > 0) return true;
+			if (canvasGroup.alpha == 1) return true;
 			else return false;
 		}
 

@@ -18,6 +18,8 @@ public class UI_AudioCharacterScreen : MonoBehaviour
 	[SerializeField] UI_CharacterBlock characterBlock;
 	[SerializeField] Transform originPos;
 	[SerializeField] Transform dialoguePos;
+	bool lastHudState;
+
 
 	#region Instance
 	private static UI_AudioCharacterScreen _instance = null;
@@ -59,7 +61,13 @@ public class UI_AudioCharacterScreen : MonoBehaviour
 
 		gameObject.SetActive(true);
 		characterBlock.gameObject.SetActive(true);
+
+		lastHudState = Singleton.Get<UI_GameplayHUD>().IsActive();
+		//Debug.Log($"AnimateIn\nlastHudState: {lastHudState}");
+
 		Singleton.Get<UI_GameplayHUD>().ToggleDisplay(false);
+
+
 
 		StartCoroutine(_Delay());
 		IEnumerator _Delay()
@@ -93,7 +101,8 @@ public class UI_AudioCharacterScreen : MonoBehaviour
 
 	void FinishAnimationOut()
 	{
-		Singleton.Get<UI_GameplayHUD>().ToggleDisplay(true);
+		//Debug.Log($"FinishAnimationOut\nlastHudState: {lastHudState}");
+		Singleton.Get<UI_GameplayHUD>().ToggleDisplay(lastHudState);
 
 		StartCoroutine(_Delay());
 		IEnumerator _Delay()
