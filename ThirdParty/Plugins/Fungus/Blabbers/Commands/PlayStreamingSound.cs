@@ -43,7 +43,19 @@ public class PlayStreamingSound : Command
 
 		if(keys.Count > 0)
 		{
-			var id = Random.Range(0, keys.Count);
+			//var id = Random.Range(0, keys.Count);
+			var id = 0;
+
+			if(keys.Count > 1)
+			{
+				id = UI_AudioCharacterScreen.Instance.GetNextPlayId();
+
+				if (id >= keys.Count)
+				{
+					id = 0;
+					UI_AudioCharacterScreen.Instance.ResetPlayId();
+				}
+			}
 
 			//Debug.Log($"PlayStreamingSound.OnEnter({keys[id]})");
 			PostRequest(StreamingAssetsManager.Instance.GetClipByKey(keys[id]));

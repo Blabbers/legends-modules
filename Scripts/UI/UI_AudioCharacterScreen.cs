@@ -15,6 +15,8 @@ public class UI_AudioCharacterScreen : MonoBehaviour
 	}
 	#endregion
 
+	[SerializeField] int lastPlayedId = -1;
+
 	[SerializeField] UI_CharacterBlock characterBlock;
 	[SerializeField] Transform originPos;
 	[SerializeField] Transform dialoguePos;
@@ -55,6 +57,18 @@ public class UI_AudioCharacterScreen : MonoBehaviour
 
 	#endregion
 
+	public int GetNextPlayId()
+	{
+		lastPlayedId++;
+		return lastPlayedId;
+	}
+
+	public void ResetPlayId()
+	{
+		lastPlayedId = 0;
+	}
+
+	#region Animation
 
 	public void AnimateIn(float duration)
 	{
@@ -77,7 +91,7 @@ public class UI_AudioCharacterScreen : MonoBehaviour
 			characterBlock.AnimateIn(dialoguePos.position, duration);
 		}
 
-		
+
 	}
 
 	public void ToggleCharacterSpeaking(bool active)
@@ -96,7 +110,7 @@ public class UI_AudioCharacterScreen : MonoBehaviour
 		IEnumerator _Delay()
 		{
 			yield return new WaitForSeconds(0.25f);
-			characterBlock.AnimateOut(originPos.position, duration, ()=> FinishAnimationOut());
+			characterBlock.AnimateOut(originPos.position, duration, () => FinishAnimationOut());
 		}
 	}
 
@@ -113,5 +127,6 @@ public class UI_AudioCharacterScreen : MonoBehaviour
 			characterBlock.gameObject.SetActive(false);
 			gameObject.SetActive(false);
 		}
-	}
+	} 
+	#endregion
 }
