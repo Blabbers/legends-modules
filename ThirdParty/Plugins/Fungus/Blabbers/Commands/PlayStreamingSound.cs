@@ -173,7 +173,7 @@ public class PlayStreamingSound : Command
 		{
 			//Animate character out
 			UI_AudioCharacterScreen.Instance.AnimateOut(animDuration, showHudOnCharacterOut);
-			Wait(animDuration + 1.5f, () => Continue());		
+			Wait(animDuration + 1.0f, () => Continue());		
 		}
 		else
 		{
