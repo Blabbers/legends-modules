@@ -1,5 +1,7 @@
 using Blabbers.Game00;
+using System;
 using UnityEngine;
+using System.Collections;
 
 namespace Fungus
 {
@@ -10,13 +12,57 @@ namespace Fungus
 	public class ToggleClickblock : Command
 	{
 		public bool active = true;
+		[SerializeField] protected float delay = 0;
+		[SerializeField] protected bool waitUntilFinished = true;
+		[SerializeField] protected bool ignoreTimeScale = true;
+
 		#region Public members
 
 		public override void OnEnter()
 		{
+			if(delay == 0)
+			{
+				UI_Clickblock.Instance.ToggleClickBlock(active);
+				Continue();
+			}
+			else
+			{
+				Wait(delay, () => PostDelay());
+			}		
+		}
+
+		void PostDelay()
+		{
 			UI_Clickblock.Instance.ToggleClickBlock(active);
 			Continue();
 		}
+
+
+		void Wait(float duration, Action callback)
+		{
+			StartCoroutine(_Wait());
+			IEnumerator _Wait()
+			{
+				if (ignoreTimeScale)
+				{
+					yield return new WaitForSecondsRealtime(duration);
+					callback?.Invoke();
+				}
+				else
+				{
+
+					var t = duration;
+					while (t > 0)
+					{
+						t -= Time.deltaTime;
+						yield return null;
+					}
+
+					callback?.Invoke();
+				}
+			}
+		}
+
 
 		public override Color GetButtonColor()
 		{
@@ -26,6 +72,7 @@ namespace Fungus
 		public override string GetSummary()
 		{
 			string namePrefix = "";
+			string nameSuffix = "";
 
 			if (active) {
 				namePrefix = $"Clickblock: Enabled";
@@ -35,7 +82,12 @@ namespace Fungus
 				namePrefix = $"Clickblock: Disabled";
 			}
 
-			return namePrefix;
+			if(delay > 0)
+			{
+				nameSuffix = $"(delayed by {delay}s)";
+			}
+
+			return namePrefix + " "+ nameSuffix;
 		}
 
 
