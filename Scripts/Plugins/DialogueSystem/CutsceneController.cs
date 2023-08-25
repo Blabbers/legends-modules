@@ -13,6 +13,7 @@ namespace Blabbers.Game00
 		public static CutsceneController Instance => Singleton.Get<CutsceneController>();
 		
 		public SceneReference sceneToLoadAfter;
+		public bool fadeMusicVolume = true;
 		public float musicVolume = 0.05f;
 		public PlayableDirector playableDirector;
 		[Header("Analytics")]
@@ -32,7 +33,10 @@ namespace Blabbers.Game00
 				return;
 			}
 
-			Singleton.Get<AudioController>().FadeMusicVolume(musicVolume, 0.5f);
+			if (fadeMusicVolume)
+			{
+				Singleton.Get<AudioController>().FadeMusicVolume(musicVolume, 0.5f);
+			}
 			Analytics.OnCutsceneStart(cutsceneNameKey);
 
 			//Fade.Out(3f);
