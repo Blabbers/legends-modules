@@ -22,6 +22,7 @@ public class PlayStreamingSound : Command
 
 	[SerializeField] protected bool animateCharacterIn = false;
 	[SerializeField] protected bool animateCharacterOut = false;
+	[SerializeField] protected bool showHud = true;
 	[SerializeField] protected bool showHudOnCharacterOut = true;
 
 	[Range(0, 1)]
@@ -41,12 +42,12 @@ public class PlayStreamingSound : Command
 	{
 		if (keys == null) return;
 
-		if(keys.Count > 0)
+		if (keys.Count > 0)
 		{
 			//var id = Random.Range(0, keys.Count);
 			var id = 0;
 
-			if(keys.Count > 1)
+			if (keys.Count > 1)
 			{
 				id = UI_AudioCharacterScreen.Instance.GetNextPlayId();
 
@@ -90,23 +91,23 @@ public class PlayStreamingSound : Command
 
 	void PostRequest(AudioClip clip)
 	{
-		if(clip == null)
+		if (clip == null)
 		{
 			Debug.LogError($"PlayStreamingSound: Clip not found\nCheck this key: {keys[0]}");
 			Continue();
 		}
 		else
 		{
-		
+
 			//Debug.Log($"PlayStreamingSound.PostRequest({clip.name})");
 
-			if(animateCharacterIn)
+			if (animateCharacterIn)
 			{
 				//Animate character in
 				//UI_Clickblock.Instance.ToggleClickBlock(active);
 
 				UI_AudioCharacterScreen.Instance.AnimateIn(animDuration);
-				Wait(animDuration + 0.5f, () => PlayAudio(clip,volume));
+				Wait(animDuration + 0.5f, () => PlayAudio(clip, volume));
 			}
 			else
 			{
@@ -121,11 +122,14 @@ public class PlayStreamingSound : Command
 	{
 		var clipDuration = clip.length;
 
-		
+
 		Fungus_StreamingAudioPlayer.Instance.PlayAudio(clip, volume);
 
-		//Set speaking = true	
-		UI_AudioCharacterScreen.Instance.ToggleCharacterSpeaking(true);
+		//Set speaking = true
+		if (showHud)
+		{
+			UI_AudioCharacterScreen.Instance.ToggleCharacterSpeaking(true);
+		}
 
 		if (waitUntilFinished)
 		{
@@ -159,7 +163,7 @@ public class PlayStreamingSound : Command
 		else
 		{
 			PostAudioPlay();
-			
+
 		}
 	}
 
@@ -167,13 +171,16 @@ public class PlayStreamingSound : Command
 	{
 
 		//Set speaking = false
-		UI_AudioCharacterScreen.Instance.ToggleCharacterSpeaking(false);
+		if (showHud)
+		{
+			UI_AudioCharacterScreen.Instance.ToggleCharacterSpeaking(false);
+		}
 
 		if (animateCharacterOut)
 		{
 			//Animate character out
 			UI_AudioCharacterScreen.Instance.AnimateOut(animDuration, showHudOnCharacterOut);
-			Wait(animDuration + 1.0f, () => Continue());		
+			Wait(animDuration + 1.0f, () => Continue());
 		}
 		else
 		{
@@ -223,7 +230,7 @@ public class PlayStreamingSound : Command
 
 		inPrefix = outPrefix = "";
 
-		if (keys == null || keys.Count==0)
+		if (keys == null || keys.Count == 0)
 		{
 			namePrefix = "<color=red><b>*INSERT ONE OR MORE KEYS TO PLAY SOUND*</b></color>";
 			return namePrefix;
@@ -247,7 +254,7 @@ public class PlayStreamingSound : Command
 			}
 		}
 
-	} 
+	}
 	#endregion
 
 }
