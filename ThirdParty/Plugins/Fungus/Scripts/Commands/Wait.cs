@@ -23,7 +23,6 @@ namespace Fungus
 
 		protected virtual void OnWaitComplete()
         {
-			Debug.Log($"OnWaitComplete()\nignoreTimeScale: {ignoreTimeScale}");
 			Continue();
         }
 
