@@ -1,6 +1,7 @@
 using Animancer;
 using Blabbers.Game00;
 using Fungus;
+using SimpleJSON;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -57,8 +58,9 @@ public class PlayStreamingSound : Command
 					UI_AudioCharacterScreen.Instance.ResetPlayId();
 				}
 			}
+			
+			if(Singleton.Get<GameplayController>()!=null) Singleton.Get<GameplayController>().TogglePause(true);
 
-			Singleton.Get<GameplayController>().TogglePause(true);
 			//Debug.Log($"PlayStreamingSound.OnEnter({keys[id]})");
 			PostRequest(StreamingAssetsManager.Instance.GetClipByKey(keys[id]));
 		}
@@ -172,7 +174,7 @@ public class PlayStreamingSound : Command
 
 	void ExitDialogue()
 	{
-		Singleton.Get<GameplayController>().TogglePause(false);
+		if (Singleton.Get<GameplayController>() != null) Singleton.Get<GameplayController>().TogglePause(false);
 		Continue();
 	}
 
