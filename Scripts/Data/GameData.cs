@@ -197,6 +197,9 @@ public class Level
     // Info for each specific level instance
     public int score;
     public int starAmount;
+
+    //New timer added for Quantitative Analogy
+    public int timer;
 }
 
 [System.Serializable]
