@@ -58,6 +58,7 @@ public class PlayStreamingSound : Command
 				}
 			}
 
+			Singleton.Get<GameplayController>().TogglePause(true);
 			//Debug.Log($"PlayStreamingSound.OnEnter({keys[id]})");
 			PostRequest(StreamingAssetsManager.Instance.GetClipByKey(keys[id]));
 		}
@@ -65,28 +66,28 @@ public class PlayStreamingSound : Command
 
 	}
 
-	private IEnumerator LoadAudio(string path, string key)
-	{
-		UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(path, AudioType.MPEG); // Create the UnityWebRequest
-		yield return www.SendWebRequest(); // Send the request
+	//private IEnumerator LoadAudio(string path, string key)
+	//{
+	//	UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(path, AudioType.MPEG); // Create the UnityWebRequest
+	//	yield return www.SendWebRequest(); // Send the request
 
 
-		if (www.result == UnityWebRequest.Result.Success) // Check if the request was successful
-		{
-			_audioClip = DownloadHandlerAudioClip.GetContent(www); // Get the audio clip from the loaded data
-			_audioClip.name = key; // Set the name of the audio clip
+	//	if (www.result == UnityWebRequest.Result.Success) // Check if the request was successful
+	//	{
+	//		_audioClip = DownloadHandlerAudioClip.GetContent(www); // Get the audio clip from the loaded data
+	//		_audioClip.name = key; // Set the name of the audio clip
 
-			//_audioSource.clip = _audioClip; // Set the audio clip on the AudioSource component
-			PostRequest(_audioClip);
-		}
-		else
-		{
-			Debug.LogError("Error loading audio file: " + www.error); // Log an error message if the request failed
-			PostRequest(null);
-		}
+	//		//_audioSource.clip = _audioClip; // Set the audio clip on the AudioSource component
+	//		PostRequest(_audioClip);
+	//	}
+	//	else
+	//	{
+	//		Debug.LogError("Error loading audio file: " + www.error); // Log an error message if the request failed
+	//		PostRequest(null);
+	//	}
 
-		www.Dispose(); // Clean up the UnityWebRequest object
-	}
+	//	www.Dispose(); // Clean up the UnityWebRequest object
+	//}
 
 
 	void PostRequest(AudioClip clip)
@@ -94,7 +95,9 @@ public class PlayStreamingSound : Command
 		if (clip == null)
 		{
 			Debug.LogError($"PlayStreamingSound: Clip not found\nCheck this key: {keys[0]}");
-			Continue();
+
+			//Continue();
+			ExitDialogue();
 		}
 		else
 		{
@@ -135,30 +138,6 @@ public class PlayStreamingSound : Command
 		{
 
 			Wait(clipDuration, () => PostAudioPlay());
-
-			#region MyRegion
-			//StartCoroutine(_Wait());
-			//IEnumerator _Wait()
-			//{
-			//	if (ignoreTimeScale)
-			//	{
-			//		yield return new WaitForSecondsRealtime(duration);
-			//		Continue();
-			//	}
-			//	else
-			//	{
-
-			//		var t = duration;
-			//		while (t > 0)
-			//		{
-			//			t -= Time.deltaTime;
-			//			yield return null;
-			//		}
-
-			//		Continue();
-			//	}
-			//} 
-			#endregion
 		}
 		else
 		{
@@ -180,13 +159,21 @@ public class PlayStreamingSound : Command
 		{
 			//Animate character out
 			UI_AudioCharacterScreen.Instance.AnimateOut(animDuration, showHudOnCharacterOut);
-			Wait(animDuration + 1.0f, () => Continue());
+			//Wait(animDuration + 1.0f, () => Continue());
+			Wait(animDuration + 1.0f, () => ExitDialogue());
 		}
 		else
 		{
-			Continue();
+			//Continue();
+			ExitDialogue();
 		}
 
+	}
+
+	void ExitDialogue()
+	{
+		Singleton.Get<GameplayController>().TogglePause(false);
+		Continue();
 	}
 
 
