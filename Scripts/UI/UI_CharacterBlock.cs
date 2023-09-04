@@ -48,16 +48,6 @@ public class UI_CharacterBlock : MonoBehaviour
 		s.Append(characterBox.DOScale(Vector3.one, blobDuration));
 	}
 
-	//void FinishAnimateOut()
-	//{
-	//	//Sequence s = DOTween.Sequence();
-	//	//s.Append(characterBox.DOScale(Vector3.zero, 0.25f));
-	//	//s.Append(helpButton.DOScale(Vector3.one, 0.5f));
-	//	//s.AppendCallback(()=> exitCallback?.Invoke());
-	//}
-
-
-
 	void MoveTo(Vector3 pos, float duration, Action callback)
 	{
 		transform.DOMove(pos, duration).OnComplete(() => callback?.Invoke());

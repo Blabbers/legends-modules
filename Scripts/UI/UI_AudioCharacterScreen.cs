@@ -123,7 +123,7 @@ public class UI_AudioCharacterScreen : MonoBehaviour
 		StartCoroutine(_Delay());
 		IEnumerator _Delay()
 		{
-			yield return new WaitForSeconds(0.5f);
+			yield return new WaitForSeconds(1.0f);
 			characterBlock.gameObject.SetActive(false);
 			gameObject.SetActive(false);
 		}
