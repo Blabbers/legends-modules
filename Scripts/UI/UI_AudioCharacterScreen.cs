@@ -96,11 +96,15 @@ public class UI_AudioCharacterScreen : MonoBehaviour
 		IEnumerator _Delay()
 		{
 			yield return new WaitForSeconds(0.5f);
-			//characterBlock.DOMove(dialoguePos.position, duration);
-			characterBlock.AnimateIn(dialoguePos.position, duration);
+			characterBlock.AnimateIn(dialoguePos.position, duration, FinishAnimationIn);
 		}
 
 
+	}
+
+	void FinishAnimationIn()
+	{
+		isAnimatingIn = false;
 	}
 
 	public void ToggleCharacterSpeaking(bool active)
@@ -114,6 +118,7 @@ public class UI_AudioCharacterScreen : MonoBehaviour
 		//Singleton.Get<UI_GameplayHUD>().ToggleDisplay(false);
 
 		if (showHudOnCharacterOut) lastHudState = showHudOnCharacterOut;
+		else lastHudState = false;
 
 		StartCoroutine(_Delay());
 		IEnumerator _Delay()

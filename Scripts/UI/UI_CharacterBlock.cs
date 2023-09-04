@@ -9,15 +9,18 @@ public class UI_CharacterBlock : MonoBehaviour
 {
 	[SerializeField] Transform helpButton;
 	[SerializeField] Transform characterBox;
+	Action entranceCallback;
 	Action exitCallback;
 	float blobDuration;
 	float moveDuration;
 
 
-	public void AnimateIn(Vector3 pos, float duration)
+	public void AnimateIn(Vector3 pos, float duration, Action callback)
 	{
 		blobDuration = duration * (0.7f);
 		moveDuration = duration * 0.3f;
+		entranceCallback = callback;
+
 
 		MoveTo(pos, moveDuration, FinishAnimateIn);
 	}
@@ -46,6 +49,7 @@ public class UI_CharacterBlock : MonoBehaviour
 		Sequence s = DOTween.Sequence();
 		s.Append(helpButton.DOScale(Vector3.zero, blobDuration/2)) ;
 		s.Append(characterBox.DOScale(Vector3.one, blobDuration));
+		s.AppendCallback(() => entranceCallback?.Invoke());
 	}
 
 	void MoveTo(Vector3 pos, float duration, Action callback)
