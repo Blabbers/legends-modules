@@ -38,6 +38,12 @@ public class UI_Clickblock : MonoBehaviour, ISingleton
 	}
 
 
+	public bool IsActive()
+	{
+		return _instance.gameObject.activeSelf;
+	}
+
+
 	public void OnCreated()
 	{
 
