@@ -7,6 +7,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Networking;
+using Blabbers.Game00;
 
 public class StreamingAssetsManager : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class StreamingAssetsManager : MonoBehaviour
 	#endregion
 
 
+	[SerializeField] string langCode;
 	[SerializeField] int languageId;
 	//[SerializeField] string folderPath;
 
@@ -50,11 +52,26 @@ public class StreamingAssetsManager : MonoBehaviour
 
 
 		//GetLanguageId
+		//GetAudioClips();
+	}
+
+
+	private void Start()
+	{
 		GetAudioClips();
-	} 
+	}
 
 	void GetAudioClips()
 	{
+
+		langCode = LocalizationExtensions.LocalizeText("langCode");
+
+		if (langCode == "en") languageId = 0;
+		else languageId = 1;
+
+
+		Debug.Log($"StreamingAssetsManager.GetAudioClips()\nLangCode: {langCode} | languageId: {languageId}");
+
 		string basePath = Application.streamingAssetsPath + "/Audio/EN/";
 
 		if(languageId == 0)
