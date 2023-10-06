@@ -22,6 +22,7 @@ public class StreamingAssetsManager : MonoBehaviour
 	#endregion
 
 
+	[SerializeField] bool forceLanguage = false;
 	[SerializeField] string langCode;
 	[SerializeField] int languageId;
 	//[SerializeField] string folderPath;
@@ -66,9 +67,13 @@ public class StreamingAssetsManager : MonoBehaviour
 
 		langCode = LocalizationExtensions.LocalizeText("langCode");
 
-		if (langCode == "en") languageId = 0;
-		else languageId = 1;
+		if (!Application.isEditor) forceLanguage = false;
 
+		if (!forceLanguage)
+		{
+			if (langCode == "en") languageId = 0;
+			else languageId = 1;
+		}
 
 		Debug.Log($"StreamingAssetsManager.GetAudioClips()\nLangCode: {langCode} | languageId: {languageId}");
 
