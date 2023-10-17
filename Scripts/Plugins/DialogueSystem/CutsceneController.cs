@@ -78,13 +78,39 @@ namespace Blabbers.Game00
 		{
 			if (sceneToLoadAfter != null)
 			{
-				Singleton.Get<SceneLoader>().LoadSceneByName(sceneToLoadAfter);
+
+				string sceneName = ConvertScenePathToName(sceneToLoadAfter.ScenePath);
+				Debug.Log($"CutsceneController.LoadNextScene()\nScene name: {sceneName}");
+
+				if (sceneName.Equals("level-select"))
+				{
+					Singleton.Get<SceneLoader>().LoadLevelSelectScene();
+				}
+				else
+				{
+					Singleton.Get<SceneLoader>().LoadSceneByName(sceneToLoadAfter);
+				}
 			}
 			else
 			{
 				//Debug.Log("There's no scene to load for this cutscene.".Colored("red"), this);
 			}
 		}
+
+		private string ConvertScenePathToName(string path)
+		{
+			string sceneName;
+			string[] split;
+			string[] split2;
+
+			split = path.Split('/');
+			sceneName = split[split.Length - 1];
+
+			split2 = sceneName.Split('.');
+
+			return split2[0];
+		}
+
 
 		public void ScreenShake(float duration)
 		{
