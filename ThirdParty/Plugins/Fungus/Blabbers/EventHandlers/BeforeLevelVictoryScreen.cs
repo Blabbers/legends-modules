@@ -37,7 +37,8 @@ namespace Fungus
 			StartCoroutine(WaitForBlockToFinish());
 			IEnumerator WaitForBlockToFinish()
 			{
-				yield return new WaitUntil(()=> !parentBlock.IsExecuting());
+				yield return new WaitUntil(()=> !parentBlock.IsExecuting() && !UI_PopupWindow.IsAnyPopupOpen);
+
 				// When we remove this from the event, the gameplay controller moves on
 				Singleton.Get<GameplayController>().OnBeforeVictoryScreenShown -= HandleBlockStart;
 			}
