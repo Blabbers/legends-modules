@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using NaughtyAttributes;
+using UnityEngine;
 
 public class ParallaxLayer : MonoBehaviour
 {
@@ -6,6 +7,9 @@ public class ParallaxLayer : MonoBehaviour
 	[SerializeField] private Vector2 parallaxEffectMultiplier = Vector2.right;
 	[SerializeField] private bool infiniteHorizontal = true;
 	[SerializeField] private bool infiniteVertical;
+	[SerializeField] private bool hasMovement;
+	[ShowIf(nameof(hasMovement))]
+	[SerializeField] private Vector2 velocity;
 
 	private Transform cameraTransform;
 	private Vector3 lastCameraPosition;
@@ -27,7 +31,7 @@ public class ParallaxLayer : MonoBehaviour
 		{
 			Instantiate(child.gameObject, extraLeftLayer.transform, true);
 		}
-		var leftPos = extraLeftLayer.transform.localPosition;		
+		var leftPos = extraLeftLayer.transform.localPosition;
 		leftPos.z += 0.001f;
 		leftPos.x -= parallaxArea.x;
 		extraLeftLayer.transform.localPosition = leftPos;
@@ -52,8 +56,13 @@ public class ParallaxLayer : MonoBehaviour
 		transform.position += new Vector3(deltaMovement.x * parallaxEffectMultiplier.x, deltaMovement.y * parallaxEffectMultiplier.y);
 		lastCameraPosition = cameraTransform.position;
 
-		if (infiniteHorizontal)
+		if (hasMovement)
 		{
+			transform.position += (Vector3)velocity * Time.deltaTime;
+		}
+
+		if (infiniteHorizontal)
+		{	
 			if (Mathf.Abs(cameraTransform.position.x - transform.position.x) > parallaxArea.x * 0.5f)
 			{
 				var offset = (cameraTransform.position.x - transform.position.x) % parallaxArea.x;
