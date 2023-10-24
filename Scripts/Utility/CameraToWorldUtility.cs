@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public static class CameraToWorldUtility
 {
@@ -94,6 +93,47 @@ public static class CameraToWorldUtility
 		Ray ray = cam.ScreenPointToRay(mousePos);
 		return ray.origin;
 	}
+
+
+	public static Vector2 CanvasPosToWorldPos2d(Transform element, Transform parentCanvas, Camera cam)
+	{
+		Vector3 absoluteAnchored;
+		Vector3 percentPosition;
+		float halfWidth, halfHeight;
+		float width, height;
+
+		absoluteAnchored = RectTransformUtility.CalculateRelativeRectTransformBounds(parentCanvas.transform, element.transform).center;
+
+		CanvasScaler scaler = parentCanvas.GetComponent<CanvasScaler>();
+
+		width = scaler.referenceResolution.x;
+		height = scaler.referenceResolution.y;
+		halfWidth = width / 2;
+		halfHeight = height / 2;
+
+		Vector2 convertedPixels = new Vector2(
+			MathUtility.Value_from_another_Scope(absoluteAnchored.x, -halfWidth, halfWidth, 0, width),
+			MathUtility.Value_from_another_Scope(absoluteAnchored.y, -halfHeight, halfHeight, 0, height)
+		);
+
+		//convertedAnchored = convertedPixels;
+
+		Vector2 percentagePosition = new Vector2(
+			convertedPixels.x / width,
+			convertedPixels.y / height
+		);
+
+		percentPosition = percentagePosition;
+
+
+		Vector2 mousePos = new Vector2(
+			Mathf.Lerp(0, Screen.width, percentPosition.x),
+			Mathf.Lerp(0, Screen.height, percentPosition.y)
+		);
+
+		return CameraPosToWorldPos2d(mousePos, cam);
+	}
+
 
 	#endregion
 }
