@@ -21,18 +21,20 @@ namespace Fungus
 
 		public override void OnEnter()
         {
-
-			target.SetActive(active);
-
 			if (target.GetComponent<UI_PopupWindow>() != null)
 			{
-				if(active) target.GetComponent<UI_PopupWindow>().ShowPopup();
+				if (active) target.GetComponent<UI_PopupWindow>().ShowPopup();
 				else target.GetComponent<UI_PopupWindow>().HidePopup();
 
-			}else if (target.GetComponent<UI_TutorialWindowBase>() != null)
+			}
+			else if (target.GetComponent<UI_TutorialWindowBase>() != null)
 			{
 				if (active) target.GetComponent<UI_TutorialWindowBase>().ShowScreen();
 				else target.GetComponent<UI_TutorialWindowBase>().HideScreen();
+			}
+			else
+			{				
+				target.SetActive(active);
 			}
 
 			
