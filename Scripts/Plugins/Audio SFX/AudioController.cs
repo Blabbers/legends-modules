@@ -46,7 +46,7 @@ namespace Blabbers.Game00
         {
             if (musicSource.clip && musicSource.isPlaying)
             {
-                Instance.musicSource.DOFade(0f, 0.5f).OnComplete(Execute);
+                Instance.musicSource.DOFade(0f, 0.5f).SetUpdate(true).OnComplete(Execute);
             }
             else
             {
@@ -65,7 +65,7 @@ namespace Blabbers.Game00
 
         public void StopFadeOutMusic()
         {
-            Instance.musicSource.DOFade(0f, 0.5f).OnComplete(() =>
+            Instance.musicSource.DOFade(0f, 0.5f).SetUpdate(true).OnComplete(() =>
             {
                 Instance.musicSource.Stop();
                 Instance.musicSource.clip = null;
@@ -74,23 +74,23 @@ namespace Blabbers.Game00
 
         public void FadeMusicVolume(float targetVolume, float duration = 0.5f)
         {
-            Instance.musicSource.DOFade(targetVolume, duration);
-        }
+            Instance.musicSource.DOFade(targetVolume, duration).SetUpdate(true);
+		}
 
         public void FadeResetMusicVolume(float duration = 0.5f)
         {
-            Instance.musicSource.DOFade(baseMusicVolume, duration);
-        }
+            Instance.musicSource.DOFade(baseMusicVolume, duration).SetUpdate(true);
+		}
 
         public void FadeGameplayVolume(float targetVolume, float duration = 0.5f)
         {
-            Instance.gameplaySource.DOFade(targetVolume, duration);
+			Instance.gameplaySource.DOFade(targetVolume, duration).SetUpdate(true);
         }
 
         public void FadeResetGameplayVolume(float duration = 0.5f)
         {
-            Instance.gameplaySource.DOFade(baseGameplayVolume, duration);
-        }
+            Instance.gameplaySource.DOFade(baseGameplayVolume, duration).SetUpdate(true);
+		}
 
 
         //Gameplay
