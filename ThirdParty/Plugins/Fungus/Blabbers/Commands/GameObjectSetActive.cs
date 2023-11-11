@@ -29,7 +29,7 @@ namespace Fungus
 			}
 			else if (target.GetComponent<UI_TutorialWindowBase>() != null)
 			{
-				if (active) target.GetComponent<UI_TutorialWindowBase>().ShowScreen();
+				if (active) target.SetActive(active);
 				else target.GetComponent<UI_TutorialWindowBase>().HideScreen();
 			}
 			else
