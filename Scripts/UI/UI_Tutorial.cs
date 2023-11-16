@@ -18,6 +18,7 @@ public class UI_Tutorial : UI_TutorialWindowBase
 	public Writer writer;
 	[Foldout("Components")]
 	public TextLocalized text;
+	public float writerDelay = 1.0f;
 
 	public override void ShowScreen()
 	{
@@ -52,6 +53,12 @@ public class UI_Tutorial : UI_TutorialWindowBase
 			if (!writer.HasInitialized)
 			{
 				yield return new WaitUntil(() => writer.HasInitialized);
+			}
+			if (writerDelay > 0)
+			{
+				text.enabled = false;
+				yield return new WaitForSecondsRealtime(writerDelay);
+				text.enabled = true;
 			}
 			StartCoroutine(writer.Write(text.Localization));
 		}
