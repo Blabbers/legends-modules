@@ -19,6 +19,7 @@ public class UI_Tutorial : UI_TutorialWindowBase
 	[Foldout("Components")]
 	public TextLocalized text;
 	public float writerDelay = 1.0f;
+	public bool fadeoutGameVolume = true;
 
 	public override void ShowScreen()
 	{
@@ -40,7 +41,10 @@ public class UI_Tutorial : UI_TutorialWindowBase
 			}
 			
 			Analytics.OnTutorialShown(this.name);
-			AudioController.Instance.FadeGameplayVolume(0.1f);
+			if (fadeoutGameVolume)
+			{
+				AudioController.Instance.FadeGameplayVolume(0.1f);
+			}
 
 			if (!ignorePause) Singleton.Get<GameplayController>()?.TogglePause(pause);
 
