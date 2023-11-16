@@ -50,6 +50,15 @@ public class ParallaxLayer : MonoBehaviour
 		extraRightLayer.transform.SetParent(this.transform);
 	}
 
+	public void SetVelocityX(float x)
+	{
+		this.velocity.x = x;
+	}
+	public void SetVelocityY(float y)
+	{
+		this.velocity.y = y;
+	}
+
 	void LateUpdate()
 	{
 		var deltaMovement = cameraTransform.position - lastCameraPosition;
