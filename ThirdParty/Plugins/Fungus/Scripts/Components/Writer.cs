@@ -60,8 +60,9 @@ namespace Fungus
         [SerializeField] protected bool instantComplete = true;
 
         [SerializeField] protected bool doReadAheadText = true;
+		[SerializeField] protected float delayToComplete = 0;
 
-        [SerializeField] protected UnityEvent OnWritingComplete;
+		[SerializeField] protected UnityEvent OnWritingComplete;
 
         // This property is true when the writer is waiting for user input to continue
         protected bool isWaitingForInput;
@@ -526,12 +527,16 @@ namespace Fungus
 
             NotifyEnd(stopAudio);
 
-            OnWritingComplete?.Invoke();
-            if (onComplete != null)
-            {
-                onComplete();
-            }
-        }
+
+			if (delayToComplete > 0) yield return new WaitForSecondsRealtime(delayToComplete);
+
+			OnWritingComplete?.Invoke();
+			if (onComplete != null)
+			{
+				onComplete();
+			}
+
+		}
 
         protected virtual IEnumerator DoWords(List<string> paramList, TokenType previousTokenType)
         {
@@ -1008,6 +1013,11 @@ namespace Fungus
             textAdapter.SetTextAlpha(textAlpha);
         }
 
+
+        public void OverrideCompletionDelay(float value)
+        {
+            delayToComplete = value;
+        }
 
 
         #endregion
