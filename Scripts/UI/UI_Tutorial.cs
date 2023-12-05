@@ -26,6 +26,13 @@ public class UI_Tutorial : UI_TutorialWindowBase
 		//if (showOnlyOnce && UI_TutorialController.AlreadyTriggeredInThisLevel.Contains(gameObject.name)) return;
 		//UI_TutorialController.AlreadyTriggeredInThisLevel.Add(gameObject.name);
 
+		if (writerDelay > 0)
+		{
+			//text.enabled = false;
+			text.AllowPlay(false);
+		}
+
+
 		Routine.Start(Run());
 
 		IEnumerator Run()
@@ -64,6 +71,8 @@ public class UI_Tutorial : UI_TutorialWindowBase
 				text.enabled = false;
 				yield return new WaitUntil(() => Application.isFocused);
 				yield return new WaitForSecondsRealtime(writerDelay);
+
+				text.AllowPlay(true);
 				text.enabled = true;
 			}
 			StartCoroutine(writer.Write(text.Localization));

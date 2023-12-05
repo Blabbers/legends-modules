@@ -13,9 +13,13 @@ public class TextLocalized : TextMeshProUGUI
 
 	[SerializeField] bool playTTSOnEnable = false;	
 	bool applyKeyCodes = false;
+	bool canPlay = true;
 
 	protected override void OnEnable()
 	{
+
+		if (!canPlay) return;
+
 		// Internally, TMPro runs [ExecuteAlways]. But this script should execute only during runtime. 
 		if (!Application.isPlaying)
 			return;
@@ -66,6 +70,11 @@ public class TextLocalized : TextMeshProUGUI
 	public void SetLocalization(LocalizedString loc)
 	{
 		localization = loc;
+	}
+
+	public void AllowPlay(bool canPlay)
+	{
+		this.canPlay = canPlay;
 	}
 	#endregion
 
