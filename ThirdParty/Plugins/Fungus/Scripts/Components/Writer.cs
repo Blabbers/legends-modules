@@ -158,9 +158,11 @@ namespace Fungus
 		}
 
 
-        #region CheckFocus
+        [SerializeField] float timeAccumulator;
 
-        protected virtual IEnumerator DoCheckFocus()
+		#region CheckFocus
+
+		protected virtual IEnumerator DoCheckFocus()
         {
     #if UNITY_EDITOR
 			yield return new WaitUntil(() => UnityEditorInternal.InternalEditorUtility.isApplicationActive == false);
@@ -186,7 +188,7 @@ namespace Fungus
            yield return new WaitUntil(() => Application.isFocused);
 #endif
 
-
+			timeAccumulator = Time.unscaledDeltaTime;
 			NotifyResume();
             Paused = false;
 
@@ -611,8 +613,9 @@ namespace Fungus
             UpdateOpenMarkup();
             UpdateCloseMarkup();
 
-            float timeAccumulator = Time.unscaledDeltaTime;
-            float invWritingSpeed = 1f / currentWritingSpeed;
+			//float timeAccumulator = Time.unscaledDeltaTime;
+			timeAccumulator = Time.unscaledDeltaTime;
+			float invWritingSpeed = 1f / currentWritingSpeed;
 
             //refactor this, its mostly the same 30 lines of code
             if (textAdapter.SupportsHiddenCharacters())
@@ -658,6 +661,8 @@ namespace Fungus
 					if (currentWritingSpeed > 0f)
                     {
                         timeAccumulator -= invWritingSpeed;
+                       // Debug.Log($"{timeAccumulator}");
+
                         if (timeAccumulator <= 0f)
                         {
 
@@ -665,7 +670,9 @@ namespace Fungus
 							//yield return new WaitUntil(() => Application.isFocused);
 							yield return new WaitForSecondsRealtime(waitTime);
                             timeAccumulator += waitTime;
-                        }
+
+							//Debug.Log($"{timeAccumulator}");
+						}
                     }
                 }
             }
@@ -714,13 +721,17 @@ namespace Fungus
 					if (currentWritingSpeed > 0f)
                     {
                         timeAccumulator -= invWritingSpeed;
-                        if (timeAccumulator <= 0f)
+						//Debug.Log($"{timeAccumulator}");
+
+						if (timeAccumulator <= 0f)
                         {
                             var waitTime = Mathf.Max(invWritingSpeed, Time.unscaledDeltaTime);
 							//yield return new WaitUntil(() => Application.isFocused);
 							yield return new WaitForSecondsRealtime(waitTime);
                             timeAccumulator += waitTime;
-                        }
+
+							//Debug.Log($"{timeAccumulator}");
+						}
                     }
                 }
             }
