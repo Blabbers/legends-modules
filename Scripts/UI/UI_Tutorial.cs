@@ -34,6 +34,7 @@ public class UI_Tutorial : UI_TutorialWindowBase
 			{
 				if (delay > 0)
 				{
+					yield return new WaitUntil(() => Application.isFocused);
 					yield return Routine.WaitSeconds(delay);
 				}
 
@@ -61,6 +62,7 @@ public class UI_Tutorial : UI_TutorialWindowBase
 			if (writerDelay > 0)
 			{
 				text.enabled = false;
+				yield return new WaitUntil(() => Application.isFocused);
 				yield return new WaitForSecondsRealtime(writerDelay);
 				text.enabled = true;
 			}

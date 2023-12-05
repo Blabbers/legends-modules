@@ -10,6 +10,8 @@ using System.Reflection;
 using System.Text;
 using System.Globalization;
 using UnityEngine.Events;
+using System;
+using UnityEditor;
 
 namespace Fungus
 {
@@ -152,9 +154,51 @@ namespace Fungus
             }
 
             CacheHiddenColorStrings();
+            StartCoroutine(DoCheckFocus());
+		}
+
+
+        #region CheckFocus
+
+        protected virtual IEnumerator DoCheckFocus()
+        {
+    #if UNITY_EDITOR
+			yield return new WaitUntil(() => UnityEditorInternal.InternalEditorUtility.isApplicationActive == false);
+    #else
+            yield return new WaitUntil(() => Application.isFocused == false);
+    #endif
+
+			Debug.Log("LostFocus");
+
+            NotifyPause();
+            Paused = true;
+
+            StartCoroutine(DoCheckFocusReturn());
         }
 
-        protected virtual void CacheHiddenColorStrings()
+        protected virtual IEnumerator DoCheckFocusReturn()
+        {
+            //yield return new WaitUntil(() => Application.isFocused);
+
+#if UNITY_EDITOR
+			yield return new WaitUntil(() => UnityEditorInternal.InternalEditorUtility.isApplicationActive);
+#else
+           yield return new WaitUntil(() => Application.isFocused);
+#endif
+
+
+			NotifyResume();
+            Paused = false;
+
+            Debug.Log("Returned to Focus");
+
+            StartCoroutine(DoCheckFocus());
+        }
+
+#endregion
+
+
+		protected virtual void CacheHiddenColorStrings()
         {
             // Cache the hidden color string
             Color32 c = hiddenTextColor;
@@ -527,7 +571,6 @@ namespace Fungus
 
             NotifyEnd(stopAudio);
 
-
 			if (delayToComplete > 0) yield return new WaitForSecondsRealtime(delayToComplete);
 
 			OnWritingComplete?.Invoke();
@@ -540,7 +583,10 @@ namespace Fungus
 
         protected virtual IEnumerator DoWords(List<string> paramList, TokenType previousTokenType)
         {
-            if (!CheckParamCount(paramList, 1))
+
+			yield return new WaitUntil(() => Application.isFocused);
+
+			if (!CheckParamCount(paramList, 1))
             {
                 yield break;
             }
@@ -588,8 +634,11 @@ namespace Fungus
 
                 while (textAdapter.RevealedCharacters < Mathf.Min(readAheadStartIndex, textAdapter.CharactersToReveal))
                 {
-                    // No delay if user has clicked and Instant Complete is enabled
-                    if (instantComplete && inputFlag)
+
+					yield return new WaitUntil(() => Application.isFocused);
+
+					// No delay if user has clicked and Instant Complete is enabled
+					if (instantComplete && inputFlag)
                     {
                         textAdapter.RevealedCharacters = textAdapter.CharactersToReveal;
                     }
@@ -598,19 +647,23 @@ namespace Fungus
 
                     NotifyGlyph();
 
-                    // Punctuation pause
-                    if (IsPunctuation(textAdapter.LastRevealedCharacter))
+					// Punctuation pause
+					if (IsPunctuation(textAdapter.LastRevealedCharacter))
                     {
                         yield return StartCoroutine(DoWait(currentPunctuationPause));
                     }
 
-                    if (currentWritingSpeed > 0f)
+					//yield return new WaitUntil(() => Application.isFocused);
+
+					if (currentWritingSpeed > 0f)
                     {
                         timeAccumulator -= invWritingSpeed;
                         if (timeAccumulator <= 0f)
                         {
+
                             var waitTime = Mathf.Max(invWritingSpeed, Time.unscaledDeltaTime);
-                            yield return new WaitForSecondsRealtime(waitTime);
+							//yield return new WaitUntil(() => Application.isFocused);
+							yield return new WaitForSecondsRealtime(waitTime);
                             timeAccumulator += waitTime;
                         }
                     }
@@ -619,8 +672,11 @@ namespace Fungus
             else
             {
                 for (int i = 0; i < param.Length + 1; ++i)
-                {   
-                    if (exitFlag)
+                {
+
+					yield return new WaitUntil(() => Application.isFocused);
+
+					if (exitFlag)
                     {
                         break;
                     }
@@ -643,8 +699,10 @@ namespace Fungus
                         continue;
                     }
 
-                    // Punctuation pause
-                    if (leftString.Length > 0 &&
+					//yield return new WaitUntil(() => Application.isFocused);
+
+					// Punctuation pause
+					if (leftString.Length > 0 &&
                         rightString.Length > 0 &&
                         IsPunctuation(leftString.ToString(leftString.Length - 1, 1)[0]))
                     {
@@ -652,14 +710,15 @@ namespace Fungus
                         yield return StartCoroutine(DoWait(currentPunctuationPause));
                     }
 
-                    // Delay between characters
-                    if (currentWritingSpeed > 0f)
+					// Delay between characters
+					if (currentWritingSpeed > 0f)
                     {
                         timeAccumulator -= invWritingSpeed;
                         if (timeAccumulator <= 0f)
                         {
                             var waitTime = Mathf.Max(invWritingSpeed, Time.unscaledDeltaTime);
-                            yield return new WaitForSecondsRealtime(waitTime);
+							//yield return new WaitUntil(() => Application.isFocused);
+							yield return new WaitForSecondsRealtime(waitTime);
                             timeAccumulator += waitTime;
                         }
                     }
@@ -737,7 +796,9 @@ namespace Fungus
 
         protected virtual IEnumerator DoWait(List<string> paramList)
         {
-            var param = "";
+			yield return new WaitUntil(() => Application.isFocused);
+
+			var param = "";
             if (paramList.Count == 1)
             {
                 param = paramList[0];
@@ -754,7 +815,9 @@ namespace Fungus
 
         protected virtual IEnumerator DoWaitVO()
         {
-            float duration = 0f;
+			yield return new WaitUntil(() => Application.isFocused);
+
+			float duration = 0f;
 
             if (AttachedWriterAudio != null)
             {
@@ -766,9 +829,13 @@ namespace Fungus
 
         protected virtual IEnumerator DoWait(float duration)
         {
-            NotifyPause();
+			yield return new WaitUntil(() => Application.isFocused);
 
-            float timeRemaining = duration;
+			NotifyPause();
+
+			//yield return new WaitUntil(() => Application.isFocused);
+
+			float timeRemaining = duration;
             while (timeRemaining > 0f && !exitFlag)
             {
                 if (instantComplete && inputFlag)
@@ -785,12 +852,16 @@ namespace Fungus
 
         protected virtual IEnumerator DoWaitForInput(bool clear)
         {
-            NotifyPause();
+			yield return new WaitUntil(() => Application.isFocused);
+
+			NotifyPause();
 
             inputFlag = false;
             isWaitingForInput = true;
 
-            while (!inputFlag && !exitFlag)
+			//yield return new WaitUntil(() => Application.isFocused);
+
+			while (!inputFlag && !exitFlag)
             {
                 yield return null;
             }
@@ -867,6 +938,7 @@ namespace Fungus
 
         protected virtual void NotifyStart(AudioClip audioClip)
         {
+
             WriterSignals.DoWriterState(this, WriterState.Start);
 
             for (int i = 0; i < writerListeners.Count; i++)
@@ -969,7 +1041,9 @@ namespace Fungus
         /// <param name="onComplete">Callback to call when writing is finished.</param>
         public virtual IEnumerator Write(string content, bool clear = true, bool waitForInput = false, bool stopAudio = false, bool waitForVO = false, AudioClip audioClip = null, System.Action onComplete = null)
         {
-            if (clear)
+			//yield return new WaitUntil(() => Application.isFocused);
+
+			if (clear)
             {
                 textAdapter.Text = "";
                 visibleCharacterCount = 0;
@@ -1000,7 +1074,7 @@ namespace Fungus
 
             gameObject.SetActive(true);
 
-            yield return StartCoroutine(ProcessTokens(tokens, stopAudio, onComplete));
+			yield return StartCoroutine(ProcessTokens(tokens, stopAudio, onComplete));
         }
 
         public void SetTextColor(Color textColor)
