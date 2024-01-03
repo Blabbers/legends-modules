@@ -1,6 +1,7 @@
 // This code is part of the Fungus library (https://github.com/snozbot/fungus)
 // It is released for free under the MIT open source license (https://github.com/snozbot/fungus/blob/master/LICENSE)
 
+using Blabbers.Game00;
 using UnityEngine;
 
 namespace Fungus
@@ -33,6 +34,9 @@ namespace Fungus
 
         public override void OnEnter()
         {
+            var gameplayAudioSource = Singleton.Get<AudioController>().gameplaySource;
+            var localVolume = gameplayAudioSource.mute ? 0f : volume * gameplayAudioSource.volume;
+                        
             if (soundClip == null)
             {
                 Continue();
@@ -41,7 +45,7 @@ namespace Fungus
 
             var musicManager = FungusManager.Instance.MusicManager;
 
-            musicManager.PlaySound(soundClip, volume);
+            musicManager.PlaySound(soundClip, localVolume );
 
             if (waitUntilFinished)
             {
