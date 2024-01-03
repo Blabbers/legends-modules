@@ -15,8 +15,8 @@ namespace Blabbers.Game00
 		public AudioSource gameplaySource;
 		public bool isMuted = false;
 
-		private float baseMusicVolume;
-		private float baseGameplayVolume;
+		public float baseMusicVolume;
+		public float baseGameplayVolume;
 
 		[BoxGroup("Game Audio")]
 		//Music
@@ -44,9 +44,9 @@ namespace Blabbers.Game00
 
 		public void PlayMusic(AudioClip musicClip)
 		{
-			Debug.Log("Music play " + musicClip.name);
 			Instance.musicSource.Stop();
 			Instance.musicSource.volume = baseMusicVolume;
+			Instance.musicSource.volume = Instance.baseMusicVolume;
 			Instance.musicSource.clip = musicClip;
 			Instance.musicSource.loop = true;
 			Instance.musicSource.Play();
