@@ -42,7 +42,7 @@ namespace Blabbers.Game00
             PlayMusic(lobbyMusic);
         }
 
-        private void PlayMusic(AudioClip musicClip)
+        public void PlayMusic(AudioClip musicClip)
         {
             if (musicSource.clip && musicSource.isPlaying)
             {
