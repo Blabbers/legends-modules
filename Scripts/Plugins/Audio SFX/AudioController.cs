@@ -44,6 +44,8 @@ namespace Blabbers.Game00
 
 		public void PlayMusic(AudioClip musicClip)
 		{
+			if (musicClip.Equals(Instance.musicSource.clip)) return;
+
 			Instance.musicSource.Stop();
 			Instance.musicSource.volume = baseMusicVolume;
 			Instance.musicSource.volume = Instance.baseMusicVolume;
