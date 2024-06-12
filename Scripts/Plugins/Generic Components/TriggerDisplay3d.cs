@@ -150,6 +150,16 @@ public class GenericTriggerDisplay3d
 			//Gizmos.DrawWireCube(transform.position, scale);
 		}
 
+		if(sphereCollider != null)
+		{
+			Gizmos.color = borderColor;
+			Gizmos.DrawWireSphere(transform.position, sphereCollider.radius);
+
+
+			Gizmos.color = gizmosColor;
+			Gizmos.DrawSphere(transform.position, sphereCollider.radius);
+		}
+
 
 
 

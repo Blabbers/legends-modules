@@ -64,12 +64,10 @@ namespace Blabbers
 
 		private void OnTriggerEnter(Collider other)
 		{
-
 			if (!Filter(other))
 			{
 				return;
 			}
-
 
 			//Debug.Log($"Trigger OnTriggerEnter\n {other.transform.name} -> {this.transform.name}".Colored("yellow"));
 			TriggerEnter.Invoke(other);
