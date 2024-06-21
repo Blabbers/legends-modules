@@ -318,6 +318,8 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 
 	public void CorrectOptionMethod()
 	{
+		Debug.Log("CorrectOptionMethod()");
+
 		QuestionWasAnsweredThisLevel = true;
 		ChoseCorrectly = true;
 		ClosePopup();
@@ -325,6 +327,8 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 
 	public void WrongOptionMethod()
 	{
+		Debug.Log("WrongOptionMethod()");
+
 		QuestionWasAnsweredThisLevel = true;
 		ChoseCorrectly = false;
 		ClosePopup();
@@ -349,7 +353,8 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 
 			EnableBtnConfirm(false);
 
-			yield return Routine.WaitSeconds(0.5f);
+			//Changed from WaitSeconds to WaitRealSeconds (it wasn't working with the game paused)
+			yield return Routine.WaitRealSeconds(0.5f);
 			OnAnswered?.Invoke(ChoseCorrectly, SelectedAnswerId);
 			base.HidePopup();
 		}
