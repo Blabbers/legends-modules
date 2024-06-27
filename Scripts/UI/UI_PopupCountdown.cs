@@ -1,20 +1,17 @@
-﻿using System.Collections;
-using Blabbers.Game00;
-using System.Collections.Generic;
-using BeauRoutine;
-using Blabbers;
+﻿using Blabbers.Game00;
+using NaughtyAttributes;
+using System;
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using DG.Tweening;
-using NaughtyAttributes;
-using TMPro;
-using UnityEngine.UI;
 
 public class UI_PopupCountdown : UI_PopupWindow, ISingleton
 {
 
+	#region Variables
 	[Foldout("Runtime")] public bool isActive = false;
-    IEnumerator countCoroutine;
+	IEnumerator countCoroutine;
 
 	[BoxGroup("Configs")] public bool enableCountdown = false;
 	[BoxGroup("Configs")] public bool showGoText = false;
@@ -30,72 +27,54 @@ public class UI_PopupCountdown : UI_PopupWindow, ISingleton
 	[Foldout("Components")] public Transform popupParent;
 	[Foldout("Components")][SerializeField] string goText;
 
+	#endregion
 
 	void Awake()
 	{
-        Debug.Log("<UI_PopupCountdown> Awake()".Colored("white"));
-
-        if (enableCountdown)
-        {
+		if (enableCountdown)
+		{
 			Singleton.Get<GameplayController>().OnPause += HandleOnPause;
-			//Singleton.Get<UI_PopupLevelInfo>().OnClose.AddListener(ExternalCountDown);
 
-			//OnCountdownFinished.AddListener(Singleton.Get<UI_GameplayHUD>().ResetLives);
-			//OnCountdownFinished.AddListener(Singleton.Get<GameStatusTracker>().ResetLives);
-
-			goText = LocalizationExtensions.LocalizeText(goKey);
+			if (showGoText) goText = LocalizationExtensions.LocalizeText(goKey);
 			gameObject.SetActive(false);
-
-
 
 			if (Singleton.Get<GameplayController>().showLevelInfo)
 			{
 				gameObject.SetActive(false);
 			}
-		} 
-    }
+		}
+	}
 
 
-    private bool isPaused;
-    private void HandleOnPause(bool pause)
-    {
-        isPaused = pause;
+	private bool isPaused;
+	private void HandleOnPause(bool pause)
+	{
+		isPaused = pause;
 
-        if (isPaused)
-        {
-            return;
-        }
-
-        StartCountdown();
-    }
-
-
-    public void ExternalCountDown()
-    {
-        //Debug.Log("ExternalCountDown()".Colored("orange"));
-        isActive = true;
+		if (isPaused)
+		{
+			return;
+		}
+		StartCountdown();
+	}
 
 
-		if (pauseTimeScale) StartCountdown_Pause();
-        else StartCountdown();
-    }
+	public void ExternalCountDown(Action callback = null)
+	{
+		isActive = true;
+		StartCountdown(pauseTimeScale, callback);
+	}
 
-
-    void StartCountdown_Pause()
-    {
-
-		Debug.Log("<UI_PopupCountdown> StartCountdown_Pause()");
-
-		Time.timeScale = 0;
-
-        StartCountdownGeneric();
+	void StartCountdown(bool pauseTimescale = false, Action callback = null)
+	{
+		if (pauseTimescale) Time.timeScale = 0;
+		StartCountdownGeneric();
 
 		countCoroutine = _Counting();
 		StartCoroutine(countCoroutine);
 
 		IEnumerator _Counting()
 		{
-		
 
 			for (int i = 3; i >= 1; i--)
 			{
@@ -103,79 +82,46 @@ public class UI_PopupCountdown : UI_PopupWindow, ISingleton
 				yield return new WaitForSecondsRealtime(tickDuration);
 			}
 
-            if (showGoText)
-            {
-				countText.text = goText + "!";
-				yield return new WaitForSecondsRealtime(tickDuration);
-			}
-
-			CountDownFinished();
-		}
-
-	}
-
-    void StartCountdown()
-    {
-		Debug.Log("<UI_PopupCountdown> StartCountdown()");
-
-        StartCountdownGeneric();
-
-		countCoroutine = _Counting();
-        StartCoroutine(countCoroutine);
-
-        IEnumerator _Counting()
-        {
-          
-            for (int i = 3; i >= 1; i--)
-            {
-                countText.text = "" + i;
-                yield return new WaitForSecondsRealtime(tickDuration);
-            }
-
 			if (showGoText)
 			{
 				countText.text = goText + "!";
 				yield return new WaitForSecondsRealtime(tickDuration);
 			}
 
-			CountDownFinished();
-        }
+			CountDownFinished(callback);
+		}
 
-    }
+	}
 
-
-    void StartCountdownGeneric()
-    {
+	void StartCountdownGeneric()
+	{
 		TogglePopup(true);
 		group.alpha = 1.0f;
 
 		if (hideHUD)
-        {
-            Singleton.Get<UI_GameplayHUD>().HideFullHUD();
-        }
-    }
-
-
-    void CountDownFinished()
-    {
-        //Debug.Log("<UI_PopupCountdown> CountDownFinished()");
-
-        OnCountdownFinished?.Invoke();
-        TogglePopup(false);
-
-		if (hideHUD) Singleton.Get<UI_GameplayHUD>().ShowFullHUD();
-
-		if (pauseTimeScale) Time.timeScale = 1.0f;
-
-		//Singleton.Get<GameplayController>().OnCountdownFinished?.Invoke();
+		{
+			Singleton.Get<UI_GameplayHUD>().HideFullHUD();
+		}
 	}
 
 
-    void TogglePopup(bool active)
-    {
-        isActive = active;
-        popupParent.gameObject.SetActive(active);
-    }
+	void CountDownFinished(Action callback = null)
+	{
+		OnCountdownFinished?.Invoke();
+		TogglePopup(false);
+
+		if (hideHUD) Singleton.Get<UI_GameplayHUD>().ShowFullHUD();
+		if (pauseTimeScale) Time.timeScale = 1.0f;
+
+		callback?.Invoke();
+	}
+
+
+	void TogglePopup(bool active)
+	{
+		isActive = active;
+		popupParent.gameObject.SetActive(active);
+	}
 
 
 }
