@@ -75,7 +75,9 @@ public class UI_CameraFX : MonoBehaviour, ISingleton
 		cinematicBarTop.gameObject.SetActive(true);
 		cinematicBarBot.gameObject.SetActive(true);
 
+		cinematicBarTop.OnAnimationFinished.RemoveAllListeners();
 		cinematicBarTop.OnAnimationFinished.AddListener(callback);
+
 		// Then enable the parent that will trigger the animation
 		cinematicBlackBars.SetActive(true);
 	}
