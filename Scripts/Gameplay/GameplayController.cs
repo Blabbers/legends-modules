@@ -160,7 +160,7 @@ namespace Blabbers.Game00
                 //extraScore -= (int)scorePenalty;
                 //ProgressController.AddProgressiveScore(extraScore);
 
-                Singleton.Get<AudioController>().FadeMusicVolume(0.075f, 1f);
+                Singleton.Get<AudioController>().FadeMusicVolume(AudioController.MusicVolumeLow, 1f);
 
                 // If a flowchart registered a block here we will wait until it is removed
                 OnBeforeVictoryScreenShown?.Invoke();
