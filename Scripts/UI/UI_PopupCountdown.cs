@@ -79,6 +79,7 @@ public class UI_PopupCountdown : UI_PopupWindow, ISingleton
 			for (int i = 3; i >= 1; i--)
 			{
 				countText.text = "" + i;
+				OnCountdownTick?.Invoke();
 				yield return new WaitForSecondsRealtime(tickDuration);
 			}
 
