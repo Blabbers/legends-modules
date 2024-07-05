@@ -250,7 +250,7 @@ public class UI_PopupQuestion : UI_PopupWindow, ISingleton
 		shouldShowAnswerAnimationFeedback = showAnswerAnimationFeedback;
 
 		AudioController.Instance.FadeGameplayVolume(0.1f);
-		AudioController.Instance.FadeMusicVolume(0.02f);
+		AudioController.Instance.FadeMusicVolume(AudioController.MusicVolumeLow);
 		// Loads the question
 		this.QuestionDescriptionText.text = question.questionDescription;
 		answerKeys = new List<string>();

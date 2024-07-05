@@ -52,7 +52,7 @@ public class UI_Tutorial : UI_TutorialWindowBase
 			if (fadeoutGameVolume)
 			{
 				AudioController.Instance.FadeGameplayVolume(0.1f);
-				AudioController.Instance.FadeMusicVolume(0.2f);
+				AudioController.Instance.FadeMusicVolume(AudioController.MusicVolumeHalf);
 			}
 
 			if (!ignorePause) Singleton.Get<GameplayController>()?.TogglePause(pause);

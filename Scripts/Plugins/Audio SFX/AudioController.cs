@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using DG.Tweening;
+﻿using DG.Tweening;
 using NaughtyAttributes;
+using System.Collections.Generic;
 using UnityEngine;
-using static Animancer.Validate;
 
 namespace Blabbers.Game00
 {
@@ -15,8 +13,12 @@ namespace Blabbers.Game00
 		public AudioSource gameplaySource;
 		public bool isMuted = false;
 
-		public float baseMusicVolume;
-		public float baseGameplayVolume;
+		private static float baseMusicVolume;
+		private static float baseGameplayVolume;
+
+		public static float MusicVolumeFull => baseMusicVolume;
+		public static float MusicVolumeHalf => baseMusicVolume * 0.5f;
+		public static float MusicVolumeLow => baseMusicVolume * 0.15f;
 
 		[BoxGroup("Game Audio")]
 		//Music
@@ -48,7 +50,6 @@ namespace Blabbers.Game00
 
 			Instance.musicSource.Stop();
 			Instance.musicSource.volume = baseMusicVolume;
-			Instance.musicSource.volume = Instance.baseMusicVolume;
 			Instance.musicSource.clip = musicClip;
 			Instance.musicSource.loop = true;
 			Instance.musicSource.Play();

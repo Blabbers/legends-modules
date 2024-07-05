@@ -35,7 +35,7 @@ namespace Blabbers.Game00
 
 			if (fadeMusicVolume)
 			{
-				Singleton.Get<AudioController>().FadeMusicVolume(musicVolume, 0.5f);
+				Singleton.Get<AudioController>().FadeMusicVolume(musicVolume);
 			}
 			Analytics.OnCutsceneStart(cutsceneNameKey);
 
