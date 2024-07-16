@@ -1,13 +1,12 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using LoLSDK;
-using TMPro;
-using System.Collections.Generic;
-using SimpleJSON;
-using System.IO;
-using System.Collections;
-using UnityEngine.Networking;
+﻿using SimpleJSON;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using TMPro;
+using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
 namespace Blabbers.Game00
@@ -52,13 +51,13 @@ namespace Blabbers.Game00
 			if (string.IsNullOrEmpty(mainText))
 			{
 				// If this text was loaded by the LoL platform.
-				if(SharedState.languageDefs != null)
+				if (SharedState.languageDefs != null)
 				{
 					var node = SharedState.languageDefs[localizationKey];
 					if (node != null)
 					{
 						mainText = node.Value;
-					}					
+					}
 				}
 			}
 
@@ -79,7 +78,7 @@ namespace Blabbers.Game00
 			{
 				mainText = $"<TNF> {localizationKey}";
 			}
-		
+
 			return $"{appendLeft}{mainText}{appendRight}";
 		}
 
@@ -108,7 +107,7 @@ namespace Blabbers.Game00
 		private static string ApplyTagsToTerm(string term, List<string> tags, string mainText)
 		{
 			bool found = false;
-			string foundTerm ="";
+			string foundTerm = "";
 			string editedText = "";
 			string currentTerm;
 
@@ -135,13 +134,20 @@ namespace Blabbers.Game00
 			string openTag, closeTag;
 			string[] split;
 
-			split = tag.Split('=');
+			if (tag.Contains("="))
+			{
+				split = tag.Split('=');
+				var value = split[1];
+				tagName = split[0];
+				openTag = $"{{{tagName}={value}}}";
+			}
+			else
+			{
+				tagName = tag;
+				openTag = $"{{{tagName}}}";
+			}
 
-			tagName = split[0];
-
-			openTag = $"{{{tagName}={split[1]}}}";
 			closeTag = $"{{/{tagName}}}";
-
 			return $"{openTag}{term}{closeTag}";
 		}
 
@@ -184,7 +190,7 @@ namespace Blabbers.Game00
 			{
 				if (ProgressController.GameProgress.enableAutomaticTTS)
 				{
-#if  UNITY_EDITOR
+#if UNITY_EDITOR
 					EditorPreviewTTS?.Invoke(key);
 #else
 					// Real TTS from the LOL platform
@@ -195,7 +201,7 @@ namespace Blabbers.Game00
 			}
 			catch { }
 		}
-		
+
 		public static void ResetLanguageJson()
 		{
 			localLanguageJson = null;
@@ -258,7 +264,7 @@ namespace Blabbers.Game00
 
 			var node = json[langCode]; // This is null after opening the project
 
-			if(node == null)
+			if (node == null)
 			{
 				if (displayMessages)
 				{
@@ -290,7 +296,7 @@ namespace Blabbers.Game00
 					Debug.Log($"<color=yellow>File language.json was loaded to this asset</color> \n<color=white>[{key}]: {node[key]}</color>", unityObject);
 				}
 				return node[key];
-			}			
+			}
 		}
 
 	}

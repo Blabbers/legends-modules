@@ -38,6 +38,8 @@ public class GameData : ScriptableObject
     
     [Title("Text Configs", 0)]
 	public string currentSelectedLangCode = "en";
+	[ReadOnly, Expandable] public StringVar keyCodesGuide;
+
 	[ReorderableList]
     [Tooltip("Adjust the KeyCodes that are important to be highlighted in this project.", order = 1)]
 	public LocalizationKeyCode[] textConfigs;

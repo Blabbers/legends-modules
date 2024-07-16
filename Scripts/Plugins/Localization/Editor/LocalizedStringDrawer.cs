@@ -1,10 +1,10 @@
-using UnityEditor;
-using UnityEngine;
+using Animancer.Editor;
 using Blabbers.Game00;
-using System.Reflection;
 using System;
 using System.Collections.Generic;
-using Animancer.Editor;
+using System.Reflection;
+using UnityEditor;
+using UnityEngine;
 
 
 [CustomPropertyDrawer(typeof(LocalizedString), true)]
@@ -209,7 +209,6 @@ public class LocalizedStringDrawer : PropertyDrawerWithEvents
 
 				void GenerateNewKey()
 				{
-					// TODO: This needs to work properly
 					GenerateLocKey(internalKeyProp, "");
 				}
 				menu.ShowAsContext();
@@ -354,6 +353,7 @@ public class LocalizedStringDrawer : PropertyDrawerWithEvents
 		if (string.IsNullOrEmpty(key))
 		{
 			property.stringValue = GetNewSmallGUID();
+			property.serializedObject.ApplyModifiedProperties();
 		}
 
 		string GetNewSmallGUID()
@@ -362,7 +362,8 @@ public class LocalizedStringDrawer : PropertyDrawerWithEvents
 			var smallGuid = guid.Substring(0, Math.Min(8, guid.Length));
 			// Tries to load it from the json, if this key already existis, we generate another one
 			var hasKey = !string.IsNullOrEmpty(LocalizationExtensions.EditorLoadFromLanguageJson(smallGuid, displayMessages: false));
-			return hasKey ? GetNewSmallGUID() : smallGuid;
+			var result = hasKey ? GetNewSmallGUID() : smallGuid;
+			return result;
 		}
 	}
 }
