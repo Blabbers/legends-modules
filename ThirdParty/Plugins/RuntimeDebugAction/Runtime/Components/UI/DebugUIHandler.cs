@@ -105,7 +105,7 @@ namespace BennyKok.RuntimeDebug.Components.UI
             //Special handling
             if (Application.isMobilePlatform)
             {
-                if (Screen.orientation == ScreenOrientation.Landscape || Screen.orientation == ScreenOrientation.LandscapeLeft || Screen.orientation == ScreenOrientation.LandscapeRight)
+                if (Screen.orientation == ScreenOrientation.LandscapeLeft || Screen.orientation == ScreenOrientation.LandscapeLeft || Screen.orientation == ScreenOrientation.LandscapeRight)
                 {
                     canvasScaler.matchWidthOrHeight = 0;
                 }

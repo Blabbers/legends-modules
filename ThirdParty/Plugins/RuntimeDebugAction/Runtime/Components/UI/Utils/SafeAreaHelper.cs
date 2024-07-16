@@ -14,7 +14,7 @@ namespace BennyKok.RuntimeDebug.Components.UI
         public static UnityEvent OnResolutionOrOrientationChanged = new UnityEvent();
 
         private static bool screenChangeVarsInitialized = false;
-        private static ScreenOrientation lastOrientation = ScreenOrientation.Landscape;
+        private static ScreenOrientation lastOrientation = ScreenOrientation.LandscapeLeft;
         private static Vector2 lastResolution = Vector2.zero;
         private static Rect lastSafeArea = Rect.zero;
 
