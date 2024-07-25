@@ -55,6 +55,8 @@ public class UI_PopupCountdown : UI_PopupWindow, ISingleton
 		{
 			return;
 		}
+		if (Singleton.Get<GameplayController>().gameOver) return;
+
 		StartCountdown();
 	}
 
