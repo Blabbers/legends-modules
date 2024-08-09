@@ -8,7 +8,6 @@ using UnityEngine.Events;
 
 public class UI_PopupCountdown : UI_PopupWindow, ISingleton
 {
-
 	#region Variables
 	[Foldout("Runtime")] public bool isActive = false;
 	IEnumerator countCoroutine;
@@ -31,20 +30,16 @@ public class UI_PopupCountdown : UI_PopupWindow, ISingleton
 
 	void Awake()
 	{
-		if (enableCountdown)
+		Singleton.Get<GameplayController>().OnPause += HandleOnPause;
+
+		if (showGoText) goText = LocalizationExtensions.LocalizeText(goKey);
+		gameObject.SetActive(false);
+
+		if (Singleton.Get<GameplayController>().showLevelInfo)
 		{
-			Singleton.Get<GameplayController>().OnPause += HandleOnPause;
-
-			if (showGoText) goText = LocalizationExtensions.LocalizeText(goKey);
 			gameObject.SetActive(false);
-
-			if (Singleton.Get<GameplayController>().showLevelInfo)
-			{
-				gameObject.SetActive(false);
-			}
 		}
 	}
-
 
 	private bool isPaused;
 	private void HandleOnPause(bool pause)
@@ -63,12 +58,16 @@ public class UI_PopupCountdown : UI_PopupWindow, ISingleton
 
 	public void ExternalCountDown(Action callback = null)
 	{
+		if (!enableCountdown) return;
+
 		isActive = true;
 		StartCountdown(pauseTimeScale, callback);
 	}
 
 	void StartCountdown(bool pauseTimescale = false, Action callback = null)
 	{
+		if (!enableCountdown) return;
+
 		if (pauseTimescale) Time.timeScale = 0;
 		StartCountdownGeneric();
 
@@ -98,6 +97,8 @@ public class UI_PopupCountdown : UI_PopupWindow, ISingleton
 
 	void StartCountdownGeneric()
 	{
+		if (!enableCountdown) return;
+
 		TogglePopup(true);
 		group.alpha = 1.0f;
 
@@ -126,5 +127,8 @@ public class UI_PopupCountdown : UI_PopupWindow, ISingleton
 		popupParent.gameObject.SetActive(active);
 	}
 
-
+	public void SetEnableCountdown(bool value)
+	{
+		enableCountdown = value;
+	}
 }
