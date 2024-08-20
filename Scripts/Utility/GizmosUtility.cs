@@ -354,11 +354,20 @@ public static class GizmosUtility
         Gizmos.DrawLine(edge, new Vector3(origin.x, origin.y + dimensions.y, origin.z));
         Gizmos.DrawLine(edge, new Vector3(origin.x + dimensions.x, origin.y, origin.z));
     }
-    #endregion
+	#endregion
 
+	public static void DrawLimiters_Height(Vector2 limiters, Vector3 center, Vector3 size, Color color)
+	{
+		Gizmos.color = color;
 
+		Vector3 extremeTop = center + Vector3.up * limiters.x;
+		Vector3 extremeBot = center + Vector3.down * limiters.y;
 
-    public static void DrawRaycastData3D(RaycastData3d data, float pointRadius = 0.2f ,bool hasOrigin = false)
+		Gizmos.DrawCube(extremeTop, size);
+		Gizmos.DrawCube(extremeBot, size);
+	}
+
+	public static void DrawRaycastData3D(RaycastData3d data, float pointRadius = 0.2f ,bool hasOrigin = false)
     {
         if (!hasOrigin)
         {
