@@ -66,23 +66,7 @@ namespace Blabbers
 				return;
 			}
 
-			//string t1, t2;
-			Debug.Log($"Trigger OnTriggerEnter2D\n {other.transform.name} -> {this.transform.name}".Colored("yellow"));
-
-			//t1 = other.transform.name;
-			//t2 = this.transform.name;
-
-			//if (other.transform.parent != null)
-			//{
-			//	t1 = other.transform.parent.name;
-			//}
-
-			//if (this.transform.parent != null)
-			//{
-			//	t2 = this.transform.parent.name;
-			//}
-
-			//Debug.Log($"Trigger OnTriggerEnter2D\n {t1} -> {t2}".Colored("yellow"));
+			//Debug.Log($"Trigger OnTriggerEnter2D\n {other.transform.name} -> {this.transform.name}".Colored("yellow"));
 			OnTriggerEnter.Invoke(other);
 		}
 
