@@ -42,4 +42,8 @@ namespace Blabbers
 
     [Serializable]
     public class ActionEvent : UnityEvent<Action> { }
+
+	[Serializable]
+	public class Collision2DEvent : UnityEvent<Collision2D> { }
+	
 }
