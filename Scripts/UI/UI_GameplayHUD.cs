@@ -47,7 +47,7 @@ namespace Blabbers.Game00
 			}
 		}
 
-		public void ToggleDisplay(bool active, bool instantly = false)
+		public void ToggleDisplay(bool active, bool instantly = false, bool setUpdate = false)
 		{
 			var value = active ? 1.0f : 0f;
 			if (instantly)
@@ -56,7 +56,7 @@ namespace Blabbers.Game00
 			}
 			else
 			{
-				canvasGroup.DOFade(value, 0.5f);
+				canvasGroup.DOFade(value, 0.5f).SetUpdate(setUpdate);
 			}
 		}
 
