@@ -81,7 +81,7 @@ public class UI_Tutorial : UI_TutorialWindowBase
 				text.AllowPlay(true);
 				text.enabled = true;
 			}
-			StartCoroutine(writer.Write(text.Localization));
+			Routine.Start(writer.Write(text.Localization));
 		}
 	}
 
