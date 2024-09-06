@@ -12,6 +12,8 @@ public class UI_Tutorial : UI_TutorialWindowBase
 
 	public bool pause;
 	public bool ignorePause = false;
+	[HideIf("ignorePause")]
+	public bool ignoreCountdown = false;
 	public bool showOnlyOnce;
 	public bool autoHideShowHUD;
 	[Foldout("Components")]
@@ -32,7 +34,6 @@ public class UI_Tutorial : UI_TutorialWindowBase
 			text.AllowPlay(false);
 		}
 
-
 		Routine.Start(Run());
 
 		IEnumerator Run()
@@ -47,7 +48,7 @@ public class UI_Tutorial : UI_TutorialWindowBase
 
 				this.gameObject.SetActive(true);
 			}
-			
+
 			Analytics.OnTutorialShown(this.name);
 			if (fadeoutGameVolume)
 			{
@@ -55,7 +56,11 @@ public class UI_Tutorial : UI_TutorialWindowBase
 				AudioController.Instance.FadeMusicVolume(AudioController.MusicVolumeHalf);
 			}
 
-			if (!ignorePause) Singleton.Get<GameplayController>()?.TogglePause(pause);
+			if (!ignorePause)
+			{
+				Singleton.Get<GameplayController>()?.TogglePause(pause);
+				if (ignoreCountdown) Singleton.Get<UI_PopupCountdown>()?.SetEnableCountdown(false);
+			}
 
 			if (autoHideShowHUD)
 			{
@@ -86,7 +91,13 @@ public class UI_Tutorial : UI_TutorialWindowBase
 		this.gameObject.SetActive(false);
 		if (Singleton.Get<GameplayController>() != null)
 		{
-			if (!ignorePause) Singleton.Get<GameplayController>()?.TogglePause(false);
+			if (!ignorePause)
+			{
+				if (ignoreCountdown) Singleton.Get<GameplayController>()?.TogglePause(false, true);
+				else Singleton.Get<GameplayController>()?.TogglePause(false);
+			}
+
+
 		}
 		if (autoHideShowHUD)
 		{

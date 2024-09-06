@@ -114,7 +114,21 @@ namespace Blabbers.Game00
 			gameplayInstance.OnPause?.Invoke(value);
         }
 
-        public void Defeat()
+		public void TogglePause(bool value, bool countdownState)
+		{
+			var gameplayInstance = Singleton.Get<GameplayController>();
+			gameplayInstance.IsPaused = value;
+			gameplayInstance.OnPause?.Invoke(value);
+
+			Routine.Start(Run());
+			IEnumerator Run()
+			{
+				yield return Routine.WaitForEndOfFrame();
+				Singleton.Get<UI_PopupCountdown>()?.SetEnableCountdown(countdownState);
+			}
+		}
+
+		public void Defeat()
         {
             if (gameOver) return;
             gameOver = true;
