@@ -75,8 +75,9 @@ public class UI_PopupCountdown : UI_PopupWindow, ISingleton
 		StartCoroutine(countCoroutine);
 
 		IEnumerator _Counting()
-		{
-
+		{	
+			var textAppearDelay = 0.3f;
+			yield return new WaitForSecondsRealtime(textAppearDelay);
 			for (int i = 3; i >= 1; i--)
 			{
 				countText.text = "" + i;
