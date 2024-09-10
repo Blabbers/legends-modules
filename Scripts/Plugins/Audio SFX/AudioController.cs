@@ -1,5 +1,6 @@
 ﻿using DG.Tweening;
 using NaughtyAttributes;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,6 +24,7 @@ namespace Blabbers.Game00
 		[BoxGroup("Game Audio")]
 		//Music
 		public AudioClip gameplayMusic, lobbyMusic;
+		public Action<bool> OnMuteSFX;
 
 		private void Awake()
 		{
@@ -128,6 +130,7 @@ namespace Blabbers.Game00
 		public void MuteSFX(bool value)
 		{
 			Instance.gameplaySource.mute = value;
+			OnMuteSFX?.Invoke(value);
 			MuteCheck();
 		}
 
