@@ -10,7 +10,7 @@ public class UI_Tutorial : UI_TutorialWindowBase
 {
 	public float delay;
 
-	public bool pause;
+	[HideIf("ignorePause")] public bool pause;
 	public bool ignorePause = false;
 	[HideIf("ignorePause")]
 	public bool ignoreCountdown = false;
@@ -93,11 +93,13 @@ public class UI_Tutorial : UI_TutorialWindowBase
 		{
 			if (!ignorePause)
 			{
-				if (ignoreCountdown) Singleton.Get<GameplayController>()?.TogglePause(false, true);
+				if (ignoreCountdown)
+				{
+					Singleton.Get<UI_PopupCountdown>()?.SetEnableCountdown(false);
+					Singleton.Get<GameplayController>()?.TogglePause(false, true);
+				} 			
 				else Singleton.Get<GameplayController>()?.TogglePause(false);
 			}
-
-
 		}
 		if (autoHideShowHUD)
 		{
