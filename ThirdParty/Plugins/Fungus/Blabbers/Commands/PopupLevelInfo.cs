@@ -28,13 +28,14 @@ namespace Fungus
 		public LocalizedString informationText;
 		[ShowAssetPreview]
 		public Sprite image;
+		public float imageScaleMultiplier = 1;
 		public bool playTTS = true;
 
 		#region Public members
 
 		public override void OnEnter()
 		{
-			PopupInstance.Setup(informationText, image, HandleOnClosedPopup);
+			PopupInstance.Setup(informationText, image, imageScaleMultiplier, HandleOnClosedPopup);
 			PopupInstance.ShowPopup();
 			if (playTTS)
 			{

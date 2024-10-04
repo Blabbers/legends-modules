@@ -16,11 +16,12 @@ namespace Blabbers.Game00
 
         private UnityAction externalOnClosed;
 
-        public void Setup(LocalizedString localizedString, Sprite sprite, UnityAction onClosed)
+        public void Setup(LocalizedString localizedString, Sprite sprite, float imageScaleMultiplier, UnityAction onClosed)
         {
             informationText.text = localizedString;
             buttonTTS.overrideTTSkey = localizedString.Key;
             image.sprite = sprite;
+            if(sprite !=null) image.transform.localScale = new Vector3(imageScaleMultiplier, imageScaleMultiplier, 1);
 			externalOnClosed = onClosed;
 		}
 
