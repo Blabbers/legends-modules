@@ -16,7 +16,7 @@ public class UI_ButtonPlayTTS : MonoBehaviour
     {
         if (!string.IsNullOrEmpty(overrideTTSkey))
         {
-            button.onClick.RemoveAllListeners();
+			button.onClick.RemoveAllListeners();
             button.onClick.AddListener(ManualSpeakText);
             return;
         }
@@ -39,6 +39,18 @@ public class UI_ButtonPlayTTS : MonoBehaviour
         }
 
     }
+
+    public void ExternalSetup(string key)
+    {
+        overrideTTSkey = key;
+
+		if (!string.IsNullOrEmpty(overrideTTSkey))
+		{
+			button.onClick.RemoveAllListeners();
+			button.onClick.AddListener(ManualSpeakText);
+			return;
+		}
+	}
 
     void ManualSpeakText()
     {
