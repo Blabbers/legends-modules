@@ -10,9 +10,11 @@ public class UI_PopupCountdown : UI_PopupWindow, ISingleton
 {
 	#region Variables
 	[Foldout("Runtime")] public bool isActive = false;
+	[Foldout("Runtime")] public bool enableCountdown = false;
 	IEnumerator countCoroutine;
 
-	[BoxGroup("Configs")] public bool enableCountdown = false;
+	[BoxGroup("Configs")] public bool hasCountdownScreen = true;
+	
 	[BoxGroup("Configs")] public bool showGoText = false;
 	[BoxGroup("Configs")] public bool hideHUD = true;
 	[BoxGroup("Configs")] public bool pauseTimeScale = false;
@@ -30,7 +32,8 @@ public class UI_PopupCountdown : UI_PopupWindow, ISingleton
 
 	void Awake()
 	{
-		Singleton.Get<GameplayController>().OnPause += HandleOnPause;
+		if (hasCountdownScreen) Singleton.Get<GameplayController>().OnPause += HandleOnPause;
+		else enableCountdown = false;
 
 		if (showGoText) goText = LocalizationExtensions.LocalizeText(goKey);
 		gameObject.SetActive(false);
@@ -133,5 +136,6 @@ public class UI_PopupCountdown : UI_PopupWindow, ISingleton
 	public void SetEnableCountdown(bool value)
 	{
 		enableCountdown = value;
+		if (!hasCountdownScreen) enableCountdown = false;
 	}
 }
