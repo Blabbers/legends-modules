@@ -6,7 +6,16 @@
         "GUID:6055be8ebefd69e48b49212b09b47b2f",
         "GUID:6546d7765b4165b40850b3667f981c26",
         "GUID:34cf00d3f10a8f34783a2f8b914a0219",
-        "GUID:007db7f7a4c8f944990d71603a110f82"
+        "GUID:007db7f7a4c8f944990d71603a110f82",
+        "BeauRoutine",
+        "com.bennykok.runtime-debug-action",
+        "GUID:29f48b9304d31094a8d00bf60009f2b7",
+        "GUID:c96d79b4d3a202d4da9445d3bfb27e05",
+        "NaughtyAttributes.Core",
+        "GUID:f88fb04354076c646a4107a491394033",
+        "Relay",
+        "GUID:e012a7aad727aa3409cb2876c555942d",
+        "SimplePool"
     ],
     "includePlatforms": [
         "Editor"
