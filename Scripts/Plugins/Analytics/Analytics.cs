@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Blabbers.Game00;
-using LoLSDK;
+//using LoLSDK;
 using UnityEngine;
-using UnityEngine.Analytics;
+//using UnityEngine.Analytics;
 
 namespace Blabbers
 {
@@ -178,7 +178,7 @@ namespace Blabbers
                 $"Analytics → <color=cyan>[{eventName}]</color> event was sent. With the parameters:{parameters}");
 #else
             
-            UnityEngine.Analytics.Analytics.CustomEvent(eventName, dataDictionary);
+            //UnityEngine.Analytics.Analytics.CustomEvent(eventName, dataDictionary);
 #endif
 
 

@@ -15,7 +15,7 @@ namespace Blabbers.Game00
 		public SceneReference sceneToLoadAfter;
 		public bool fadeMusicVolume = true;
 		public float musicVolume = 0.05f;
-		public PlayableDirector playableDirector;
+		//public PlayableDirector playableDirector;
 		[Header("Analytics")]
 		public string cutsceneNameKey = "cutscene-start";
 		public UnityEvent OnStart;
@@ -59,12 +59,12 @@ namespace Blabbers.Game00
 			if (value)
 			{
 				//Pause
-				playableDirector.playableGraph.GetRootPlayable(0).SetSpeed(0);
+				//playableDirector.playableGraph.GetRootPlayable(0).SetSpeed(0);
 			}
 			else
 			{
 				//Resume
-				playableDirector.playableGraph.GetRootPlayable(0).SetSpeed(1);
+				//playableDirector.playableGraph.GetRootPlayable(0).SetSpeed(1);
 			}
 		}
 
