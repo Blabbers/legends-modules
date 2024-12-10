@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 public static class StringUtility
@@ -59,5 +60,49 @@ public static class StringUtility
 		return updated;
 	}
 
+
+	public static int ConvertSceneNameToLevel(string scenePath)
+	{
+		int level = 1;
+
+		string sceneName = ConvertScenePathToName(scenePath);
+		if (!sceneName.Contains("-")) return -1;
+
+
+		string[] split = sceneName.Split("-");
+		int result = level;
+
+		string clean = RemoveNonNumericCharacters(split[1]);
+
+		if (int.TryParse(clean, out result))
+		{
+			level = result;
+		}
+
+
+		return level;
+	}
+
+	public static string ConvertScenePathToName(string path)
+	{
+		string sceneName;
+		string[] split;
+		string[] split2;
+
+		split = path.Split('/');
+		sceneName = split[split.Length - 1];
+		split2 = sceneName.Split('.');
+
+		return split2[0];
+	}
+
+	public static string RemoveNonNumericCharacters(string input)
+	{
+		if (string.IsNullOrEmpty(input))
+			return input;
+
+		// Regex to match any character that is not a digit
+		return Regex.Replace(input, "[^0-9]", "");
+	}
 
 }
