@@ -12,6 +12,7 @@ using System.Globalization;
 using UnityEngine.Events;
 using System;
 using UnityEditor;
+using TMPro;
 
 namespace Fungus
 {
@@ -129,6 +130,8 @@ namespace Fungus
         protected int readAheadStartIndex = 0;
         public WriterAudio AttachedWriterAudio { get; set; }
         public bool HasInitialized { get; private set; } = false;
+        private Color originalColor;
+
 
         protected void Awake()
         {
@@ -155,6 +158,12 @@ namespace Fungus
 
             CacheHiddenColorStrings();
             StartCoroutine(DoCheckFocus());
+
+			var text = targetTextObject.GetComponent<TextMeshProUGUI>();
+			originalColor = text.color;
+			var newColor = originalColor;
+			newColor.a = 0;
+			text.color = newColor;
 		}
 
 
@@ -1065,8 +1074,17 @@ namespace Fungus
                 yield break;
             }
 
-            // If this clip is null then WriterAudio will play the default sound effect (if any)
-            NotifyStart(audioClip);
+			StartCoroutine(routine());
+			IEnumerator routine()
+			{
+				var text = targetTextObject.GetComponent<TextMeshProUGUI>();
+				yield return new WaitForSecondsRealtime(0.1f);
+				text.color = originalColor;
+			}
+
+
+			// If this clip is null then WriterAudio will play the default sound effect (if any)
+			NotifyStart(audioClip);
 
             string tokenText = TextVariationHandler.SelectVariations(content);
             
