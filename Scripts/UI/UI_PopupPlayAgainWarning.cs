@@ -24,9 +24,10 @@ namespace Blabbers.Game00
             if (!HasClearedWithTwoStars || HasShownPlayAgainPopup) return;
             HasShownPlayAgainPopup = true;
 
-            continue_btn.interactable = false;
-            //Aparentemente a animação do motion tween resetava a posição do target sem essa linha
-            target.SetActive(false);
+            if(continue_btn=null) continue_btn.interactable = false;
+
+			//Aparentemente a animação do motion tween resetava a posição do target sem essa linha
+			target.SetActive(false);
 
             base.ShowPopup();
 
@@ -39,7 +40,7 @@ namespace Blabbers.Game00
                 yield return new WaitForSeconds(delay);
                 target.transform.position = buttons[levelId].position;
                 target.SetActive(true);
-                continue_btn.interactable = true;
+				if (continue_btn = null) continue_btn.interactable = true;
             }
         }
 
