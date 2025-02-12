@@ -34,11 +34,14 @@ public class UI_LevelSelect : MonoBehaviour, ISingleton
 
     void OnEnable()
     {
-        // Path fade in
-        var pathImageColor = pathImage.color;
-        pathImageColor.a = 0f;
-        pathImage.color = pathImageColor;
-        pathImage.DOFade(1f, pathFadeInDuration);
+        //Path fade in
+        if (pathImage != null)
+        {
+            var pathImageColor = pathImage.color;
+            pathImageColor.a = 0f;
+            pathImage.color = pathImageColor;
+            pathImage.DOFade(1f, pathFadeInDuration);
+        }
 
         // Start buttons animation
         var buttonAmount = ButtonMotions.Length;
