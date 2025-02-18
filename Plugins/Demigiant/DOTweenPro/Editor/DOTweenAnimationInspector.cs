@@ -1,4 +1,4 @@
-﻿// Author: Daniele Giardini - http://www.demigiant.com
+// Author: Daniele Giardini - http://www.demigiant.com
 // Created: 2015/03/12 16:03
 
 using System;
@@ -38,7 +38,7 @@ namespace DG.DOTweenEditor
 
         static readonly Dictionary<DOTweenAnimation.AnimationType, Type[]> _AnimationTypeToComponent = new Dictionary<DOTweenAnimation.AnimationType, Type[]>() {
             { DOTweenAnimation.AnimationType.Move, new[] {
-#if true // PHYSICS_MARKER
+#if false // PHYSICS_MARKER
                 typeof(Rigidbody),
 #endif
 #if true // PHYSICS2D_MARKER
@@ -50,7 +50,7 @@ namespace DG.DOTweenEditor
                 typeof(Transform)
             }},
             { DOTweenAnimation.AnimationType.Rotate, new[] {
-#if true // PHYSICS_MARKER
+#if false // PHYSICS_MARKER
                 typeof(Rigidbody),
 #endif
 #if true // PHYSICS2D_MARKER

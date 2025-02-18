@@ -37,8 +37,8 @@ namespace Blabbers
     [Serializable]
     public class Collider2DEvent : UnityEvent<Collider2D> { }
 
-    [Serializable]
-    public class ColliderEvent : UnityEvent<Collider> { }
+/*    [Serializable]
+    public class ColliderEvent : UnityEvent<Collider> { }*/
 
     [Serializable]
     public class ActionEvent : UnityEvent<Action> { }
