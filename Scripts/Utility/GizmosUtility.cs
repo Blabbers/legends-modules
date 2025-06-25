@@ -1,14 +1,20 @@
-﻿using Fungus;
-using Raycast.Utility;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using Fungus;
+using Raycast.Utility;
 //using System.Drawing;
 using UnityEditor;
 using UnityEngine;
 
 public static class GizmosUtility
 {
-    public static void DrawRay(Vector3 pos, Vector3 dir, Color color, float distance = 5, float radius = 0.2f)
+    public static void DrawRay(
+        Vector3 pos,
+        Vector3 dir,
+        Color color,
+        float distance = 5,
+        float radius = 0.2f
+    )
     {
         Vector3 target;
         Gizmos.color = color;
@@ -18,7 +24,13 @@ public static class GizmosUtility
         Gizmos.DrawSphere(target, radius);
     }
 
-    public static void DrawRayWithOrigin(Vector3 pos, Vector3 dir, Color color, float distance = 5, float radius = 0.2f)
+    public static void DrawRayWithOrigin(
+        Vector3 pos,
+        Vector3 dir,
+        Color color,
+        float distance = 5,
+        float radius = 0.2f
+    )
     {
         Vector3 target;
         Gizmos.color = color;
@@ -29,8 +41,13 @@ public static class GizmosUtility
         Gizmos.DrawSphere(target, radius);
     }
 
-
-    public static void DrawForce(Vector3 pos, Vector3 dir, Color color, float distance = 5, float radius = 0.2f)
+    public static void DrawForce(
+        Vector3 pos,
+        Vector3 dir,
+        Color color,
+        float distance = 5,
+        float radius = 0.2f
+    )
     {
         Vector3 target;
         Gizmos.color = color;
@@ -50,252 +67,166 @@ public static class GizmosUtility
         Gizmos.DrawSphere(end, radius);
     }
 
+    #region 3d Shapes
 
+    public static void DrawWireCube(Transform current, BoxCollider collider, Color color)
+    {
+        var scaleX = collider.size.x * current.lossyScale.x;
+        var scaleY = collider.size.y * current.lossyScale.y;
+        var scaleZ = collider.size.z * current.lossyScale.z;
 
-	#region 3d Shapes
+        var scale = new Vector3(scaleX, scaleY, scaleZ);
 
-	public static void DrawWireCube(Transform current, BoxCollider collider, Color color)
-	{
+        var rotation = current.rotation.eulerAngles;
+        var center = collider.bounds.center;
 
+        DrawWireCube(scale, center, rotation, color);
+    }
 
-
-
-
-
-		#region MyRegion
-
-		//Transform parent;
-		//Vector3 parentScale;
-
-		//parentScale = Vector3.one;
-
-
-		//if (current.parent != null)
-		//{
-		//	parent = current.parent;
-		//	parentScale = parent.lossyScale;
-
-		//}
-
-		//var scaleX = collider.size.x * parent.localScale.x * current.localScale.x;
-		//var scaleY = collider.size.y * parent.localScale.y * current.localScale.y;
-		//var scaleZ = collider.size.z * parent.localScale.z * current.localScale.z;
-
-		//var scaleX = collider.size.x * parentScale.x * current.localScale.x;
-		//var scaleY = collider.size.y * parentScale.y * current.localScale.y;
-		//var scaleZ = collider.size.z * parentScale.z * current.localScale.z; 
-
-		//var rotation = current.rotation.eulerAngles;
-		//      var center = current.position + collider.center;
-
-		//var scale = collider.bounds.size;
-
-		#endregion
-
-		var scaleX = collider.size.x * current.lossyScale.x;
-		var scaleY = collider.size.y * current.lossyScale.y;
-		var scaleZ = collider.size.z * current.lossyScale.z;
-
-		var scale = new Vector3(scaleX, scaleY, scaleZ);
-
-
-		var rotation = current.rotation.eulerAngles;
-		var center = collider.bounds.center;
-
-		DrawWireCube(scale, center, rotation,color);
-	}
-
-	public static void DrawWireCube(Vector3 scale, Vector3 center, Vector3 rotation , Color color)
+    public static void DrawWireCube(Vector3 scale, Vector3 center, Vector3 rotation, Color color)
     {
         var up = Vector3.up.Rotated(rotation);
-		var right = Vector3.right.Rotated(rotation);
-		var forward = Vector3.forward.Rotated(rotation);
+        var right = Vector3.right.Rotated(rotation);
+        var forward = Vector3.forward.Rotated(rotation);
 
+        Vector3 baseCenter,
+            upperCenter;
+        baseCenter = center - up * scale.y / 2;
+        upperCenter = center + up * scale.y / 2;
 
-		Vector3 baseCenter, upperCenter;
-		baseCenter = center - up * scale.y / 2;
-		upperCenter = center + up * scale.y / 2;
-
-
-		List<Vector3> baseVertices = GenerateRectangleVertices(scale, baseCenter, right, forward);
+        List<Vector3> baseVertices = GenerateRectangleVertices(scale, baseCenter, right, forward);
         DrawRectangle(baseVertices);
-        
-		List<Vector3> upperVertices = GenerateRectangleVertices(scale, upperCenter, right, forward);
-		DrawRectangle(upperVertices);
 
-		DrawCubeEdges(baseVertices, upperVertices);
-	}
+        List<Vector3> upperVertices = GenerateRectangleVertices(scale, upperCenter, right, forward);
+        DrawRectangle(upperVertices);
 
+        DrawCubeEdges(baseVertices, upperVertices);
+    }
 
-	public static void DrawFilledCube(Transform current, BoxCollider collider, Color fillColor, Color wireColor)
-	{
-        #region MyRegion
-        //Transform parent;
-        //      Transform gParent;
+    public static void DrawFilledCube(
+        Transform current,
+        BoxCollider collider,
+        Color fillColor,
+        Color wireColor
+    )
+    {
+        var scaleX = collider.size.x * current.lossyScale.x;
+        var scaleY = collider.size.y * current.lossyScale.y;
+        var scaleZ = collider.size.z * current.lossyScale.z;
 
-        //      Vector3 parentScale, gParentScale;
+        var scale = new Vector3(scaleX, scaleY, scaleZ);
 
-        //      parentScale = gParentScale = Vector3.one;
+        var rotation = current.rotation.eulerAngles;
+        var center = collider.bounds.center;
 
-        //if (current.parent != null)
-        //{
-        //	parent = current.parent;
-        //          parentScale = parent.localScale;
+        DrawFilledCube(scale, center, rotation, fillColor, wireColor);
+    }
 
-        //	if (parent.parent != null)
-        //	{
-        //		gParent = parent.parent;
-        //		gParentScale = parent.localScale;
-        //	}
+    public static void DrawFilledCube(
+        Vector3 scale,
+        Vector3 center,
+        Vector3 rotation,
+        Color fillColor,
+        Color wireColor
+    )
+    {
+        var up = Vector3.up.Rotated(rotation);
+        var right = Vector3.right.Rotated(rotation);
+        var forward = Vector3.forward.Rotated(rotation);
 
-        //}
+        Vector3 baseCenter,
+            upperCenter;
+        baseCenter = center - up * scale.y / 2;
+        upperCenter = center + up * scale.y / 2;
 
-
-        ////var scaleX = collider.size.x * parent.localScale.x * current.localScale.x;
-        ////var scaleY = collider.size.y * parent.localScale.y * current.localScale.y;
-        ////var scaleZ = collider.size.z * parent.localScale.z * current.localScale.z;
-
-        //var scaleX = collider.size.x * parentScale.x * gParentScale.x * current.localScale.x;
-        //var scaleY = collider.size.y * parentScale.y * gParentScale.y * current.localScale.y;
-        //var scaleZ = collider.size.z * parentScale.z * gParentScale.z * current.localScale.z;
-
-        #endregion
-
-
-  //      var scale = collider.bounds.size;
-		//var rotation = current.rotation.eulerAngles;
-  //      var center = collider.bounds.center;
-
-		#region MyRegion
-		//var scale = new Vector3(scaleX, scaleY, scaleZ);
-
-		//var rotation = current.rotation.eulerAngles;
-		//var center = current.position + collider.center; 
-		#endregion
-
-
-		var scaleX = collider.size.x * current.lossyScale.x;
-		var scaleY = collider.size.y * current.lossyScale.y;
-		var scaleZ = collider.size.z * current.lossyScale.z;
-
-		var scale = new Vector3(scaleX, scaleY, scaleZ);
-
-
-		var rotation = current.rotation.eulerAngles;
-		var center = collider.bounds.center;
-
-
-		DrawFilledCube(scale, center, rotation, fillColor, wireColor);
-	}
-
-
-
-
-
-
-	public static void DrawFilledCube(Vector3 scale, Vector3 center, Vector3 rotation, Color fillColor, Color wireColor)
-	{
-		var up = Vector3.up.Rotated(rotation);
-		var right = Vector3.right.Rotated(rotation);
-		var forward = Vector3.forward.Rotated(rotation);
-
-
-		Vector3 baseCenter, upperCenter;
-		baseCenter = center - up * scale.y / 2;
-		upperCenter = center + up * scale.y / 2;
-
-
-		List<Vector3> baseVertices = GenerateRectangleVertices(scale, baseCenter, right, forward);
-		//DrawRectangle(baseVertices);
-
-		List<Vector3> upperVertices = GenerateRectangleVertices(scale, upperCenter, right, forward);
-        //DrawRectangle(upperVertices);
+        List<Vector3> baseVertices = GenerateRectangleVertices(scale, baseCenter, right, forward);
+        List<Vector3> upperVertices = GenerateRectangleVertices(scale, upperCenter, right, forward);
 
 #if UNITY_EDITOR
         Handles.DrawSolidRectangleWithOutline(baseVertices.ToArray(), fillColor, wireColor);
-		Handles.DrawSolidRectangleWithOutline(upperVertices.ToArray(), fillColor, wireColor);
+        Handles.DrawSolidRectangleWithOutline(upperVertices.ToArray(), fillColor, wireColor);
 #endif
 
         DrawSideRectangles(baseVertices, upperVertices, fillColor, wireColor);
-		//DrawCubeEdges(baseVertices, upperVertices);
-	}
-	static void DrawSideRectangles(List<Vector3> basePoints, List<Vector3> upperPoints, Color fillColor, Color wireColor)
-	{
-        List<Vector3> rect1, rect2, rect3, rect4;
+    }
+
+    static void DrawSideRectangles(
+        List<Vector3> basePoints,
+        List<Vector3> upperPoints,
+        Color fillColor,
+        Color wireColor
+    )
+    {
+        List<Vector3> rect1,
+            rect2,
+            rect3,
+            rect4;
 
         rect1 = new List<Vector3>();
         rect1.Add(basePoints[0]);
-		rect1.Add(basePoints[1]);
-		rect1.Add(upperPoints[1]);
-		rect1.Add(upperPoints[0]);
+        rect1.Add(basePoints[1]);
+        rect1.Add(upperPoints[1]);
+        rect1.Add(upperPoints[0]);
 
+        rect2 = new List<Vector3>();
+        rect2.Add(basePoints[1]);
+        rect2.Add(basePoints[2]);
+        rect2.Add(upperPoints[2]);
+        rect2.Add(upperPoints[1]);
 
+        rect3 = new List<Vector3>();
+        rect3.Add(basePoints[2]);
+        rect3.Add(basePoints[3]);
+        rect3.Add(upperPoints[3]);
+        rect3.Add(upperPoints[2]);
 
-		rect2 = new List<Vector3>();
-		rect2.Add(basePoints[1]);
-		rect2.Add(basePoints[2]);
-		rect2.Add(upperPoints[2]);
-		rect2.Add(upperPoints[1]);
-
-
-
-		rect3 = new List<Vector3>();
-		rect3.Add(basePoints[2]);
-		rect3.Add(basePoints[3]);
-		rect3.Add(upperPoints[3]);
-		rect3.Add(upperPoints[2]);
-
-
-
-		rect4 = new List<Vector3>();
-		rect4.Add(basePoints[3]);
-		rect4.Add(basePoints[0]);
-		rect4.Add(upperPoints[0]);
-		rect4.Add(upperPoints[3]);
-
+        rect4 = new List<Vector3>();
+        rect4.Add(basePoints[3]);
+        rect4.Add(basePoints[0]);
+        rect4.Add(upperPoints[0]);
+        rect4.Add(upperPoints[3]);
 
 #if UNITY_EDITOR
-		Handles.DrawSolidRectangleWithOutline(rect1.ToArray(), fillColor, wireColor);
-		Handles.DrawSolidRectangleWithOutline(rect2.ToArray(), fillColor, wireColor);
-		Handles.DrawSolidRectangleWithOutline(rect3.ToArray(), fillColor, wireColor);
-		Handles.DrawSolidRectangleWithOutline(rect4.ToArray(), fillColor, wireColor);
+        Handles.DrawSolidRectangleWithOutline(rect1.ToArray(), fillColor, wireColor);
+        Handles.DrawSolidRectangleWithOutline(rect2.ToArray(), fillColor, wireColor);
+        Handles.DrawSolidRectangleWithOutline(rect3.ToArray(), fillColor, wireColor);
+        Handles.DrawSolidRectangleWithOutline(rect4.ToArray(), fillColor, wireColor);
 #endif
+    }
 
-
-	}
-
-
-
-	static void DrawRectangle(List<Vector3> points)
-	{
-        for (int i = 0; i < points.Count-1; i++)
+    static void DrawRectangle(List<Vector3> points)
+    {
+        for (int i = 0; i < points.Count - 1; i++)
         {
             Gizmos.DrawLine(points[i], points[i + 1]);
         }
 
-		Gizmos.DrawLine(points[points.Count-1], points[0]);
-	}
+        Gizmos.DrawLine(points[points.Count - 1], points[0]);
+    }
 
-	static List<Vector3> GenerateRectangleVertices(Vector3 scale, Vector3 center, Vector3 right, Vector3 forward)
+    static List<Vector3> GenerateRectangleVertices(
+        Vector3 scale,
+        Vector3 center,
+        Vector3 right,
+        Vector3 forward
+    )
     {
         List<Vector3> vertices = new List<Vector3>();
         Vector3 current;
 
-		current = center + (forward * scale.z / 2) + (-right * scale.x / 2);
-		vertices.Add(current);
+        current = center + (forward * scale.z / 2) + (-right * scale.x / 2);
+        vertices.Add(current);
 
-		current = center + (forward * scale.z / 2) + (right * scale.x / 2);
-		vertices.Add(current);
-
+        current = center + (forward * scale.z / 2) + (right * scale.x / 2);
+        vertices.Add(current);
 
         current = center + (-forward * scale.z / 2) + (right * scale.x / 2);
-		vertices.Add(current);
+        vertices.Add(current);
 
-		current = center + (-forward * scale.z / 2) + (-right * scale.x / 2);
-		vertices.Add(current);
+        current = center + (-forward * scale.z / 2) + (-right * scale.x / 2);
+        vertices.Add(current);
 
-		return vertices;
-
+        return vertices;
     }
 
     static void DrawCubeEdges(List<Vector3> basePoints, List<Vector3> upperPoints)
@@ -306,12 +237,43 @@ public static class GizmosUtility
         }
     }
 
+    #endregion
 
+    #region 2d Shapes
 
-	#endregion
+    public static void DrawWireRectangle2d(Vector2 center, Vector2 scale, float angle, Color color)
+    {
+        var rotation = new Vector3(0, 0, angle);
 
-	#region 2d Shapes
-	public static void DrawRectangle(Vector3 center, Vector2 dimensions, Color color, Vector2 offset, float alpha = 1.0f)
+        var up = Vector3.up.Rotated(rotation);
+        var right = Vector3.right.Rotated(rotation);
+        var forward = Vector3.forward.Rotated(rotation);
+
+        Vector3 center3d = new Vector3(center.x, center.y, 0);
+
+        Vector3 baseCenter,
+            upperCenter;
+        baseCenter = center3d - up * scale.y / 2;
+        upperCenter = center3d + up * scale.y / 2;
+
+        Gizmos.color = color;
+
+        List<Vector3> baseVertices = GenerateRectangleVertices(scale, baseCenter, right, forward);
+        DrawRectangle(baseVertices);
+
+        List<Vector3> upperVertices = GenerateRectangleVertices(scale, upperCenter, right, forward);
+        DrawRectangle(upperVertices);
+
+        DrawCubeEdges(baseVertices, upperVertices);
+    }
+
+    public static void DrawRectangle(
+        Vector3 center,
+        Vector2 dimensions,
+        Color color,
+        Vector2 offset,
+        float alpha = 1.0f
+    )
     {
         Vector3 adjustedCenter;
         Gizmos.color = new Color(color.r, color.g, color.b, color.a * alpha);
@@ -320,29 +282,39 @@ public static class GizmosUtility
         Gizmos.DrawCube(adjustedCenter, dimensions);
     }
 
-	public static void DrawSphere(Vector3 center, float radius, Color color, Vector3 offset, float alpha = 1.0f)
-	{
-		Vector3 adjustedCenter;
-		Gizmos.color = new Color(color.r, color.g, color.b, color.a * alpha);
+    public static void DrawSphere(
+        Vector3 center,
+        float radius,
+        Color color,
+        Vector3 offset,
+        float alpha = 1.0f
+    )
+    {
+        Vector3 adjustedCenter;
+        Gizmos.color = new Color(color.r, color.g, color.b, color.a * alpha);
 
-		adjustedCenter = new Vector3(center.x + offset.x, center.y + offset.y, center.z);
-		
-		Gizmos.DrawSphere(adjustedCenter, radius);
-	}
+        adjustedCenter = new Vector3(center.x + offset.x, center.y + offset.y, center.z);
 
+        Gizmos.DrawSphere(adjustedCenter, radius);
+    }
 
-	public static void DrawWireRectangle(Vector3 center, Vector2 dimensions, Color color, Vector2 offset)
+    public static void DrawWireRectangle(
+        Vector3 center,
+        Vector2 dimensions,
+        Color color,
+        Vector2 offset
+    )
     {
         Vector3 adjustedCenter;
         adjustedCenter = new Vector3(center.x + offset.x, center.y + offset.y, center.z);
 
         DrawWireRectangle(adjustedCenter, dimensions, color);
-
     }
 
     static void DrawWireRectangle(Vector3 center, Vector2 dimensions, Color color)
     {
-        Vector3 origin, edge;
+        Vector3 origin,
+            edge;
         Gizmos.color = color;
 
         origin = new Vector3(center.x - dimensions.x / 2, center.y - dimensions.y / 2, 0);
@@ -354,20 +326,29 @@ public static class GizmosUtility
         Gizmos.DrawLine(edge, new Vector3(origin.x, origin.y + dimensions.y, origin.z));
         Gizmos.DrawLine(edge, new Vector3(origin.x + dimensions.x, origin.y, origin.z));
     }
-	#endregion
+    #endregion
 
-	public static void DrawLimiters_Height(Vector2 limiters, Vector3 center, Vector3 size, Color color)
-	{
-		Gizmos.color = color;
+    public static void DrawLimiters_Height(
+        Vector2 limiters,
+        Vector3 center,
+        Vector3 size,
+        Color color
+    )
+    {
+        Gizmos.color = color;
 
-		Vector3 extremeTop = center + Vector3.up * limiters.x;
-		Vector3 extremeBot = center + Vector3.down * limiters.y;
+        Vector3 extremeTop = center + Vector3.up * limiters.x;
+        Vector3 extremeBot = center + Vector3.down * limiters.y;
 
-		Gizmos.DrawCube(extremeTop, size);
-		Gizmos.DrawCube(extremeBot, size);
-	}
+        Gizmos.DrawCube(extremeTop, size);
+        Gizmos.DrawCube(extremeBot, size);
+    }
 
-	public static void DrawRaycastData3D(RaycastData3d data, float pointRadius = 0.2f ,bool hasOrigin = false)
+    public static void DrawRaycastData3D(
+        RaycastData3d data,
+        float pointRadius = 0.2f,
+        bool hasOrigin = false
+    )
     {
         if (!hasOrigin)
         {
@@ -375,13 +356,12 @@ public static class GizmosUtility
             return;
         }
 
-
         DrawRayWithOrigin(data.GetOrigin(), data.direction, data.color, data.Range, pointRadius);
     }
 
     public enum RaycastRayType
     {
-        Check, Force
+        Check,
+        Force,
     }
-
 }
