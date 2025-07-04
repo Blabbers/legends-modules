@@ -33,7 +33,7 @@ namespace Blabbers.Game00
         {
             if (
                 !UI_RetryButton.HardReset
-                && (scene.name.Contains("level") || scene.name.Contains("Level"))
+                && scene.name.Contains("level")
                 && !scene.name.Equals("level-select")
             )
             {
@@ -107,35 +107,8 @@ namespace Blabbers.Game00
         public void LoadGameLevel(int level)
         {
             ProgressController.GameProgress.currentLevelId = level - 1;
-            bool foundScene = CheckIfLevelExists($"Level {level}");
-            if (foundScene)
-            {
-                LoadScene($"Level {level}");
-            }
-            else
-            {
-                LoadScene($"level-{level}");
-            }
-        }
-
-        bool CheckIfLevelExists(string targeScene)
-        {
-            string pathName;
-            string sceneName;
-            for (int i = 0; i < SceneManager.sceneCountInBuildSettings; i++)
-            {
-                pathName = SceneUtility.GetScenePathByBuildIndex(i);
-                sceneName = ConvertScenePathToName(pathName);
-                //Debug.Log($"LoadGameLevel: [{pathName}] [{sceneName}]");
-
-                if (sceneName == targeScene)
-                {
-                    LoadScene(targeScene);
-                    return true;
-                }
-            }
-
-            return false;
+            //SceneManager.LoadScene($"level-{level}");
+            LoadScene($"level-{level}");
         }
 
         public void LoadLevelSelectScene()
