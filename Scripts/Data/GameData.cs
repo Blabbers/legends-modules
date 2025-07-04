@@ -1,7 +1,7 @@
-﻿using BennyKok.RuntimeDebug.Utils;
+﻿using System.Collections.Generic;
+using BennyKok.RuntimeDebug.Utils;
 using Blabbers.Game00;
 using NaughtyAttributes;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class GameData : ScriptableObject
@@ -12,13 +12,14 @@ public class GameData : ScriptableObject
     {
         get
         {
-            if (!_instance) _instance = Resources.Load<GameData>("GameData");
+            if (!_instance)
+                _instance = Resources.Load<GameData>("GameData");
             return _instance;
         }
     }
-	#endregion
+    #endregion
 
-	public void OnEnable()
+    public void OnEnable()
     {
         Application.runInBackground = false;
         SharedState.maxProgress = maxProgress;
@@ -32,57 +33,66 @@ public class GameData : ScriptableObject
     // Progress should be a minimum of 8
     [Title("Platform Settings", 0)]
     [Comment("Mandatory settings for LL's build.", order = 1)]
-    public int maxProgress = 8;    
-    public int totalLevels = 3;    
+    public int maxProgress = 8;
+    public int totalLevels = 3;
     public string applicationID = "com.blabbers.gameName";
-    
+
+    [Title("Other Settings", 0)]
+    public bool alwaysShow3Stars = false;
+
     [Title("Text Configs", 0)]
-	public string currentSelectedLangCode = "en";
-	[ReadOnly, Expandable] public StringVar keyCodesGuide;
+    public string currentSelectedLangCode = "en";
 
-	[ReorderableList]
-    [Tooltip("Adjust the KeyCodes that are important to be highlighted in this project.", order = 1)]
-	public LocalizationKeyCode[] textConfigs;
+    [ReadOnly, Expandable]
+    public StringVar keyCodesGuide;
 
-	[Tooltip("Everytime a level finishes it automatically goes to the level select scene. If you populate this list, you can override this behaviour and go to a simulation screen instead for example.")]
+    [ReorderableList]
+    [Tooltip(
+        "Adjust the KeyCodes that are important to be highlighted in this project.",
+        order = 1
+    )]
+    public LocalizationKeyCode[] textConfigs;
+
+    [Tooltip(
+        "Everytime a level finishes it automatically goes to the level select scene. If you populate this list, you can override this behaviour and go to a simulation screen instead for example."
+    )]
     [ReorderableList]
     public SceneToLoad[] levelSelectOverrideScenes;
 
-	[Tooltip("Scenes that when entered or exited will trigger a loading screen first")]
-	[ReorderableList]
-	public SceneReference[] scenesWithLoadingScreen;
+    [Tooltip("Scenes that when entered or exited will trigger a loading screen first")]
+    [ReorderableList]
+    public SceneReference[] scenesWithLoadingScreen;
 
-	[Tooltip("Hints/Learning that will be displayed on the loading screen before a scene")]
-	[ReorderableList]
-	public LoadingHint[] loadingHints;
+    [Tooltip("Hints/Learning that will be displayed on the loading screen before a scene")]
+    [ReorderableList]
+    public LoadingHint[] loadingHints;
 
-
-	[System.Serializable]
+    [System.Serializable]
     public struct SceneToLoad
-	{
+    {
         public SceneReference previousScene;
         public SceneReference targetScene;
-	}
+    }
 
-	[System.Serializable]
-	public struct LoadingHint
-	{
-		public string hintKey;
-		public SceneReference nextScene;
-      
-	}
+    [System.Serializable]
+    public struct LoadingHint
+    {
+        public string hintKey;
+        public SceneReference nextScene;
+    }
 
-
-	private GameProgress progress;    
+    private GameProgress progress;
     public GameProgress Progress => this.progress;
+
     public void SetProgressData(GameProgress newProgressData)
-	{
+    {
         progress = newProgressData;
     }
 
     //Fields for debugging only.
     [ShowNativeProperty]
     public bool IsStuckOnThisLevel => SceneLoader.isStuckOnThisLevel;
+
     [ShowNativeProperty]
     public bool HardReset => UI_RetryButton.HardReset;
 
@@ -145,9 +155,9 @@ public class GameProgress
     public bool enableAutomaticTTS = true;
 
     public Customization[] customizations;
-	public Choice[] choices;
+    public Choice[] choices;
 
-	public bool AllLevelsWith3Stars()
+    public bool AllLevelsWith3Stars()
     {
         foreach (var level in levels)
         {
@@ -180,9 +190,9 @@ public class GameProgress
 
     public Choice GetChoice(string key)
     {
-        foreach(var choice in choices)
+        foreach (var choice in choices)
         {
-            if(choice.key == key)
+            if (choice.key == key)
             {
                 return choice;
             }
@@ -190,7 +200,6 @@ public class GameProgress
 
         return null;
     }
-
 }
 
 [System.Serializable]
@@ -215,7 +224,7 @@ public class Customization
 [System.Serializable]
 public class Choice
 {
-	// Info for each specific level instance
-	public string key;
-	public int selectedId;
+    // Info for each specific level instance
+    public string key;
+    public int selectedId;
 }
