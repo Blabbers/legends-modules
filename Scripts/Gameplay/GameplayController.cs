@@ -194,48 +194,42 @@ namespace Blabbers.Game00
 
                 // Star system based on gameplay rules
                 var stars = new VictoryStar[3];
+                // Default star
                 stars[0] = new VictoryStar(true, "star_finishTheLevel");
 
-                if (GameData.Instance.alwaysShow3Stars)
+                #region Question
+                var popupQuestion = Singleton.Get<UI_PopupQuestion>();
+                var questionWasShown = popupQuestion && popupQuestion.QuestionWasAnsweredThisLevel;
+                // Extra star based on question
+                if (questionWasShown)
                 {
-                    stars[1] = new VictoryStar(true, "star_correctAnswer");
-                    stars[2] = new VictoryStar(true, "star_dontRepeatLevel");
+                    var correct = popupQuestion.ChoseCorrectly;
+                    stars[1] = new VictoryStar(correct, "star_correctAnswer");
                 }
                 else
                 {
-                    // Default star
+                    stars[1] = new VictoryStar(true, "star_correctAnswer");
+                }
+                #endregion
 
-                    #region Question
-                    var popupQuestion = Singleton.Get<UI_PopupQuestion>();
-                    var questionWasShown =
-                        popupQuestion && popupQuestion.QuestionWasAnsweredThisLevel;
-                    // Extra star based on question
-                    if (questionWasShown)
-                    {
-                        var correct = popupQuestion.ChoseCorrectly;
-                        stars[1] = new VictoryStar(correct, "star_correctAnswer");
-                    }
-                    else
-                    {
-                        stars[1] = new VictoryStar(true, "star_correctAnswer");
-                    }
-                    #endregion
+                //var correct = Singleton.Get<GameStatusController>().CheckIfAnyFireLeft();
+                //stars[1] = new VictoryStar(correct, "star_putOutAllFires");
 
-                    // Star for finishing the level at first try. Ignore this for the first 2 levels
-                    if (currentLevel > 2)
-                    {
-                        stars[2] = new VictoryStar(
-                            !SceneLoader.isStuckOnThisLevel,
-                            "star_dontRepeatLevel"
-                        );
-                    }
-                    else
-                    {
-                        stars[2] = new VictoryStar(true, "star_dontRepeatLevel");
-                    }
+                // Star for finishing the level at first try. Ignore this for the first 2 levels
+                if (currentLevel > 2)
+                {
+                    stars[2] = new VictoryStar(
+                        !SceneLoader.isStuckOnThisLevel,
+                        "star_dontRepeatLevel"
+                    );
+                }
+                else
+                {
+                    stars[2] = new VictoryStar(true, "star_dontRepeatLevel");
                 }
 
                 yield return new WaitForSeconds(1f);
+
                 // Finally shows the victory popup screen
                 Singleton
                     .Get<UI_PopupVictoryScreen>()
