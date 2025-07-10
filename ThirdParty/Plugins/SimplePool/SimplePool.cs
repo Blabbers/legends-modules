@@ -7,38 +7,37 @@
 ///   UPDATES:
 ///     2020-07-09: - Fixed a Bug with already inactive members getting Despawned again. thx AndySum (see: https://gist.github.com/Draugor/00f2a47e5f649945fe4466dea7697024#gistcomment-2642441)
 ///     2020-06-30: - made the "parent" parameter avaible in the public API to spawn GameObjects as children
-///     2018-01-04: - Added Extension Method for Despawn on GameObjects 
+///     2018-01-04: - Added Extension Method for Despawn on GameObjects
 ///                 - Changed the Member Lookup so it doesn't require a PoolMemberComponent anymore.
 ///                     - for that i added a HashSet which contains all PoolMemberIDs  (HashSet has O(1) contains operator)
 ///                 - Changed PoolDictionary from (Prefab, Pool) to (int, Pool) using Prefab.GetInstanceID
 /// 	2015-04-16: Changed Pool to use a Stack generic.
-/// 
+///
 /// Usage:
-/// 
+///
 ///   There's no need to do any special setup of any kind.
-/// 
+///
 ///   Instead of calling Instantiate(), use this:
 ///       SimplePool.Spawn(somePrefab, somePosition, someRotation);
-/// 
+///
 ///   Instead of destroying an object, use this:
 ///       SimplePool.Despawn(myGameObject);
 ///   or this:
 ///       myGameObject.Despawn();
-/// 
+///
 ///   If desired, you can preload the pool with a number of instances:
 ///       SimplePool.Preload(somePrefab, 20);
-/// 
+///
 /// Remember that Awake and Start will only ever be called on the first instantiation
 /// and that member variables won't be reset automatically.  You should reset your
 /// object yourself after calling Spawn().  (i.e. You'll have to do things like set
 /// the object's HPs to max, reset animation states, etc...)
-/// 
-/// 
-/// 
-
-using UnityEngine;
+///
+///
+///
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEngine;
 
 public static class SimplePool
 {
@@ -58,15 +57,18 @@ public static class SimplePool
         // We append an id to the name of anything we instantiate.
         // This is purely cosmetic.
         private int _nextId = 1;
+
         // The structure containing our inactive objects.
         // Why a Stack and not a List? Because we'll never need to
         // pluck an object from the start or middle of the array.
         // We'll always just grab the last one, which eliminates
         // any need to shuffle the objects around in memory.
         private readonly Stack<GameObject> _inactive;
-        //A Hashset which contains all GetInstanceIDs from the instantiated GameObjects 
+
+        //A Hashset which contains all GetInstanceIDs from the instantiated GameObjects
         //so we know which GameObject is a member of this pool.
         public readonly HashSet<int> MemberIDs;
+
         // The prefab that we are pooling
         private readonly GameObject _prefab;
 
@@ -123,20 +125,18 @@ public static class SimplePool
         // Return an object to the inactive pool.
         public void Despawn(GameObject obj)
         {
-
             if (obj.activeInHierarchy)
             {
                 obj.SetActive(false);
 
                 // Since Stack doesn't have a Capacity member, we can't control
                 // the growth factor if it does have to expand an internal array.
-                // On the other hand, it might simply be using a linked list 
+                // On the other hand, it might simply be using a linked list
                 // internally.  But then, why does it allow us to specify a size
                 // in the constructor? Maybe it's a placebo? Stack is weird.
                 _inactive.Push(obj);
             }
         }
-
     }
 
     // All of our pools
@@ -152,7 +152,7 @@ public static class SimplePool
 
         if (prefab != null)
         {
-            //changed from (prefab, Pool) to (int, Pool) which should be faster if we have 
+            //changed from (prefab, Pool) to (int, Pool) which should be faster if we have
             //many different prefabs.
             var prefabID = prefab.GetInstanceID();
             if (!_pools.ContainsKey(prefabID))
@@ -188,18 +188,23 @@ public static class SimplePool
     /// after spawning -- but remember that toggling IsActive will also
     /// call that function.
     /// </summary>
-    static public GameObject Spawn(GameObject prefab, Vector3 pos, Quaternion rot, Transform parent = null)
+    static public GameObject Spawn(
+        GameObject prefab,
+        Vector3 pos,
+        Quaternion rot,
+        Transform parent = null
+    )
     {
         Init(prefab);
 
         return _pools[prefab.GetInstanceID()].Spawn(pos, rot, parent);
     }
-    
-    static public GameObject Spawn(GameObject prefab, Transform parent = null)
+
+    public static GameObject Spawn(GameObject prefab, Transform parent = null)
     {
         return Spawn(prefab, prefab.transform.position, prefab.transform.rotation, parent);
     }
-    
+
     /// <summary>
     /// Despawn the specified gameobject back into its pool.
     /// </summary>
@@ -217,7 +222,9 @@ public static class SimplePool
 
         if (p == null)
         {
-            Debug.LogWarning("Object '" + obj.name + "' wasn't spawned from a pool. Destroying it instead.");
+            Debug.LogWarning(
+                "Object '" + obj.name + "' wasn't spawned from a pool. Destroying it instead."
+            );
             GameObject.Destroy(obj);
         }
         else
@@ -225,12 +232,45 @@ public static class SimplePool
             p.Despawn(obj);
         }
     }
+
+    public static void Despawn(GameObject obj, float delay)
+    {
+        if (delay > 0)
+        {
+            obj.Despawn(delay);
+        }
+        else
+        {
+            Despawn(obj);
+        }
+    }
 }
 
 public static class SimplePoolGameObjectExtensions
 {
-    public static void Despawn(this GameObject go)
+    public static void Despawn(this GameObject go, float delay = 0)
     {
-        SimplePool.Despawn(go);
+        // If a delay is specified, we can use a coroutine to wait before despawning.
+        if (delay > 0)
+        {
+            DespawnAsync(go, delay);
+        }
+        else
+        {
+            SimplePool.Despawn(go);
+        }
+    }
+
+    private static async Task DespawnAsync(this GameObject go, float delay = 0)
+    {
+        if (delay > 0)
+        {
+            await Task.Delay((int)(delay * 1000f)); // delay is in seconds, convert to ms
+            SimplePool.Despawn(go);
+        }
+        else
+        {
+            SimplePool.Despawn(go);
+        }
     }
 }
