@@ -20,6 +20,9 @@ namespace Blabbers.Game00
         public bool hasAnimation = false;
 
         [BoxGroup("Level Config")]
+        public bool alwaysForce3Stars = false;
+
+        [BoxGroup("Level Config")]
         public CharacterSay initialDialogue;
 
         [BoxGroup("Level Config")]
@@ -201,7 +204,7 @@ namespace Blabbers.Game00
                 var popupQuestion = Singleton.Get<UI_PopupQuestion>();
                 var questionWasShown = popupQuestion && popupQuestion.QuestionWasAnsweredThisLevel;
                 // Extra star based on question
-                if (questionWasShown)
+                if (!alwaysForce3Stars &&  questionWasShown)
                 {
                     var correct = popupQuestion.ChoseCorrectly;
                     stars[1] = new VictoryStar(correct, "star_correctAnswer");
@@ -216,7 +219,7 @@ namespace Blabbers.Game00
                 //stars[1] = new VictoryStar(correct, "star_putOutAllFires");
 
                 // Star for finishing the level at first try. Ignore this for the first 2 levels
-                if (currentLevel > 2)
+                if (!alwaysForce3Stars && currentLevel > 2)
                 {
                     stars[2] = new VictoryStar(
                         !SceneLoader.isStuckOnThisLevel,
