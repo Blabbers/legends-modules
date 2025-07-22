@@ -58,6 +58,15 @@ namespace Fungus
         [SerializeField]
         protected Sprite portrait;
 
+        public void RefreshPortrait()
+        {
+            // Refresh only if theres only one portrait
+            if (character.Portraits != null && character.Portraits.Count == 1)
+            {
+                portrait = GetPortraits()[0];
+            }
+        }
+
         private List<Sprite> GetPortraits() => character != null ? character.Portraits : null;
 
         private bool HasNoCharacter() => character == null;
@@ -99,6 +108,11 @@ namespace Fungus
         {
             get { return portrait; }
             set { portrait = value; }
+        }
+
+        void OnEnable()
+        {
+            RefreshPortrait();
         }
 
         public override void OnEnter()

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Fungus.EditorUtils
 {
-    [CustomEditor (typeof(Say))]
+    [CustomEditor(typeof(Say))]
     public class SayEditor : CommandEditor
     {
         protected SerializedProperty characterProp;
@@ -17,16 +17,21 @@ namespace Fungus.EditorUtils
             base.OnEnable();
 
             //characterProp = serializedObject.FindProperty("character");
-            portraitProp = serializedObject.FindProperty("portrait");            
+            portraitProp = serializedObject.FindProperty("portrait");
         }
-        
-        public override void DrawCommandGUI() 
+
+        public override void DrawCommandGUI()
         {
             base.DrawCommandGUI();
-            
+
             var sprite = ((Sprite)portraitProp.objectReferenceValue);
-			var texture = AssetPreview.GetAssetPreview(sprite);
-			GUILayout.Label(texture);            
-		}
+            var texture = AssetPreview.GetAssetPreview(sprite);
+            GUILayout.Label(texture);
+
+            if (GUILayout.Button("Refresh Portrait"))
+            {
+                ((Say)target).RefreshPortrait();
+            }
+        }
     }
 }
