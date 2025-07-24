@@ -61,9 +61,22 @@ namespace Fungus
         public void RefreshPortrait()
         {
             // Refresh only if theres only one portrait
-            if (character.Portraits != null && character.Portraits.Count == 1)
+            if (character.Portraits != null)
             {
-                portrait = GetPortraits()[0];
+                var currentPortraitIsListed = false;
+                for (int i = 0; i < character.Portraits.Count; i++)
+                {
+                    var otherPortrait = character.Portraits[i];
+                    if (otherPortrait == portrait)
+                    {
+                        currentPortraitIsListed = true;
+                        break;
+                    }
+                }
+                if (!currentPortraitIsListed || character.Portraits.Count == 1)
+                {
+                    portrait = GetPortraits()[0];
+                }
             }
         }
 
