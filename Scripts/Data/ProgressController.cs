@@ -1,10 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using LoLSDK;
+using Sigtrap.Relays;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using LoLSDK;
-using System;
-using Sigtrap.Relays;
 using static UnityEngine.AudioSettings;
 
 namespace Blabbers.Game00
@@ -12,41 +12,37 @@ namespace Blabbers.Game00
     public class ProgressController : MonoBehaviour, ISingleton
     {
         private GameData gameData => GameData.Instance;
-		public static GameProgress GameProgress => GameData.Instance.Progress;
-		public static bool enableAutomaticTTS = true;
+        public static GameProgress GameProgress => GameData.Instance.Progress;
+        public static bool enableAutomaticTTS = true;
 
-
-
-		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-		static void Init()
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void Init()
         {
             enableAutomaticTTS = false;
-		}
-
-
-		private void Awake()
-        {
-            SceneManager.sceneLoaded += HandleSceneLoaded;            
         }
 
-        void ISingleton.OnCreated()
+        private void Awake()
         {
+            SceneManager.sceneLoaded += HandleSceneLoaded;
         }
+
+        void ISingleton.OnCreated() { }
 
         private void HandleSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            if (GameProgress == null) return;
+            if (GameProgress == null)
+                return;
 
-			// If on a level, set its score to zero?
-			if (GameProgress.currentLevelId < GameProgress.levels.Length)
+            // If on a level, set its score to zero?
+            if (GameProgress.currentLevelId < GameProgress.levels.Length)
                 GameProgress.CurrentLevel.score = 0;
         }
 
         private void Start()
         {
             StateInitialize(OnLoad);
-			// Used for player feedback. Not required by SDK.
-			LOLSDK.Instance.SaveResultReceived += OnSaveResult;
+            // Used for player feedback. Not required by SDK.
+            LOLSDK.Instance.SaveResultReceived += OnSaveResult;
         }
 
         private void OnDestroy()
@@ -98,15 +94,15 @@ namespace Blabbers.Game00
         /// </summary>
         public void OnLoad(GameProgress loadedData)
         {
-			// Overrides serialized state data or continues with editor serialized values.
-			if (loadedData != null)
+            // Overrides serialized state data or continues with editor serialized values.
+            if (loadedData != null)
             {
-				gameData.SetProgressData(loadedData);
+                gameData.SetProgressData(loadedData);
                 gameData.Progress.isNewGame = false;
             }
             else
             {
-				CreateNewGameData();
+                CreateNewGameData();
             }
         }
 
@@ -119,8 +115,7 @@ namespace Blabbers.Game00
             gameData.SetProgressData(new GameProgress());
             gameData.Progress.Initialize(gameData.totalLevels);
             gameData.Progress.enableAutomaticTTS = enableAutomaticTTS;
-
-		}
+        }
 
         /// <summary>
         /// Helper to handle your required NEW GAME and CONTINUE buttons.
@@ -129,32 +124,33 @@ namespace Blabbers.Game00
         /// <para>NOTE: This is just a helper method, you can implement this flow yourself but it must send Progress when the state loads.</para>
         /// </summary>
         public Action<GameProgress> OnGameDataLoaded;
+
         public void StateInitialize(Action<GameProgress> callback)
         {
-			try
+            try
             {
-				// Check for valid state data, from server or fallback local ( PlayerPrefs )
-				LOLSDK.Instance.LoadState<GameProgress>(state =>
+                // Check for valid state data, from server or fallback local ( PlayerPrefs )
+                LOLSDK.Instance.LoadState<GameProgress>(state =>
                 {
                     if (state != null)
                     {
                         if (state.data.HasFinishedTheGame)
                         {
-							callback(null);
+                            callback(null);
                             OnGameDataLoaded?.Invoke(null);
                         }
                         else
                         {
                             // If we have a partial state of a saved game, then we load it
-							callback(state.data);
-							OnGameDataLoaded?.Invoke(state.data);
-						}
-						// Broadcast saved progress back to the teacher app.
+                            callback(state.data);
+                            OnGameDataLoaded?.Invoke(state.data);
+                        }
+                        // Broadcast saved progress back to the teacher app.
                         SubmitProgress();
                     }
                     else
                     {
-						callback(null);
+                        callback(null);
                         OnGameDataLoaded(null);
                     }
                 });
@@ -163,10 +159,10 @@ namespace Blabbers.Game00
             {
                 Debug.Log("[Could not LOAD save state] " + e);
             }
-		}
+        }
         #endregion
 
-        #region GameManagerFunctions 
+        #region GameManagerFunctions
         /// <summary>
         /// Finishes the level going to the level select screen, enabling the next level.
         /// This is called on the "Continue" button UI event, inside every level.
@@ -189,6 +185,7 @@ namespace Blabbers.Game00
         /// Finishes the game and sends the message to the LOL platform.
         /// </summary>
         private bool isGameFinished = false;
+
         public void FinishGame()
         {
             if (LoLSDK.LOLSDK.Instance.IsInitialized)
@@ -201,6 +198,7 @@ namespace Blabbers.Game00
                 Singleton.Get<ProgressController>().isGameFinished = true;
             }
         }
+
         /// <summary>
         /// Submit progress informing the LOL platform that the student advanced.
         /// </summary>
@@ -208,10 +206,17 @@ namespace Blabbers.Game00
         {
             if (LOLSDK.Instance && LOLSDK.Instance.IsInitialized)
             {
-                LOLSDK.Instance.SubmitProgress(GameProgress.score, GameProgress.currentProgress, SharedState.maxProgress);
+                LOLSDK.Instance.SubmitProgress(
+                    GameProgress.score,
+                    GameProgress.currentProgress,
+                    SharedState.maxProgress
+                );
             }
-            Debug.Log("[Current Progress] " + GameProgress.currentProgress + "/" + SharedState.maxProgress);
+            Debug.Log(
+                "[Current Progress] " + GameProgress.currentProgress + "/" + SharedState.maxProgress
+            );
         }
+
         /// <summary>
         /// Adds 1 progress to the game SharedState.
         /// </summary>
@@ -231,6 +236,7 @@ namespace Blabbers.Game00
         }
 
         public static readonly Relay<int> OnLevelScoreChanged = new Relay<int>();
+
         /// <summary>
         /// Adds X score to the game SharedState and to current level score.
         /// </summary>
@@ -239,6 +245,8 @@ namespace Blabbers.Game00
         {
             GameProgress.score += amount;
             GameProgress.CurrentLevel.score += amount;
+
+            Debug.Log("[Current Score] " + GameProgress.score);
 
             OnLevelScoreChanged?.Invoke(GameProgress.CurrentLevel.score);
 
