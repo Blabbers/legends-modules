@@ -246,7 +246,7 @@ namespace Blabbers.Game00
             GameProgress.score += amount;
             GameProgress.CurrentLevel.score += amount;
 
-            Debug.Log("[Current Score] " + GameProgress.score);
+            //Debug.Log("[Current Score] " + GameProgress.score);
 
             OnLevelScoreChanged?.Invoke(GameProgress.CurrentLevel.score);
 
